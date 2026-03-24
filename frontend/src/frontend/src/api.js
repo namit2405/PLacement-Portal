@@ -1,6 +1,8 @@
 import axios from "axios";
 
-export const BASE_URL = "http://localhost:8010/api";
+// In production (Vercel), set VITE_API_URL to your Render backend URL.
+// e.g. https://placement-portal-backend.onrender.com/api
+export const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8010/api";
 
 export const api = axios.create({
   baseURL: BASE_URL,
@@ -37,3 +39,19 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+// ── Keep-alive ping ───────────────────────────────────────────────────────────
+// Pings the backend every 5 minutes so Render's free tier doesn't sleep.
+const PING_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+
+function startKeepAlive() {
+  setInterval(async () => {
+    try {
+      await axios.get(`${BASE_URL}/ping/`);
+    } catch {
+      // silently ignore — this is best-effort
+    }
+  }, PING_INTERVAL_MS);
+}
+
+startKeepAlive();
