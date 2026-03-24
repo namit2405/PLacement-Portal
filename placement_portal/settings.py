@@ -98,7 +98,7 @@ AUTH_USER_MODEL = "core.User"
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
 CORS_ALLOWED_ORIGINS = [
-    o.strip() for o in os.environ.get(
+    o.strip().rstrip("/") for o in os.environ.get(
         "CORS_ALLOWED_ORIGINS",
         "http://localhost:3000,http://localhost:5173,http://localhost:5174",
     ).split(",")
