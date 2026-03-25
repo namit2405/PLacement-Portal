@@ -12,4 +12,4 @@ jobs:
     steps:
       - name: Ping backend
         run: |
-          curl -f https://placement-portal.onrender.com/api/ping/ || echo "Ping failed (service may be starting up)"
+          curl -f https://placement-portal-iwwu.onrender.com/api/ping/ || echo "Ping failed (service may be starting up)"
