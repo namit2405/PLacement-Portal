@@ -106,21 +106,21 @@ function SidebarContent({ role, activeTab, onTabChange, onClose }) {
       <div className="px-3 pb-4 pt-3 border-t border-sidebar-border space-y-1">
         {user && (
           <div className="flex items-center gap-2.5 px-3 py-2 rounded-md mb-1">
-            <div className="h-6 w-6 rounded-full bg-indigo-600/20 flex items-center justify-center text-indigo-400 text-xs font-bold shrink-0">
+            <div className="h-6 w-6 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
               {(user.first_name || user.username || "?")[0].toUpperCase()}
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-medium text-sidebar-foreground/80 truncate">
+              <p className="text-xs font-medium text-sidebar-foreground/70 truncate">
                 {user.first_name ? `${user.first_name} ${user.last_name || ""}`.trim() : user.username}
               </p>
             </div>
           </div>
         )}
-        <Button variant="ghost" size="sm" onClick={logout} data-ocid="nav.logout.button"
-          className="w-full justify-start gap-2.5 text-sidebar-foreground/50 hover:text-red-400 hover:bg-red-500/8 rounded-md text-xs transition-all">
-          <LogOut className="h-3.5 w-3.5" />
+        <button type="button" onClick={logout} data-ocid="nav.logout.button"
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium text-sidebar-foreground/50 hover:text-red-400 hover:bg-red-500/10 transition-all">
+          <LogOut className="h-3.5 w-3.5 shrink-0" />
           Sign Out
-        </Button>
+        </button>
       </div>
     </div>
   );
