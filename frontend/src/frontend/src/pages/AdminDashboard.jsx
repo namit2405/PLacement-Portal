@@ -83,9 +83,9 @@ function DashboardTab() {
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { icon: Users,      label: "Total Students",     value: stats?.totalStudents ?? "—",     color: "text-blue-600",   bg: "from-blue-50 to-indigo-50",   border: "border-blue-100",   delay: 0.1 },
-            { icon: Briefcase,  label: "Total Jobs",         value: stats?.totalJobs ?? "—",         color: "text-purple-600", bg: "from-purple-50 to-violet-50", border: "border-purple-100", delay: 0.2 },
-            { icon: FileText,   label: "Applications",       value: stats?.totalApplications ?? "—", color: "text-amber-600",  bg: "from-amber-50 to-orange-50",  border: "border-amber-100",  delay: 0.3 },
+            { icon: Users,      label: "Total Students",     value: stats?.totalStudents ?? "â€”",     color: "text-blue-600",   bg: "from-blue-50 to-indigo-50",   border: "border-blue-100",   delay: 0.1 },
+            { icon: Briefcase,  label: "Total Jobs",         value: stats?.totalJobs ?? "â€”",         color: "text-purple-600", bg: "from-purple-50 to-violet-50", border: "border-purple-100", delay: 0.2 },
+            { icon: FileText,   label: "Applications",       value: stats?.totalApplications ?? "â€”", color: "text-amber-600",  bg: "from-amber-50 to-orange-50",  border: "border-amber-100",  delay: 0.3 },
             { icon: TrendingUp, label: "Placements",         value: stats?.placements ?? "",        color: "text-green-600",  bg: "from-green-50 to-emerald-50", border: "border-green-100",  delay: 0.4 },
           ].map((s) => (
             <motion.div key={s.label}
@@ -95,7 +95,7 @@ function DashboardTab() {
               className={`rounded-2xl border bg-gradient-to-br ${s.bg} ${s.border} p-5 relative overflow-hidden cursor-default`}>
               <motion.div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -skew-x-12"
                 initial={{ x:"-100%" }} animate={{ x:"200%" }} transition={{ delay:s.delay+0.4, duration:0.8 }} />
-              <s.icon className={`h-5 w-5 ${s.color} mb-3 opacity-80`} />
+              {(() => { const I = s.icon; return <I className={`h-5 w-5 ${s.color} mb-3 opacity-80`} />; })()}
               <p className={`text-3xl font-extrabold ${s.color}`}>{s.value}</p>
               <p className="text-xs font-semibold text-muted-foreground mt-1">{s.label}</p>
             </motion.div>
@@ -116,7 +116,7 @@ function DashboardTab() {
               whileHover={{ scale:1.03, y:-2 }}
               className={`rounded-2xl border bg-gradient-to-br ${s.bg} ${s.border} p-4 flex items-center gap-4 cursor-default`}>
               <div className="h-11 w-11 rounded-xl bg-white/60 flex items-center justify-center shrink-0">
-                <s.icon className={`h-5 w-5 ${s.color}`} />
+                {(() => { const I = s.icon; return <I className={`h-5 w-5 ${s.color}`} />; })()}
               </div>
               <div>
                 <p className={`text-2xl font-extrabold ${s.color}`}>{s.value}</p>
@@ -142,7 +142,7 @@ function DashboardTab() {
               whileHover={{ scale:1.02, y:-2 }} whileTap={{ scale:0.98 }}
               className={`text-left rounded-2xl p-4 flex items-start gap-4 shadow-sm transition-all ${a.highlight ? "bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200" : "bg-card border border-border/60 hover:border-primary/30"}`}>
               <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${a.gradient} flex items-center justify-center shrink-0 shadow-md`}>
-                <a.icon className="h-4 w-4 text-white" />
+                {(() => { const I = a.icon; return <I className="h-4 w-4 text-white" />; })()}
               </div>
               <div>
                 <p className="text-sm font-bold">{a.title}</p>
@@ -241,17 +241,17 @@ function StudentsTab() {
                   <div className="grid grid-cols-3 gap-2 text-xs">
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Enrollment</p>
-                      <p className="font-medium truncate">{s.enrollment_no || "â€”"}</p>
+                      <p className="font-medium truncate">{s.enrollment_no || "Ã¢â‚¬â€"}</p>
                     </div>
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">CGPA</p>
                       <p className={`font-semibold ${s.gpa >= 8 ? "text-green-600" : s.gpa >= 6 ? "text-amber-600" : "text-red-600"}`}>
-                        {s.gpa ? Number(s.gpa).toFixed(2) : "â€”"}
+                        {s.gpa ? Number(s.gpa).toFixed(2) : "Ã¢â‚¬â€"}
                       </p>
                     </div>
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Grad Year</p>
-                      <p className="font-medium">{s.graduationYear || "â€”"}</p>
+                      <p className="font-medium">{s.graduationYear || "Ã¢â‚¬â€"}</p>
                     </div>
                   </div>
                   {skillList.length > 0 && (
@@ -271,7 +271,7 @@ function StudentsTab() {
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>Edit Student â€” {editing?.user?.username}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Edit Student Ã¢â‚¬â€ {editing?.user?.username}</DialogTitle></DialogHeader>
           {form && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -385,9 +385,9 @@ function RecruitersTab() {
                     </div>
                   </div>
                   <div className="space-y-1 text-xs text-muted-foreground">
-                    {r.user?.email && <p className="flex items-center gap-1.5">ðŸ“§ {r.user.email}</p>}
-                    {r.website && <a href={r.website} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-primary hover:underline">ðŸŒ {r.website}</a>}
-                    {r.address && <p className="flex items-center gap-1.5">ðŸ“ {r.address}</p>}
+                    {r.user?.email && <p className="flex items-center gap-1.5">Ã°Å¸â€œÂ§ {r.user.email}</p>}
+                    {r.website && <a href={r.website} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-primary hover:underline">Ã°Å¸Å’Â {r.website}</a>}
+                    {r.address && <p className="flex items-center gap-1.5">Ã°Å¸â€œÂ {r.address}</p>}
                     {r.description && <p className="line-clamp-2 mt-1 text-muted-foreground/80">{r.description}</p>}
                   </div>
                 </CardContent>
@@ -399,7 +399,7 @@ function RecruitersTab() {
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>Edit Recruiter â€” {editing?.name}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Edit Recruiter Ã¢â‚¬â€ {editing?.name}</DialogTitle></DialogHeader>
           {form && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -530,12 +530,12 @@ function JobsTab() {
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Location</p>
-                      <p className="font-medium truncate">{job.location || "â€”"}</p>
+                      <p className="font-medium truncate">{job.location || "Ã¢â‚¬â€"}</p>
                     </div>
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Deadline</p>
                       <p className={`font-medium ${expired ? "text-red-500" : ""}`}>
-                        {job.last_date_to_apply ? new Date(job.last_date_to_apply).toLocaleDateString() : "â€”"}
+                        {job.last_date_to_apply ? new Date(job.last_date_to_apply).toLocaleDateString() : "Ã¢â‚¬â€"}
                       </p>
                     </div>
                   </div>
@@ -556,7 +556,7 @@ function JobsTab() {
 
       <Dialog open={!!editingJob} onOpenChange={(o) => !o && setEditingJob(null)}>
         <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>Edit Job â€” {editingJob?.title}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Edit Job Ã¢â‚¬â€ {editingJob?.title}</DialogTitle></DialogHeader>
           {form && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -631,7 +631,7 @@ function ApplicationsTab() {
           {applications.map((app, i) => {
             const studentName = app.student?.user?.first_name
               ? `${app.student.user.first_name} ${app.student.user.last_name}`.trim()
-              : app.student?.user?.username ?? "â€”";
+              : app.student?.user?.username ?? "Ã¢â‚¬â€";
             return (
               <Card key={app.id || i} className="shadow-card">
                 <CardContent className="p-4 space-y-3">
@@ -659,7 +659,7 @@ function ApplicationsTab() {
                       {studentName[0]?.toUpperCase()}
                     </div>
                     <span className="font-medium text-foreground">{studentName}</span>
-                    <span>Â·</span>
+                    <span>Ã‚Â·</span>
                     <span>{new Date(app.applied_at).toLocaleDateString()}</span>
                   </div>
                   <Input
