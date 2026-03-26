@@ -1,5 +1,13 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+import os
+
+def resume_storage():
+    if os.environ.get("CLOUDINARY_CLOUD_NAME"):
+        from cloudinary_storage.storage import RawMediaCloudinaryStorage
+        return RawMediaCloudinaryStorage()
+    from django.core.files.storage import FileSystemStorage
+    return FileSystemStorage()
 
 
 class User(AbstractUser):
@@ -29,7 +37,7 @@ class StudentProfile(models.Model):
     year = models.IntegerField(null=True, blank=True)
     cgpa = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
     skills = models.TextField(blank=True)  # comma-separated or free text
-    resume = models.FileField(upload_to="resumes/", null=True, blank=True)
+    resume = models.FileField(upload_to="resumes/", storage=resume_storage, null=True, blank=True)
 
     def __str__(self) -> str:
         return f"{self.user.get_full_name()} ({self.enrollment_no})"
