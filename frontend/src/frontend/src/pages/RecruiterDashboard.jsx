@@ -255,7 +255,7 @@ function JobForm({ initial, onSubmit, isPending, submitLabel }) {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="job-salary">Stipend / Salary</Label>
-          <Input id="job-salary" value={form.stipendOrSalary} onChange={(e) => setForm(p => ({ ...p, stipendOrSalary: e.target.value }))} placeholder="ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¹8,00,000 per annum" required />
+          <Input id="job-salary" value={form.stipendOrSalary} onChange={(e) => setForm(p => ({ ...p, stipendOrSalary: e.target.value }))} placeholder="ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¹8,00,000 per annum" required />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="job-type">Type</Label>
@@ -284,7 +284,7 @@ function JobForm({ initial, onSubmit, isPending, submitLabel }) {
         <Textarea id="job-description" value={form.description} onChange={(e) => setForm(p => ({ ...p, description: e.target.value }))} rows={4} required />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="job-requirements">Required Skills <span className="text-muted-foreground text-xs">(comma-separated ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â used for smart matching)</span></Label>
+        <Label htmlFor="job-requirements">Required Skills <span className="text-muted-foreground text-xs">(comma-separated ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â used for smart matching)</span></Label>
         <Input id="job-requirements" value={form.requirementsText} onChange={(e) => setForm(p => ({ ...p, requirementsText: e.target.value }))} placeholder="React, TypeScript, Node.js" />
       </div>
       <Button type="submit" disabled={isPending}>
@@ -349,8 +349,8 @@ function MyJobsTab({ onViewApplicants }) {
                   </div>
                   <p className="text-sm text-primary">{job.company?.name}</p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {job.location} ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· {job.stipendOrSalary}
-                    {job.eligibility_cgpa ? ` ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· Min CGPA: ${job.eligibility_cgpa}` : ""}
+                    {job.location} ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· {job.stipendOrSalary}
+                    {job.eligibility_cgpa ? ` ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· Min CGPA: ${job.eligibility_cgpa}` : ""}
                   </p>
                   {job.requirements?.length > 0 && (
                     <div className="flex gap-1 flex-wrap mt-2">
@@ -466,7 +466,7 @@ function ApplicantsTab() {
             <SelectTrigger><SelectValue placeholder="Choose a job posting..." /></SelectTrigger>
             <SelectContent>
               {myJobs.map((job) => (
-                <SelectItem key={job.id} value={String(job.id)}>{job.title} ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â {job.company?.name}</SelectItem>
+                <SelectItem key={job.id} value={String(job.id)}>{job.title} ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â {job.company?.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -496,7 +496,7 @@ function ApplicantsTab() {
             <div className="flex items-center justify-between flex-wrap gap-3">
               <CardTitle className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-primary" />
-                Applicants ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ranked by skill match
+                Applicants ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ranked by skill match
               </CardTitle>
               {applicants.length > 0 && (
                 <div className="flex gap-2">
@@ -565,12 +565,12 @@ function ApplicantsTab() {
                             className="font-medium text-primary hover:underline text-left">
                             {app.student?.user?.first_name
                               ? `${app.student.user.first_name} ${app.student.user.last_name}`.trim()
-                              : app.student?.user?.username ?? "ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â"}
+                              : app.student?.user?.username ?? "ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â"}
                           </button>
                         </TableCell>
                         <TableCell>
                           <span className={`text-sm font-semibold ${Number(app.student?.cgpa) >= 8 ? "text-green-600" : Number(app.student?.cgpa) >= 6 ? "text-amber-600" : "text-red-500"}`}>
-                            {app.student?.cgpa ?? "ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â"}
+                            {app.student?.cgpa ?? "ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â"}
                           </span>
                         </TableCell>
                         <TableCell>
@@ -585,7 +585,7 @@ function ApplicantsTab() {
                         <TableCell>
                           {app.student?.resume_url
                             ? <a href={app.student.resume_url} target="_blank" rel="noreferrer" className="text-primary underline text-sm flex items-center gap-1"><FileText className="h-3.5 w-3.5" />View</a>
-                            : <span className="text-muted-foreground text-sm">ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â</span>}
+                            : <span className="text-muted-foreground text-sm">ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â</span>}
                         </TableCell>
                         <TableCell><StatusBadge status={app.status} /></TableCell>
                         <TableCell>
@@ -652,103 +652,91 @@ function RecruiterHomeTab({ onTabChange }) {
 
   return (
     <div className="space-y-5">
-      {/* Welcome banner */}
-      <motion.div initial={{ opacity:0, y:-16 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.5, ease:[0.22,1,0.36,1] }}
-        className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 p-6 text-white shadow-xl">
-        <div className="absolute inset-0 opacity-20" style={{backgroundImage:"radial-gradient(circle at 80% 50%, white 0%, transparent 60%)"}} />
-        <motion.div animate={{ scale:[1,1.08,1], opacity:[0.2,0.4,0.2] }} transition={{ duration:4, repeat:Infinity }}
-          className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
-        <div className="relative flex items-center gap-4">
-          <motion.div initial={{ scale:0 }} animate={{ scale:1 }} transition={{ delay:0.2, type:"spring", stiffness:200 }}
-            className="h-14 w-14 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-2xl font-extrabold shadow-lg shrink-0">
-            {(profile?.name || profile?.user?.username || "R")[0].toUpperCase()}
-          </motion.div>
-          <div>
-            <motion.h1 initial={{ opacity:0, x:-10 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.3 }}
-              className="text-xl font-extrabold">
-              Welcome back{profile?.name ? `, ${profile.name}` : ""}! 
-            </motion.h1>
-            <motion.p initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:0.4 }}
-              className="text-white/70 text-sm mt-0.5">Here is your recruiter overview.</motion.p>
-          </div>
+      <motion.div initial={{ opacity:0, y:-12 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.4 }}
+        className="rounded-xl border border-border bg-card p-5 flex items-center gap-4">
+        <motion.div initial={{ scale:0.8, opacity:0 }} animate={{ scale:1, opacity:1 }} transition={{ delay:0.1, type:"spring", stiffness:200 }}
+          className="h-12 w-12 rounded-xl bg-indigo-600 flex items-center justify-center text-white text-lg font-bold shrink-0 shadow-md shadow-indigo-500/20">
+          {(profile?.name || profile?.user?.username || "R")[0].toUpperCase()}
+        </motion.div>
+        <div>
+          <motion.h1 initial={{ opacity:0, x:-8 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.15 }}
+            className="text-lg font-semibold text-foreground">
+            Welcome back{profile?.name ? `, ${profile.name}` : ""}
+          </motion.h1>
+          <motion.p initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:0.2 }}
+            className="text-sm text-muted-foreground">Recruiter overview</motion.p>
         </div>
       </motion.div>
 
-      {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: "My Jobs",     value: myJobs.length,                                                    color: "text-violet-600", bg: "bg-violet-50", border: "border-violet-100", delay: 0.1 },
-          { label: "Applicants",  value: myApps.length,                                                    color: "text-blue-600",   bg: "bg-blue-50",   border: "border-blue-100",   delay: 0.2 },
-          { label: "Pending",     value: myApps.filter(a => a.status === "APPLIED").length,                color: "text-amber-600",  bg: "bg-amber-50",  border: "border-amber-100",  delay: 0.3 },
-          { label: "Selected",    value: myApps.filter(a => a.status === "SELECTED").length,               color: "text-green-600",  bg: "bg-green-50",  border: "border-green-100",  delay: 0.4 },
-        ].map((s) => (
-          <motion.div key={s.label}
-            initial={{ opacity:0, scale:0.8, y:16 }} animate={{ opacity:1, scale:1, y:0 }}
-            transition={{ delay:s.delay, type:"spring", stiffness:200 }}
-            whileHover={{ scale:1.04, y:-2 }}
-            className={`rounded-2xl border p-4 text-center relative overflow-hidden cursor-default ${s.bg} ${s.border}`}>
-            <motion.div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12"
-              initial={{ x:"-100%" }} animate={{ x:"200%" }} transition={{ delay:s.delay+0.4, duration:0.7 }} />
-            <p className={`text-3xl font-extrabold ${s.color}`}>{s.value}</p>
-            <p className="text-xs font-semibold text-muted-foreground mt-1">{s.label}</p>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Active vs expired */}
-      <div className="grid grid-cols-2 gap-3">
-        {[
-          { label: "Active Jobs",  value: activeJobs.length,  color: "text-green-600", bg: "from-green-50 to-emerald-50", border: "border-green-100", delay: 0.45 },
-          { label: "Expired Jobs", value: expiredJobs.length, color: "text-red-500",   bg: "from-red-50 to-rose-50",     border: "border-red-100",   delay: 0.5  },
-        ].map((s) => (
+          { label: "My Jobs",    value: myJobs.length,                                         accent: "text-foreground" },
+          { label: "Applicants", value: myApps.length,                                         accent: "text-indigo-600" },
+          { label: "Pending",    value: myApps.filter(a => a.status === "APPLIED").length,     accent: "text-amber-600" },
+          { label: "Selected",   value: myApps.filter(a => a.status === "SELECTED").length,    accent: "text-emerald-600" },
+        ].map((s, i) => (
           <motion.div key={s.label}
             initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }}
-            transition={{ delay:s.delay, type:"spring", stiffness:180 }}
-            whileHover={{ scale:1.03, y:-2 }}
-            className={`rounded-2xl border bg-gradient-to-br ${s.bg} ${s.border} p-4 flex items-center gap-3 cursor-default`}>
-            <p className={`text-2xl font-extrabold ${s.color}`}>{s.value}</p>
-            <p className="text-sm font-semibold text-muted-foreground">{s.label}</p>
+            transition={{ delay: 0.1 + i * 0.07 }}
+            whileHover={{ y:-2, boxShadow:"0 4px 16px rgba(99,102,241,0.08)" }}
+            className="rounded-xl border border-border bg-card p-4 cursor-default transition-shadow">
+            <p className={`text-2xl font-bold ${s.accent}`}>{s.value}</p>
+            <p className="text-xs text-muted-foreground font-medium mt-0.5">{s.label}</p>
           </motion.div>
         ))}
       </div>
 
-      {/* Profile completeness */}
+      <div className="grid grid-cols-2 gap-3">
+        {[
+          { label: "Active Jobs",  value: activeJobs.length,  accent: "text-emerald-600" },
+          { label: "Expired Jobs", value: expiredJobs.length, accent: "text-muted-foreground" },
+        ].map((s, i) => (
+          <motion.div key={s.label}
+            initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }}
+            transition={{ delay: 0.35 + i * 0.07 }}
+            whileHover={{ y:-1 }}
+            className="rounded-xl border border-border bg-card p-4 flex items-center gap-3 cursor-default transition-all">
+            <p className={`text-xl font-bold ${s.accent}`}>{s.value}</p>
+            <p className="text-sm text-muted-foreground">{s.label}</p>
+          </motion.div>
+        ))}
+      </div>
+
       {profilePct < 100 && (
-        <motion.div initial={{ opacity:0, x:-16 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.55 }}
-          className="rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50 to-purple-50 p-4">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-bold text-violet-800">Company profile {profilePct}% complete</p>
-            <button type="button" onClick={() => onTabChange("profile")}
-              className="text-xs text-violet-700 hover:text-violet-900 font-semibold underline transition-colors">
-              Complete now 
-            </button>
+        <motion.div initial={{ opacity:0, x:-12 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.4 }}
+          className="rounded-xl border border-border bg-card p-4">
+          <div className="flex items-center justify-between mb-2.5">
+            <p className="text-sm font-medium text-foreground">Company profile completeness</p>
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-semibold text-indigo-600">{profilePct}%</span>
+              <button type="button" onClick={() => onTabChange("profile")}
+                className="text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors">Complete </button>
+            </div>
           </div>
-          <div className="h-2 rounded-full bg-violet-200 overflow-hidden">
-            <motion.div initial={{ width:0 }} animate={{ width: profilePct + "%" }} transition={{ delay:0.75, duration:0.8, ease:"easeOut" }}
-              className="h-full rounded-full bg-gradient-to-r from-violet-500 to-purple-500" />
+          <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+            <motion.div initial={{ width:0 }} animate={{ width: profilePct + "%" }} transition={{ delay:0.55, duration:0.7, ease:"easeOut" }}
+              className="h-full rounded-full bg-indigo-600" />
           </div>
-          <p className="text-xs text-violet-600/80 mt-1.5">Candidates can see your company profile when browsing jobs.</p>
         </motion.div>
       )}
 
-      {/* Recent listings */}
       {recentJobs.length > 0 && (
         <div className="space-y-2">
-          <SectionHeader title="Recent Listings" action={() => onTabChange("jobs")} actionLabel="See all" delay={0.6} />
-          <div className="space-y-2">
+          <SectionHeader title="Recent Listings" action={() => onTabChange("jobs")} actionLabel="See all" delay={0.45} />
+          <div className="space-y-1.5">
             {recentJobs.map((job, i) => {
               const expired = job.last_date_to_apply && new Date(job.last_date_to_apply) < new Date();
               return (
                 <motion.div key={job.id || i}
-                  initial={{ opacity:0, x:-12 }} animate={{ opacity:1, x:0 }}
-                  transition={{ delay: 0.65 + i * 0.08 }}
-                  whileHover={{ x:4 }}
-                  className="rounded-xl border border-border/60 bg-card p-3 flex items-center justify-between gap-3 cursor-default transition-all">
+                  initial={{ opacity:0, x:-8 }} animate={{ opacity:1, x:0 }}
+                  transition={{ delay: 0.5 + i * 0.07 }}
+                  whileHover={{ x:3 }}
+                  className="rounded-lg border border-border bg-card px-4 py-3 flex items-center justify-between gap-3 cursor-default transition-all">
                   <div className="min-w-0">
-                    <p className="font-semibold text-sm truncate">{job.title}</p>
+                    <p className="text-sm font-medium text-foreground truncate">{job.title}</p>
                     <p className="text-xs text-muted-foreground">{job.location}</p>
                   </div>
-                  <span className={`text-xs font-bold px-2.5 py-1 rounded-full shrink-0 ${expired ? "bg-red-100 text-red-600" : "bg-green-100 text-green-700"}`}>
+                  <span className={`text-xs font-semibold px-2 py-0.5 rounded-md shrink-0 ${expired ? "bg-muted text-muted-foreground" : "bg-emerald-50 text-emerald-700"}`}>
                     {expired ? "Expired" : "Active"}
                   </span>
                 </motion.div>
@@ -758,25 +746,26 @@ function RecruiterHomeTab({ onTabChange }) {
         </div>
       )}
 
-      {/* Quick actions */}
       <div>
-        <SectionHeader title="Quick Actions" delay={0.75} />
-        <div className="grid grid-cols-2 gap-3">
+        <SectionHeader title="Quick Actions" delay={0.55} />
+        <div className="grid grid-cols-2 gap-2.5">
           {[
-            { label: "Post a Job",      icon: Briefcase,     tab: "post",       gradient: "from-violet-500 to-purple-600" },
-            { label: "View Applicants", icon: Users,         tab: "applicants", gradient: "from-blue-500 to-indigo-600" },
-            { label: "My Listings",     icon: ClipboardList, tab: "jobs",       gradient: "from-emerald-500 to-teal-600" },
-            { label: "Messages",        icon: MessageCircle, tab: "chat",       gradient: "from-pink-500 to-rose-600" },
+            { label: "Post a Job",      icon: Briefcase,     tab: "post" },
+            { label: "View Applicants", icon: Users,         tab: "applicants" },
+            { label: "My Listings",     icon: ClipboardList, tab: "jobs" },
+            { label: "Messages",        icon: MessageCircle, tab: "chat" },
           ].map((item, i) => {
             const Icon = item.icon;
             return (
               <motion.button key={item.tab} type="button" onClick={() => onTabChange(item.tab)}
-                initial={{ opacity:0, scale:0.9 }} animate={{ opacity:1, scale:1 }}
-                transition={{ delay: 0.8 + i * 0.07, type:"spring", stiffness:200 }}
-                whileHover={{ scale:1.04, y:-2 }} whileTap={{ scale:0.97 }}
-                className={`rounded-2xl p-4 flex items-center gap-3 text-white shadow-lg bg-gradient-to-br ${item.gradient}`}>
-                <Icon className="h-5 w-5 shrink-0" />
-                <span className="text-sm font-bold">{item.label}</span>
+                initial={{ opacity:0, scale:0.95 }} animate={{ opacity:1, scale:1 }}
+                transition={{ delay: 0.6 + i * 0.06 }}
+                whileHover={{ scale:1.02, y:-1 }} whileTap={{ scale:0.98 }}
+                className="rounded-xl border border-border bg-card px-4 py-3.5 flex items-center gap-3 text-left hover:border-indigo-200 hover:bg-indigo-50/50 transition-all">
+                <div className="h-8 w-8 rounded-lg bg-indigo-50 flex items-center justify-center shrink-0">
+                  <Icon className="h-4 w-4 text-indigo-600" />
+                </div>
+                <span className="text-sm font-medium text-foreground">{item.label}</span>
               </motion.button>
             );
           })}
