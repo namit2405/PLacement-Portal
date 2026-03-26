@@ -22,6 +22,8 @@ import { calcSkillMatch, useAllJobs, useApplicationsForJob, useDeleteJob, usePos
 import { useCompanyProfile, useSaveCompanyProfile } from "../hooks/useQueries";
 import { useAllApplications } from "../hooks/useQueries";
 import { ChatPage, InlineChatPanel } from "../components/ChatPanel";
+import { SectionHeader } from "../components/AnimatedUI";
+import { SectionHeader } from "../components/AnimatedUI";
 
 const emptyJob = () => ({
   title: "", company: "", description: "", requirements: [],
@@ -253,7 +255,7 @@ function JobForm({ initial, onSubmit, isPending, submitLabel }) {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="job-salary">Stipend / Salary</Label>
-          <Input id="job-salary" value={form.stipendOrSalary} onChange={(e) => setForm(p => ({ ...p, stipendOrSalary: e.target.value }))} placeholder="â‚¹8,00,000 per annum" required />
+          <Input id="job-salary" value={form.stipendOrSalary} onChange={(e) => setForm(p => ({ ...p, stipendOrSalary: e.target.value }))} placeholder="ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¹8,00,000 per annum" required />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="job-type">Type</Label>
@@ -282,7 +284,7 @@ function JobForm({ initial, onSubmit, isPending, submitLabel }) {
         <Textarea id="job-description" value={form.description} onChange={(e) => setForm(p => ({ ...p, description: e.target.value }))} rows={4} required />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="job-requirements">Required Skills <span className="text-muted-foreground text-xs">(comma-separated â€” used for smart matching)</span></Label>
+        <Label htmlFor="job-requirements">Required Skills <span className="text-muted-foreground text-xs">(comma-separated ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â used for smart matching)</span></Label>
         <Input id="job-requirements" value={form.requirementsText} onChange={(e) => setForm(p => ({ ...p, requirementsText: e.target.value }))} placeholder="React, TypeScript, Node.js" />
       </div>
       <Button type="submit" disabled={isPending}>
@@ -347,8 +349,8 @@ function MyJobsTab({ onViewApplicants }) {
                   </div>
                   <p className="text-sm text-primary">{job.company?.name}</p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {job.location} Â· {job.stipendOrSalary}
-                    {job.eligibility_cgpa ? ` Â· Min CGPA: ${job.eligibility_cgpa}` : ""}
+                    {job.location} Ãƒâ€šÃ‚Â· {job.stipendOrSalary}
+                    {job.eligibility_cgpa ? ` Ãƒâ€šÃ‚Â· Min CGPA: ${job.eligibility_cgpa}` : ""}
                   </p>
                   {job.requirements?.length > 0 && (
                     <div className="flex gap-1 flex-wrap mt-2">
@@ -464,7 +466,7 @@ function ApplicantsTab() {
             <SelectTrigger><SelectValue placeholder="Choose a job posting..." /></SelectTrigger>
             <SelectContent>
               {myJobs.map((job) => (
-                <SelectItem key={job.id} value={String(job.id)}>{job.title} â€” {job.company?.name}</SelectItem>
+                <SelectItem key={job.id} value={String(job.id)}>{job.title} ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â {job.company?.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -494,7 +496,7 @@ function ApplicantsTab() {
             <div className="flex items-center justify-between flex-wrap gap-3">
               <CardTitle className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-primary" />
-                Applicants â€” ranked by skill match
+                Applicants ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â ranked by skill match
               </CardTitle>
               {applicants.length > 0 && (
                 <div className="flex gap-2">
@@ -563,12 +565,12 @@ function ApplicantsTab() {
                             className="font-medium text-primary hover:underline text-left">
                             {app.student?.user?.first_name
                               ? `${app.student.user.first_name} ${app.student.user.last_name}`.trim()
-                              : app.student?.user?.username ?? "â€”"}
+                              : app.student?.user?.username ?? "ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â"}
                           </button>
                         </TableCell>
                         <TableCell>
                           <span className={`text-sm font-semibold ${Number(app.student?.cgpa) >= 8 ? "text-green-600" : Number(app.student?.cgpa) >= 6 ? "text-amber-600" : "text-red-500"}`}>
-                            {app.student?.cgpa ?? "â€”"}
+                            {app.student?.cgpa ?? "ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â"}
                           </span>
                         </TableCell>
                         <TableCell>
@@ -583,7 +585,7 @@ function ApplicantsTab() {
                         <TableCell>
                           {app.student?.resume_url
                             ? <a href={app.student.resume_url} target="_blank" rel="noreferrer" className="text-primary underline text-sm flex items-center gap-1"><FileText className="h-3.5 w-3.5" />View</a>
-                            : <span className="text-muted-foreground text-sm">â€”</span>}
+                            : <span className="text-muted-foreground text-sm">ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â</span>}
                         </TableCell>
                         <TableCell><StatusBadge status={app.status} /></TableCell>
                         <TableCell>
@@ -649,97 +651,107 @@ function RecruiterHomeTab({ onTabChange }) {
   const profilePct = Math.round((companyComplete / 4) * 100);
 
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
-      {/* Welcome */}
-      <div className="flex items-center gap-4">
-        <div className="h-12 w-12 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-lg shrink-0">
-          {(profile?.name || user?.username || "?")[0].toUpperCase()}
+    <div className="space-y-5">
+      {/* Welcome banner */}
+      <motion.div initial={{ opacity:0, y:-16 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.5, ease:[0.22,1,0.36,1] }}
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 p-6 text-white shadow-xl">
+        <div className="absolute inset-0 opacity-20" style={{backgroundImage:"radial-gradient(circle at 80% 50%, white 0%, transparent 60%)"}} />
+        <motion.div animate={{ scale:[1,1.08,1], opacity:[0.2,0.4,0.2] }} transition={{ duration:4, repeat:Infinity }}
+          className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
+        <div className="relative flex items-center gap-4">
+          <motion.div initial={{ scale:0 }} animate={{ scale:1 }} transition={{ delay:0.2, type:"spring", stiffness:200 }}
+            className="h-14 w-14 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-2xl font-extrabold shadow-lg shrink-0">
+            {(profile?.name || profile?.user?.username || "R")[0].toUpperCase()}
+          </motion.div>
+          <div>
+            <motion.h1 initial={{ opacity:0, x:-10 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.3 }}
+              className="text-xl font-extrabold">
+              Welcome back{profile?.name ? `, ${profile.name}` : ""}! 
+            </motion.h1>
+            <motion.p initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:0.4 }}
+              className="text-white/70 text-sm mt-0.5">Here is your recruiter overview.</motion.p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-xl font-bold">Welcome{profile?.name ? `, ${profile.name}` : ""}!</h1>
-          <p className="text-sm text-muted-foreground">Here's your recruiting overview.</p>
-        </div>
-      </div>
+      </motion.div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: "My Jobs", value: myJobs.length, color: "bg-blue-50 text-blue-700 border-blue-100" },
-          { label: "Applicants", value: totalApplicants, color: "bg-purple-50 text-purple-700 border-purple-100" },
-          { label: "Pending", value: pending, color: "bg-amber-50 text-amber-700 border-amber-100" },
-          { label: "Selected", value: selected, color: "bg-green-50 text-green-700 border-green-100" },
+          { label: "My Jobs",     value: myJobs.length,                                                    color: "text-violet-600", bg: "bg-violet-50", border: "border-violet-100", delay: 0.1 },
+          { label: "Applicants",  value: myApps.length,                                                    color: "text-blue-600",   bg: "bg-blue-50",   border: "border-blue-100",   delay: 0.2 },
+          { label: "Pending",     value: myApps.filter(a => a.status === "APPLIED").length,                color: "text-amber-600",  bg: "bg-amber-50",  border: "border-amber-100",  delay: 0.3 },
+          { label: "Selected",    value: myApps.filter(a => a.status === "SELECTED").length,               color: "text-green-600",  bg: "bg-green-50",  border: "border-green-100",  delay: 0.4 },
         ].map((s) => (
-          <Card key={s.label} className={`shadow-card border ${s.color}`}>
-            <CardContent className={`p-4 text-center ${s.color}`}>
-              <p className="text-2xl font-bold">{s.value}</p>
-              <p className="text-xs font-medium mt-0.5">{s.label}</p>
-            </CardContent>
-          </Card>
+          <motion.div key={s.label}
+            initial={{ opacity:0, scale:0.8, y:16 }} animate={{ opacity:1, scale:1, y:0 }}
+            transition={{ delay:s.delay, type:"spring", stiffness:200 }}
+            whileHover={{ scale:1.04, y:-2 }}
+            className={`rounded-2xl border p-4 text-center relative overflow-hidden cursor-default ${s.bg} ${s.border}`}>
+            <motion.div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12"
+              initial={{ x:"-100%" }} animate={{ x:"200%" }} transition={{ delay:s.delay+0.4, duration:0.7 }} />
+            <p className={`text-3xl font-extrabold ${s.color}`}>{s.value}</p>
+            <p className="text-xs font-semibold text-muted-foreground mt-1">{s.label}</p>
+          </motion.div>
         ))}
       </div>
 
-      {/* Job health */}
+      {/* Active vs expired */}
       <div className="grid grid-cols-2 gap-3">
-        <Card className="shadow-card border-green-100 bg-green-50/40">
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="h-9 w-9 rounded-lg bg-green-100 text-green-600 flex items-center justify-center shrink-0">
-              <Sparkles className="h-4 w-4" />
-            </div>
-            <div>
-              <p className="text-xl font-bold text-green-700">{activeJobs.length}</p>
-              <p className="text-xs text-green-600 font-medium">Active Listings</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="shadow-card border-red-100 bg-red-50/40">
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="h-9 w-9 rounded-lg bg-red-100 text-red-600 flex items-center justify-center shrink-0">
-              <Trash2 className="h-4 w-4" />
-            </div>
-            <div>
-              <p className="text-xl font-bold text-red-700">{expiredJobs.length}</p>
-              <p className="text-xs text-red-600 font-medium">Expired Listings</p>
-            </div>
-          </CardContent>
-        </Card>
+        {[
+          { label: "Active Jobs",  value: activeJobs,  color: "text-green-600", bg: "from-green-50 to-emerald-50", border: "border-green-100", delay: 0.45 },
+          { label: "Expired Jobs", value: expiredJobs, color: "text-red-500",   bg: "from-red-50 to-rose-50",     border: "border-red-100",   delay: 0.5  },
+        ].map((s) => (
+          <motion.div key={s.label}
+            initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }}
+            transition={{ delay:s.delay, type:"spring", stiffness:180 }}
+            whileHover={{ scale:1.03, y:-2 }}
+            className={`rounded-2xl border bg-gradient-to-br ${s.bg} ${s.border} p-4 flex items-center gap-3 cursor-default`}>
+            <p className={`text-2xl font-extrabold ${s.color}`}>{s.value}</p>
+            <p className="text-sm font-semibold text-muted-foreground">{s.label}</p>
+          </motion.div>
+        ))}
       </div>
 
       {/* Profile completeness */}
       {profilePct < 100 && (
-        <Card className="shadow-card border-amber-200 bg-amber-50/40">
-          <CardContent className="p-4 space-y-2">
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-medium">Company profile {profilePct}% complete</p>
-              <button type="button" onClick={() => onTabChange("profile")} className="text-xs text-primary hover:underline">Complete now</button>
-            </div>
-            <Progress value={profilePct} className="h-2" />
-            <p className="text-xs text-muted-foreground">Candidates can see your company profile when browsing jobs.</p>
-          </CardContent>
-        </Card>
+        <motion.div initial={{ opacity:0, x:-16 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.55 }}
+          className="rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50 to-purple-50 p-4">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-sm font-bold text-violet-800">Company profile {profilePct}% complete</p>
+            <button type="button" onClick={() => onTabChange("profile")}
+              className="text-xs text-violet-700 hover:text-violet-900 font-semibold underline transition-colors">
+              Complete now 
+            </button>
+          </div>
+          <div className="h-2 rounded-full bg-violet-200 overflow-hidden">
+            <motion.div initial={{ width:0 }} animate={{ width: profilePct + "%" }} transition={{ delay:0.75, duration:0.8, ease:"easeOut" }}
+              className="h-full rounded-full bg-gradient-to-r from-violet-500 to-purple-500" />
+          </div>
+          <p className="text-xs text-violet-600/80 mt-1.5">Candidates can see your company profile when browsing jobs.</p>
+        </motion.div>
       )}
 
-      {/* Recent job listings */}
+      {/* Recent listings */}
       {recentJobs.length > 0 && (
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold">Recent Listings</p>
-            <button type="button" onClick={() => onTabChange("jobs")} className="text-xs text-primary hover:underline">See all</button>
-          </div>
+          <SectionHeader title="Recent Listings" action={() => onTabChange("jobs")} actionLabel="See all" delay={0.6} />
           <div className="space-y-2">
             {recentJobs.map((job, i) => {
               const expired = job.last_date_to_apply && new Date(job.last_date_to_apply) < new Date();
               return (
-                <Card key={job.id || i} className="shadow-card">
-                  <CardContent className="p-3 flex items-center justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="font-medium text-sm truncate">{job.title}</p>
-                      <p className="text-xs text-muted-foreground">{job.location}</p>
-                    </div>
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${expired ? "bg-red-100 text-red-600" : "bg-green-100 text-green-700"}`}>
-                      {expired ? "Expired" : "Active"}
-                    </span>
-                  </CardContent>
-                </Card>
+                <motion.div key={job.id || i}
+                  initial={{ opacity:0, x:-12 }} animate={{ opacity:1, x:0 }}
+                  transition={{ delay: 0.65 + i * 0.08 }}
+                  whileHover={{ x:4 }}
+                  className="rounded-xl border border-border/60 bg-card p-3 flex items-center justify-between gap-3 cursor-default transition-all">
+                  <div className="min-w-0">
+                    <p className="font-semibold text-sm truncate">{job.title}</p>
+                    <p className="text-xs text-muted-foreground">{job.location}</p>
+                  </div>
+                  <span className={`text-xs font-bold px-2.5 py-1 rounded-full shrink-0 ${expired ? "bg-red-100 text-red-600" : "bg-green-100 text-green-700"}`}>
+                    {expired ? "Expired" : "Active"}
+                  </span>
+                </motion.div>
               );
             })}
           </div>
@@ -747,23 +759,29 @@ function RecruiterHomeTab({ onTabChange }) {
       )}
 
       {/* Quick actions */}
-      <div className="grid grid-cols-2 gap-3">
-        {[
-          { label: "Post a Job", icon: Briefcase, tab: "post", color: "bg-blue-50 text-blue-700 border-blue-100" },
-          { label: "View Applicants", icon: Users, tab: "applicants", color: "bg-purple-50 text-purple-700 border-purple-100" },
-          { label: "My Listings", icon: ClipboardList, tab: "jobs", color: "bg-green-50 text-green-700 border-green-100" },
-          { label: "Messages", icon: MessageCircle, tab: "chat", color: "bg-amber-50 text-amber-700 border-amber-100" },
-        ].map((item) => {
-          const Icon = item.icon;
-          return (
-            <button key={item.tab} type="button" onClick={() => onTabChange(item.tab)}
-              className={`rounded-xl border p-4 flex items-center gap-3 hover:opacity-80 transition-opacity ${item.color}`}>
-              <Icon className="h-5 w-5 shrink-0" />
-              <span className="text-sm font-semibold">{item.label}</span>
-            </button>
-          );
-        })}
+      <div>
+        <SectionHeader title="Quick Actions" delay={0.75} />
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { label: "Post a Job",      icon: Briefcase,     tab: "post",       gradient: "from-violet-500 to-purple-600" },
+            { label: "View Applicants", icon: Users,         tab: "applicants", gradient: "from-blue-500 to-indigo-600" },
+            { label: "My Listings",     icon: ClipboardList, tab: "jobs",       gradient: "from-emerald-500 to-teal-600" },
+            { label: "Messages",        icon: MessageCircle, tab: "chat",       gradient: "from-pink-500 to-rose-600" },
+          ].map((item, i) => {
+            const Icon = item.icon;
+            return (
+              <motion.button key={item.tab} type="button" onClick={() => onTabChange(item.tab)}
+                initial={{ opacity:0, scale:0.9 }} animate={{ opacity:1, scale:1 }}
+                transition={{ delay: 0.8 + i * 0.07, type:"spring", stiffness:200 }}
+                whileHover={{ scale:1.04, y:-2 }} whileTap={{ scale:0.97 }}
+                className={`rounded-2xl p-4 flex items-center gap-3 text-white shadow-lg bg-gradient-to-br ${item.gradient}`}>
+                <Icon className="h-5 w-5 shrink-0" />
+                <span className="text-sm font-bold">{item.label}</span>
+              </motion.button>
+            );
+          })}
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

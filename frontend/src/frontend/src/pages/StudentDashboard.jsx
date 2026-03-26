@@ -347,7 +347,7 @@ function BrowseJobsTab() {
           })}
         </div>
       )}
-    </motion.div>
+    </PageTransition>
   );
 }
 
@@ -482,6 +482,7 @@ function StudentHomeTab({ onTabChange }) {
   const appliedCount = myApps.length;
   const shortlistedCount = myApps.filter(function(a) { return a.status === "SHORTLISTED"; }).length;
   const selectedCount = myApps.filter(function(a) { return a.status === "SELECTED"; }).length;
+  const rejectedCount = myApps.filter(function(a) { return a.status === "REJECTED"; }).length;
 
   const recommended = !profile || !profile.skills ? [] : jobs
     .filter(function(j) { return !j.last_date_to_apply || new Date(j.last_date_to_apply) >= new Date(); })
@@ -495,24 +496,25 @@ function StudentHomeTab({ onTabChange }) {
   const pct = Math.round((completeness / 5) * 100);
 
   return (
-    <PageTransition className="space-y-5">
+    <div className="space-y-5">
       {/* Welcome banner */}
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-        className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 p-6 text-white shadow-lg">
-        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)", backgroundSize: "30px 30px" }} />
-        <motion.div animate={{ x: [0, 10, 0], opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 4, repeat: Infinity }}
-          className="absolute right-6 top-4 h-24 w-24 rounded-full bg-white/10 blur-xl" />
+      <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.22,1,0.36,1] }}
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 p-6 text-white shadow-xl">
+        <div className="absolute inset-0 opacity-20" style={{backgroundImage:"radial-gradient(circle at 80% 50%, white 0%, transparent 60%)"}} />
+        <motion.div animate={{ scale:[1,1.05,1], opacity:[0.3,0.5,0.3] }} transition={{ duration:4, repeat:Infinity }}
+          className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
         <div className="relative flex items-center gap-4">
-          <motion.div whileHover={{ scale: 1.1, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }}
-            className="h-14 w-14 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-white font-extrabold text-xl shrink-0 shadow-lg border border-white/30">
+          <motion.div initial={{ scale:0 }} animate={{ scale:1 }} transition={{ delay:0.2, type:"spring", stiffness:200 }}
+            className="h-14 w-14 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-2xl font-extrabold shadow-lg shrink-0">
             {(profile && (profile.name || profile.email) ? (profile.name || profile.email)[0] : "?").toUpperCase()}
           </motion.div>
           <div>
-            <motion.h1 initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
-              className="text-xl font-extrabold leading-tight">
+            <motion.h1 initial={{ opacity:0, x:-10 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.3 }}
+              className="text-xl font-extrabold">
               Welcome back{profile && profile.name ? ", " + profile.name.split(" ")[0] : ""}! 
             </motion.h1>
-            <p className="text-white/70 text-sm mt-0.5">Here is your placement overview.</p>
+            <motion.p initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:0.4 }}
+              className="text-white/70 text-sm mt-0.5">Here is your placement overview.</motion.p>
           </div>
         </div>
       </motion.div>
@@ -526,104 +528,113 @@ function StudentHomeTab({ onTabChange }) {
           { label: "Rejected",    value: rejectedCount,    color: "text-red-500",    bg: "bg-red-50",    border: "border-red-100",    delay: 0.4 },
         ].map(function(s) {
           return (
-            <AnimatedStatCard key={s.label} label={s.label} value={s.value}
-              color={s.color} bg={s.bg} border={s.border} delay={s.delay} />
+            <motion.div key={s.label}
+              initial={{ opacity:0, scale:0.8, y:16 }} animate={{ opacity:1, scale:1, y:0 }}
+              transition={{ delay:s.delay, type:"spring", stiffness:200 }}
+              whileHover={{ scale:1.04, y:-2 }}
+              className={"rounded-2xl border p-4 text-center relative overflow-hidden cursor-default " + s.bg + " " + s.border}>
+              <motion.div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12"
+                initial={{ x:"-100%" }} animate={{ x:"200%" }} transition={{ delay:s.delay+0.4, duration:0.7 }} />
+              <p className={"text-3xl font-extrabold " + s.color}>{s.value}</p>
+              <p className="text-xs font-semibold text-muted-foreground mt-1">{s.label}</p>
+            </motion.div>
           );
         })}
       </div>
 
       {/* Profile completeness */}
       {pct < 100 && (
-        <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5 }}
-          className="rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 p-4 space-y-2">
-          <div className="flex items-center justify-between">
+        <motion.div initial={{ opacity:0, x:-16 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.5 }}
+          className="rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 p-4">
+          <div className="flex items-center justify-between mb-2">
             <p className="text-sm font-bold text-amber-800">Profile {pct}% complete</p>
             <button type="button" onClick={function() { onTabChange("profile"); }}
               className="text-xs text-amber-700 hover:text-amber-900 font-semibold underline transition-colors">
-              Complete now 
+              Complete now Ã¢â€ â€™
             </button>
           </div>
-          <div className="h-2 rounded-full bg-amber-100 overflow-hidden">
-            <motion.div initial={{ width: 0 }} animate={{ width: pct + "%" }} transition={{ delay: 0.7, duration: 0.8, ease: "easeOut" }}
+          <div className="h-2 rounded-full bg-amber-200 overflow-hidden">
+            <motion.div initial={{ width:0 }} animate={{ width: pct + "%" }} transition={{ delay:0.7, duration:0.8, ease:"easeOut" }}
               className="h-full rounded-full bg-gradient-to-r from-amber-400 to-orange-500" />
           </div>
-          <p className="text-xs text-amber-600">A complete profile improves your job match score.</p>
+          <p className="text-xs text-amber-600/80 mt-1.5">A complete profile improves your job match score.</p>
         </motion.div>
       )}
 
-      {/* Top recommended jobs */}
+      {/* Top recommended */}
       {recommended.length > 0 && (
         <div className="space-y-2">
-          <SectionHeader title=" Top Matches For You" action={function() { onTabChange("recommended"); }} actionLabel="See all" delay={0.4} />
-          <StaggerList className="space-y-2">
+          <SectionHeader title=" Top Matches For You" action={function() { onTabChange("recommended"); }} actionLabel="See all" delay={0.55} />
+          <div className="space-y-2">
             {recommended.map(function(job, i) {
               return (
-                <StaggerItem key={job.id || i}>
-                  <motion.div whileHover={{ x: 4 }} transition={{ duration: 0.2 }}
-                    className="rounded-xl border border-border/60 bg-card p-3 flex items-center justify-between gap-3 shadow-sm hover:shadow-md hover:border-primary/30 transition-all cursor-default">
-                    <div className="min-w-0">
-                      <p className="font-semibold text-sm truncate">{job.title}</p>
-                      <p className="text-xs text-muted-foreground">{job.company && job.company.name}  {job.location}</p>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span className={"text-xs font-bold px-2.5 py-1 rounded-full " + (job._score >= 70 ? "bg-green-100 text-green-700" : job._score >= 40 ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-600")}>
-                        {job._score}%
-                      </span>
-                      <button type="button" onClick={function() { onTabChange("browse"); }}
-                        className="text-xs text-primary hover:underline font-medium">View</button>
-                    </div>
-                  </motion.div>
-                </StaggerItem>
+                <motion.div key={job.id || i}
+                  initial={{ opacity:0, x:-12 }} animate={{ opacity:1, x:0 }}
+                  transition={{ delay: 0.6 + i * 0.08 }}
+                  whileHover={{ x:4, backgroundColor:"rgba(99,102,241,0.04)" }}
+                  className="rounded-xl border border-border/60 bg-card p-3 flex items-center justify-between gap-3 cursor-default transition-colors">
+                  <div className="min-w-0">
+                    <p className="font-semibold text-sm truncate">{job.title}</p>
+                    <p className="text-xs text-muted-foreground">{job.company && job.company.name}  {job.location}</p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className={"text-xs font-bold px-2.5 py-1 rounded-full " + (job._score >= 70 ? "bg-green-100 text-green-700" : job._score >= 40 ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-600")}>
+                      {job._score}%
+                    </span>
+                    <button type="button" onClick={function() { onTabChange("browse"); }}
+                      className="text-xs text-primary hover:underline font-medium">View</button>
+                  </div>
+                </motion.div>
               );
             })}
-          </StaggerList>
+          </div>
         </div>
       )}
 
       {/* Recent applications */}
       {recentApps.length > 0 && (
         <div className="space-y-2">
-          <SectionHeader title="Recent Applications" action={function() { onTabChange("applications"); }} actionLabel="See all" delay={0.5} />
-          <StaggerList className="space-y-2">
+          <SectionHeader title="Recent Applications" action={function() { onTabChange("applications"); }} actionLabel="See all" delay={0.65} />
+          <div className="space-y-2">
             {recentApps.map(function(app, i) {
-              const statusColor = { APPLIED: "bg-blue-100 text-blue-700", SHORTLISTED: "bg-amber-100 text-amber-700", SELECTED: "bg-green-100 text-green-700", REJECTED: "bg-red-100 text-red-600" };
+              var statusColor = { APPLIED:"bg-blue-100 text-blue-700", SHORTLISTED:"bg-amber-100 text-amber-700", SELECTED:"bg-green-100 text-green-700", REJECTED:"bg-red-100 text-red-600" };
               return (
-                <StaggerItem key={app.id || i}>
-                  <motion.div whileHover={{ x: 4 }} transition={{ duration: 0.2 }}
-                    className="rounded-xl border border-border/60 bg-card p-3 flex items-center justify-between gap-3 shadow-sm hover:shadow-md transition-all">
-                    <div className="min-w-0">
-                      <p className="font-semibold text-sm truncate">{app.job ? app.job.title : ("Job #" + app.jobId)}</p>
-                      <p className="text-xs text-muted-foreground">{app.job && app.job.company && app.job.company.name}</p>
-                    </div>
-                    <span className={"text-xs font-bold px-2.5 py-1 rounded-full shrink-0 " + (statusColor[app.status] || "bg-muted text-muted-foreground")}>
-                      {app.status}
-                    </span>
-                  </motion.div>
-                </StaggerItem>
+                <motion.div key={app.id || i}
+                  initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }}
+                  transition={{ delay: 0.7 + i * 0.08 }}
+                  whileHover={{ x:4 }}
+                  className="rounded-xl border border-border/60 bg-card p-3 flex items-center justify-between gap-3 cursor-default transition-all">
+                  <div className="min-w-0">
+                    <p className="font-semibold text-sm truncate">{app.job ? app.job.title : ("Job #" + app.jobId)}</p>
+                    <p className="text-xs text-muted-foreground">{app.job && app.job.company && app.job.company.name}</p>
+                  </div>
+                  <span className={"text-xs font-bold px-2.5 py-1 rounded-full shrink-0 " + (statusColor[app.status] || "bg-muted text-muted-foreground")}>
+                    {app.status}
+                  </span>
+                </motion.div>
               );
             })}
-          </StaggerList>
+          </div>
         </div>
       )}
 
       {/* Quick actions */}
       <div>
-        <SectionHeader title="Quick Actions" delay={0.6} />
+        <SectionHeader title="Quick Actions" delay={0.75} />
         <div className="grid grid-cols-2 gap-3">
           {[
             { label: "Browse Jobs",  icon: Briefcase,     tab: "browse",       gradient: "from-blue-500 to-indigo-600" },
             { label: "For You",      icon: Sparkles,      tab: "recommended",  gradient: "from-purple-500 to-violet-600" },
             { label: "My Profile",   icon: User,          tab: "profile",      gradient: "from-emerald-500 to-teal-600" },
-            { label: "Messages",     icon: MessageCircle, tab: "chat",         gradient: "from-amber-500 to-orange-600" },
+            { label: "Messages",     icon: MessageCircle, tab: "chat",         gradient: "from-pink-500 to-rose-600" },
           ].map(function(item, i) {
             var Icon = item.icon;
             return (
-              <motion.button key={item.tab} type="button"
-                initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.65 + i * 0.08 }}
-                whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}
-                onClick={function() { onTabChange(item.tab); }}
-                className={"rounded-2xl p-4 flex items-center gap-3 text-white shadow-md hover:shadow-lg transition-all bg-gradient-to-br " + item.gradient}>
+              <motion.button key={item.tab} type="button" onClick={function() { onTabChange(item.tab); }}
+                initial={{ opacity:0, scale:0.9 }} animate={{ opacity:1, scale:1 }}
+                transition={{ delay: 0.8 + i * 0.07, type:"spring", stiffness:200 }}
+                whileHover={{ scale:1.04, y:-2 }} whileTap={{ scale:0.97 }}
+                className={"rounded-2xl p-4 flex items-center gap-3 text-white shadow-lg bg-gradient-to-br " + item.gradient}>
                 <Icon className="h-5 w-5 shrink-0" />
                 <span className="text-sm font-bold">{item.label}</span>
               </motion.button>
@@ -631,6 +642,6 @@ function StudentHomeTab({ onTabChange }) {
           })}
         </div>
       </div>
-    </PageTransition>
+    </div>
   );
 }

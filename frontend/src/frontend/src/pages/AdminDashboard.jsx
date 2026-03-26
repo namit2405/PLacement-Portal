@@ -14,6 +14,7 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { JobTypeBadge } from "../components/JobTypeBadge";
+import { SectionHeader } from "../components/AnimatedUI";
 import { StatusBadge } from "../components/StatusBadge";
 import { useAllApplications, useAllJobs, useAllRecruiters, useAllStudents, useAssignRole, useDeleteJob, useDeleteRecruiter, useDeleteStudent, useStats, useUpdateApplicationStatus, useUpdateJob, useUpdateRecruiter, useUpdateStudent } from "../hooks/useQueries";
 
@@ -55,106 +56,103 @@ function DashboardTab() {
   const { data: applications = [] } = useAllApplications();
   const { data: jobs = [] } = useAllJobs();
 
-  const statCards = [
-    { icon: Users, label: "Total Students", value: stats ? stats.totalStudents : "—", color: "bg-blue-100 text-blue-600" },
-    { icon: Briefcase, label: "Total Jobs", value: stats ? stats.totalJobs : "—", color: "bg-purple-100 text-purple-600" },
-    { icon: FileText, label: "Total Applications", value: stats ? stats.totalApplications : "—", color: "bg-amber-100 text-amber-600" },
-    { icon: TrendingUp, label: "Placements", value: stats ? stats.placements : "—", color: "bg-green-100 text-green-600" },
-  ];
-
-  // Derived insights
   const pendingApps = applications.filter(a => a.status === "APPLIED").length;
   const expiredJobs = jobs.filter(j => j.last_date_to_apply && new Date(j.last_date_to_apply) < new Date()).length;
-  const activeJobs = jobs.filter(j => !j.last_date_to_apply || new Date(j.last_date_to_apply) >= new Date()).length;
   const placementRate = stats?.totalApplications
-    ? Math.round((stats.placements / stats.totalApplications) * 100)
-    : 0;
+    ? Math.round((stats.placements / stats.totalApplications) * 100) : 0;
 
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+    <div className="space-y-6">
+      <motion.div initial={{ opacity:0, y:-16 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.5 }}
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 p-6 text-white shadow-xl">
+        <div className="absolute inset-0 opacity-20" style={{backgroundImage:"radial-gradient(circle at 80% 50%, white 0%, transparent 60%)"}} />
+        <motion.div animate={{ scale:[1,1.08,1], opacity:[0.2,0.4,0.2] }} transition={{ duration:4, repeat:Infinity }}
+          className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
+        <div className="relative">
+          <motion.h1 initial={{ opacity:0, x:-10 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.2 }}
+            className="text-2xl font-extrabold">Admin Dashboard </motion.h1>
+          <motion.p initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:0.3 }}
+            className="text-white/70 text-sm mt-1">Platform overview and management tools.</motion.p>
+        </div>
+      </motion.div>
+
       {isLoading ? (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {[1,2,3,4].map(i => <Skeleton key={i} className="h-28" />)}
+          {[1,2,3,4].map(i => <Skeleton key={i} className="h-28 rounded-2xl" />)}
         </div>
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {statCards.map((card) => <StatCard key={card.label} {...card} />)}
+          {[
+            { icon: Users,      label: "Total Students",     value: stats?.totalStudents ?? "—",     color: "text-blue-600",   bg: "from-blue-50 to-indigo-50",   border: "border-blue-100",   delay: 0.1 },
+            { icon: Briefcase,  label: "Total Jobs",         value: stats?.totalJobs ?? "—",         color: "text-purple-600", bg: "from-purple-50 to-violet-50", border: "border-purple-100", delay: 0.2 },
+            { icon: FileText,   label: "Applications",       value: stats?.totalApplications ?? "—", color: "text-amber-600",  bg: "from-amber-50 to-orange-50",  border: "border-amber-100",  delay: 0.3 },
+            { icon: TrendingUp, label: "Placements",         value: stats?.placements ?? "",        color: "text-green-600",  bg: "from-green-50 to-emerald-50", border: "border-green-100",  delay: 0.4 },
+          ].map((s) => (
+            <motion.div key={s.label}
+              initial={{ opacity:0, scale:0.85, y:16 }} animate={{ opacity:1, scale:1, y:0 }}
+              transition={{ delay:s.delay, type:"spring", stiffness:200 }}
+              whileHover={{ scale:1.03, y:-2 }}
+              className={`rounded-2xl border bg-gradient-to-br ${s.bg} ${s.border} p-5 relative overflow-hidden cursor-default`}>
+              <motion.div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -skew-x-12"
+                initial={{ x:"-100%" }} animate={{ x:"200%" }} transition={{ delay:s.delay+0.4, duration:0.8 }} />
+              <s.icon className={`h-5 w-5 ${s.color} mb-3 opacity-80`} />
+              <p className={`text-3xl font-extrabold ${s.color}`}>{s.value}</p>
+              <p className="text-xs font-semibold text-muted-foreground mt-1">{s.label}</p>
+            </motion.div>
+          ))}
         </div>
       )}
 
-      {/* Insights row */}
       {!isLoading && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Card className="shadow-card border-amber-200 bg-amber-50/50">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
-                <FileText className="h-5 w-5" />
+          {[
+            { icon: FileText,   label: "Pending Reviews",      value: pendingApps,         color: "text-amber-700",  bg: "from-amber-50 to-orange-50",  border: "border-amber-200",  delay: 0.5  },
+            { icon: Trash2,     label: "Expired Postings",     value: expiredJobs,         color: "text-red-700",    bg: "from-red-50 to-rose-50",      border: "border-red-200",    delay: 0.55 },
+            { icon: TrendingUp, label: "Placement Rate",       value: placementRate + "%", color: "text-green-700",  bg: "from-green-50 to-emerald-50", border: "border-green-200",  delay: 0.6  },
+          ].map((s) => (
+            <motion.div key={s.label}
+              initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }}
+              transition={{ delay:s.delay, type:"spring", stiffness:180 }}
+              whileHover={{ scale:1.03, y:-2 }}
+              className={`rounded-2xl border bg-gradient-to-br ${s.bg} ${s.border} p-4 flex items-center gap-4 cursor-default`}>
+              <div className="h-11 w-11 rounded-xl bg-white/60 flex items-center justify-center shrink-0">
+                <s.icon className={`h-5 w-5 ${s.color}`} />
               </div>
               <div>
-                <p className="text-xl font-bold text-amber-700">{pendingApps}</p>
-                <p className="text-xs text-amber-600 font-medium">Pending Reviews</p>
+                <p className={`text-2xl font-extrabold ${s.color}`}>{s.value}</p>
+                <p className="text-xs font-semibold text-muted-foreground">{s.label}</p>
               </div>
-            </CardContent>
-          </Card>
-          <Card className="shadow-card border-red-200 bg-red-50/50">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center shrink-0">
-                <Trash2 className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-xl font-bold text-red-700">{expiredJobs}</p>
-                <p className="text-xs text-red-600 font-medium">Expired Job Postings</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="shadow-card border-green-200 bg-green-50/50">
-            <CardContent className="p-4 flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-green-100 text-green-600 flex items-center justify-center shrink-0">
-                <TrendingUp className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-xl font-bold text-green-700">{placementRate}%</p>
-                <p className="text-xs text-green-600 font-medium">Placement Rate</p>
-              </div>
-            </CardContent>
-          </Card>
+            </motion.div>
+          ))}
         </div>
       )}
 
-      <Card className="shadow-card">
-        <CardHeader><CardTitle>Admin Actions</CardTitle></CardHeader>
-        <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <ActionCard
-            icon={RefreshCw}
-            title="Refresh Stats"
-            description="Reload dashboard data from the server."
-            onClick={() => { refetch(); toast.success("Stats refreshed."); }}
-            variant="outline"
-          />
-          <ActionCard
-            icon={ShieldCheck}
-            title="Manage User Roles"
-            description="Assign or change roles for any user account."
-            onClick={() => document.querySelector('[data-ocid="admin.roles.tab"]')?.click()}
-            variant="outline"
-          />
-          <ActionCard
-            icon={Users}
-            title="View All Students"
-            description="Browse student profiles, CGPA, and skills."
-            onClick={() => document.querySelector('[data-ocid="admin.students.tab"]')?.click()}
-            variant="outline"
-          />
-          <ActionCard
-            icon={UserX}
-            title="Review Applications"
-            description={`${pendingApps} application${pendingApps !== 1 ? "s" : ""} awaiting review.`}
-            onClick={() => document.querySelector('[data-ocid="admin.applications.tab"]')?.click()}
-            variant={pendingApps > 0 ? "default" : "outline"}
-          />
-        </CardContent>
-      </Card>
-    </motion.div>
+      <div>
+        <SectionHeader title="Admin Actions" delay={0.65} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { icon: RefreshCw,   title: "Refresh Stats",       desc: "Reload dashboard data from the server.",                                     onClick: () => { refetch(); toast.success("Stats refreshed."); },                                                   gradient: "from-slate-500 to-gray-600",   highlight: false },
+            { icon: ShieldCheck, title: "Manage User Roles",   desc: "Assign or change roles for any user account.",                               onClick: () => document.querySelector('[data-ocid="admin.roles.tab"]')?.click(),                                    gradient: "from-indigo-500 to-violet-600", highlight: false },
+            { icon: Users,       title: "View All Students",   desc: "Browse student profiles, CGPA, and skills.",                                onClick: () => document.querySelector('[data-ocid="admin.students.tab"]')?.click(),                                 gradient: "from-blue-500 to-cyan-600",    highlight: false },
+            { icon: UserX,       title: "Review Applications", desc: `${pendingApps} application${pendingApps !== 1 ? "s" : ""} awaiting review.`, onClick: () => document.querySelector('[data-ocid="admin.applications.tab"]')?.click(), gradient: "from-amber-500 to-orange-600", highlight: pendingApps > 0 },
+          ].map((a, i) => (
+            <motion.button key={a.title} type="button" onClick={a.onClick}
+              initial={{ opacity:0, scale:0.95 }} animate={{ opacity:1, scale:1 }}
+              transition={{ delay: 0.7 + i * 0.07, type:"spring", stiffness:200 }}
+              whileHover={{ scale:1.02, y:-2 }} whileTap={{ scale:0.98 }}
+              className={`text-left rounded-2xl p-4 flex items-start gap-4 shadow-sm transition-all ${a.highlight ? "bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200" : "bg-card border border-border/60 hover:border-primary/30"}`}>
+              <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${a.gradient} flex items-center justify-center shrink-0 shadow-md`}>
+                <a.icon className="h-4 w-4 text-white" />
+              </div>
+              <div>
+                <p className="text-sm font-bold">{a.title}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{a.desc}</p>
+              </div>
+            </motion.button>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -243,17 +241,17 @@ function StudentsTab() {
                   <div className="grid grid-cols-3 gap-2 text-xs">
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Enrollment</p>
-                      <p className="font-medium truncate">{s.enrollment_no || "—"}</p>
+                      <p className="font-medium truncate">{s.enrollment_no || "â€”"}</p>
                     </div>
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">CGPA</p>
                       <p className={`font-semibold ${s.gpa >= 8 ? "text-green-600" : s.gpa >= 6 ? "text-amber-600" : "text-red-600"}`}>
-                        {s.gpa ? Number(s.gpa).toFixed(2) : "—"}
+                        {s.gpa ? Number(s.gpa).toFixed(2) : "â€”"}
                       </p>
                     </div>
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Grad Year</p>
-                      <p className="font-medium">{s.graduationYear || "—"}</p>
+                      <p className="font-medium">{s.graduationYear || "â€”"}</p>
                     </div>
                   </div>
                   {skillList.length > 0 && (
@@ -273,7 +271,7 @@ function StudentsTab() {
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>Edit Student — {editing?.user?.username}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Edit Student â€” {editing?.user?.username}</DialogTitle></DialogHeader>
           {form && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -387,9 +385,9 @@ function RecruitersTab() {
                     </div>
                   </div>
                   <div className="space-y-1 text-xs text-muted-foreground">
-                    {r.user?.email && <p className="flex items-center gap-1.5">📧 {r.user.email}</p>}
-                    {r.website && <a href={r.website} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-primary hover:underline">🌐 {r.website}</a>}
-                    {r.address && <p className="flex items-center gap-1.5">📍 {r.address}</p>}
+                    {r.user?.email && <p className="flex items-center gap-1.5">ðŸ“§ {r.user.email}</p>}
+                    {r.website && <a href={r.website} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-primary hover:underline">ðŸŒ {r.website}</a>}
+                    {r.address && <p className="flex items-center gap-1.5">ðŸ“ {r.address}</p>}
                     {r.description && <p className="line-clamp-2 mt-1 text-muted-foreground/80">{r.description}</p>}
                   </div>
                 </CardContent>
@@ -401,7 +399,7 @@ function RecruitersTab() {
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>Edit Recruiter — {editing?.name}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Edit Recruiter â€” {editing?.name}</DialogTitle></DialogHeader>
           {form && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -532,12 +530,12 @@ function JobsTab() {
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Location</p>
-                      <p className="font-medium truncate">{job.location || "—"}</p>
+                      <p className="font-medium truncate">{job.location || "â€”"}</p>
                     </div>
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Deadline</p>
                       <p className={`font-medium ${expired ? "text-red-500" : ""}`}>
-                        {job.last_date_to_apply ? new Date(job.last_date_to_apply).toLocaleDateString() : "—"}
+                        {job.last_date_to_apply ? new Date(job.last_date_to_apply).toLocaleDateString() : "â€”"}
                       </p>
                     </div>
                   </div>
@@ -558,7 +556,7 @@ function JobsTab() {
 
       <Dialog open={!!editingJob} onOpenChange={(o) => !o && setEditingJob(null)}>
         <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>Edit Job — {editingJob?.title}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Edit Job â€” {editingJob?.title}</DialogTitle></DialogHeader>
           {form && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -633,7 +631,7 @@ function ApplicationsTab() {
           {applications.map((app, i) => {
             const studentName = app.student?.user?.first_name
               ? `${app.student.user.first_name} ${app.student.user.last_name}`.trim()
-              : app.student?.user?.username ?? "—";
+              : app.student?.user?.username ?? "â€”";
             return (
               <Card key={app.id || i} className="shadow-card">
                 <CardContent className="p-4 space-y-3">
@@ -661,7 +659,7 @@ function ApplicationsTab() {
                       {studentName[0]?.toUpperCase()}
                     </div>
                     <span className="font-medium text-foreground">{studentName}</span>
-                    <span>·</span>
+                    <span>Â·</span>
                     <span>{new Date(app.applied_at).toLocaleDateString()}</span>
                   </div>
                   <Input
