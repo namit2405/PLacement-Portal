@@ -233,7 +233,7 @@ function ProfileTab() {
   const pct = Math.round((completeness / 5) * 100);
 
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-4 max-w-2xl">
+    <PageTransition className="space-y-4 max-w-2xl">
       <Card className="shadow-card">
         <CardHeader><CardTitle>Student Profile</CardTitle></CardHeader>
         <CardContent>
@@ -289,7 +289,7 @@ function ProfileTab() {
           {pct < 100 && <p className="text-xs text-muted-foreground mt-2">Complete your profile to improve job match scores.</p>}
         </CardContent>
       </Card>
-    </motion.div>
+    </PageTransition>
   );
 }
 
@@ -383,7 +383,7 @@ function RecommendedTab() {
   );
 
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+    <PageTransition className="space-y-4">
       <RecruiterProfileModal company={viewCompany} open={!!viewCompany} onClose={function() { setViewCompany(null); }} />
       <p className="text-sm text-muted-foreground">Top matches based on your skills and eligibility.</p>
       {recommended.length === 0 ? (
@@ -401,7 +401,7 @@ function RecommendedTab() {
           })}
         </div>
       )}
-    </motion.div>
+    </PageTransition>
   );
 }
 
@@ -416,7 +416,7 @@ function ApplicationsTab() {
   const counts = applications.reduce(function(acc, a) { acc[a.status] = (acc[a.status] || 0) + 1; return acc; }, {});
 
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+    <PageTransition className="space-y-4">
       <RecruiterProfileModal company={viewCompany} open={!!viewCompany} onClose={function() { setViewCompany(null); }} />
       {applications.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

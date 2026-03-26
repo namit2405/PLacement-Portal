@@ -81,7 +81,7 @@ function DashboardTab() {
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {[
-            { label: "Students",     value: stats?.totalStudents ?? "—",     accent: "text-foreground" },
+            { label: "Students",     value: stats?.totalStudents ?? "â€”",     accent: "text-foreground" },
             { label: "Jobs",         value: stats?.totalJobs ?? "",         accent: "text-indigo-600" },
             { label: "Applications", value: stats?.totalApplications ?? "", accent: "text-foreground" },
             { label: "Placements",   value: stats?.placements ?? "",        accent: "text-emerald-600" },
@@ -190,7 +190,7 @@ function StudentsTab() {
   if (isLoading) return <Skeleton className="h-64" />;
 
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
+    <PageTransition className="space-y-3">
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">All Students ({students.length})</h2>
       </div>
@@ -234,17 +234,17 @@ function StudentsTab() {
                   <div className="grid grid-cols-3 gap-2 text-xs">
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Enrollment</p>
-                      <p className="font-medium truncate">{s.enrollment_no || "ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â"}</p>
+                      <p className="font-medium truncate">{s.enrollment_no || "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â"}</p>
                     </div>
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">CGPA</p>
                       <p className={`font-semibold ${s.gpa >= 8 ? "text-green-600" : s.gpa >= 6 ? "text-amber-600" : "text-red-600"}`}>
-                        {s.gpa ? Number(s.gpa).toFixed(2) : "ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â"}
+                        {s.gpa ? Number(s.gpa).toFixed(2) : "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â"}
                       </p>
                     </div>
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Grad Year</p>
-                      <p className="font-medium">{s.graduationYear || "ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â"}</p>
+                      <p className="font-medium">{s.graduationYear || "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â"}</p>
                     </div>
                   </div>
                   {skillList.length > 0 && (
@@ -264,7 +264,7 @@ function StudentsTab() {
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>Edit Student ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â {editing?.user?.username}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Edit Student ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â {editing?.user?.username}</DialogTitle></DialogHeader>
           {form && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -312,7 +312,7 @@ function StudentsTab() {
           )}
         </DialogContent>
       </Dialog>
-    </motion.div>
+    </PageTransition>
   );
 }
 
@@ -339,7 +339,7 @@ function RecruitersTab() {
   if (isLoading) return <Skeleton className="h-64" />;
 
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
+    <PageTransition className="space-y-3">
       <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">All Recruiters ({recruiters.length})</h2>
       {recruiters.length === 0 ? (
         <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No recruiters registered yet.</p></CardContent></Card>
@@ -378,9 +378,9 @@ function RecruitersTab() {
                     </div>
                   </div>
                   <div className="space-y-1 text-xs text-muted-foreground">
-                    {r.user?.email && <p className="flex items-center gap-1.5">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒâ€šÃ‚Â§ {r.user.email}</p>}
-                    {r.website && <a href={r.website} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-primary hover:underline">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã¢â‚¬â„¢Ãƒâ€šÃ‚Â {r.website}</a>}
-                    {r.address && <p className="flex items-center gap-1.5">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒâ€šÃ‚Â {r.address}</p>}
+                    {r.user?.email && <p className="flex items-center gap-1.5">ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ {r.user.email}</p>}
+                    {r.website && <a href={r.website} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-primary hover:underline">ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â {r.website}</a>}
+                    {r.address && <p className="flex items-center gap-1.5">ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â {r.address}</p>}
                     {r.description && <p className="line-clamp-2 mt-1 text-muted-foreground/80">{r.description}</p>}
                   </div>
                 </CardContent>
@@ -392,7 +392,7 @@ function RecruitersTab() {
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>Edit Recruiter ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â {editing?.name}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Edit Recruiter ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â {editing?.name}</DialogTitle></DialogHeader>
           {form && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -435,7 +435,7 @@ function RecruitersTab() {
           )}
         </DialogContent>
       </Dialog>
-    </motion.div>
+    </PageTransition>
   );
 }
 
@@ -484,7 +484,7 @@ function JobsTab() {
   if (isLoading) return <Skeleton className="h-64" />;
 
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
+    <PageTransition className="space-y-3">
       <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">All Job Postings ({jobs.length})</h2>
       {jobs.length === 0 ? (
         <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No jobs posted yet.</p></CardContent></Card>
@@ -523,12 +523,12 @@ function JobsTab() {
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Location</p>
-                      <p className="font-medium truncate">{job.location || "ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â"}</p>
+                      <p className="font-medium truncate">{job.location || "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â"}</p>
                     </div>
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Deadline</p>
                       <p className={`font-medium ${expired ? "text-red-500" : ""}`}>
-                        {job.last_date_to_apply ? new Date(job.last_date_to_apply).toLocaleDateString() : "ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â"}
+                        {job.last_date_to_apply ? new Date(job.last_date_to_apply).toLocaleDateString() : "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â"}
                       </p>
                     </div>
                   </div>
@@ -549,7 +549,7 @@ function JobsTab() {
 
       <Dialog open={!!editingJob} onOpenChange={(o) => !o && setEditingJob(null)}>
         <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>Edit Job ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â {editingJob?.title}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Edit Job ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â {editingJob?.title}</DialogTitle></DialogHeader>
           {form && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -603,7 +603,7 @@ function JobsTab() {
           )}
         </DialogContent>
       </Dialog>
-    </motion.div>
+    </PageTransition>
   );
 }
 
@@ -615,7 +615,7 @@ function ApplicationsTab() {
   if (isLoading) return <Skeleton className="h-64" />;
 
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
+    <PageTransition className="space-y-3">
       <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">All Applications ({applications.length})</h2>
       {applications.length === 0 ? (
         <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No applications yet.</p></CardContent></Card>
@@ -624,7 +624,7 @@ function ApplicationsTab() {
           {applications.map((app, i) => {
             const studentName = app.student?.user?.first_name
               ? `${app.student.user.first_name} ${app.student.user.last_name}`.trim()
-              : app.student?.user?.username ?? "ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â";
+              : app.student?.user?.username ?? "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â";
             return (
               <Card key={app.id || i} className="shadow-card">
                 <CardContent className="p-4 space-y-3">
@@ -652,7 +652,7 @@ function ApplicationsTab() {
                       {studentName[0]?.toUpperCase()}
                     </div>
                     <span className="font-medium text-foreground">{studentName}</span>
-                    <span>ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â·</span>
+                    <span>ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â·</span>
                     <span>{new Date(app.applied_at).toLocaleDateString()}</span>
                   </div>
                   <Input
@@ -676,7 +676,7 @@ function ApplicationsTab() {
           })}
         </div>
       )}
-    </motion.div>
+    </PageTransition>
   );
 }
 
