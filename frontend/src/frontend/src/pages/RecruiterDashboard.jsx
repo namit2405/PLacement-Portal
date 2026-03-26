@@ -255,7 +255,7 @@ function JobForm({ initial, onSubmit, isPending, submitLabel }) {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="job-salary">Stipend / Salary</Label>
-          <Input id="job-salary" value={form.stipendOrSalary} onChange={(e) => setForm(p => ({ ...p, stipendOrSalary: e.target.value }))} placeholder="ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¹8,00,000 per annum" required />
+          <Input id="job-salary" value={form.stipendOrSalary} onChange={(e) => setForm(p => ({ ...p, stipendOrSalary: e.target.value }))} placeholder="ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¹8,00,000 per annum" required />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="job-type">Type</Label>
@@ -284,7 +284,7 @@ function JobForm({ initial, onSubmit, isPending, submitLabel }) {
         <Textarea id="job-description" value={form.description} onChange={(e) => setForm(p => ({ ...p, description: e.target.value }))} rows={4} required />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="job-requirements">Required Skills <span className="text-muted-foreground text-xs">(comma-separated ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â used for smart matching)</span></Label>
+        <Label htmlFor="job-requirements">Required Skills <span className="text-muted-foreground text-xs">(comma-separated ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â used for smart matching)</span></Label>
         <Input id="job-requirements" value={form.requirementsText} onChange={(e) => setForm(p => ({ ...p, requirementsText: e.target.value }))} placeholder="React, TypeScript, Node.js" />
       </div>
       <Button type="submit" disabled={isPending}>
@@ -349,8 +349,8 @@ function MyJobsTab({ onViewApplicants }) {
                   </div>
                   <p className="text-sm text-primary">{job.company?.name}</p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {job.location} Ãƒâ€šÃ‚Â· {job.stipendOrSalary}
-                    {job.eligibility_cgpa ? ` Ãƒâ€šÃ‚Â· Min CGPA: ${job.eligibility_cgpa}` : ""}
+                    {job.location} ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· {job.stipendOrSalary}
+                    {job.eligibility_cgpa ? ` ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· Min CGPA: ${job.eligibility_cgpa}` : ""}
                   </p>
                   {job.requirements?.length > 0 && (
                     <div className="flex gap-1 flex-wrap mt-2">
@@ -466,7 +466,7 @@ function ApplicantsTab() {
             <SelectTrigger><SelectValue placeholder="Choose a job posting..." /></SelectTrigger>
             <SelectContent>
               {myJobs.map((job) => (
-                <SelectItem key={job.id} value={String(job.id)}>{job.title} ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â {job.company?.name}</SelectItem>
+                <SelectItem key={job.id} value={String(job.id)}>{job.title} ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â {job.company?.name}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -496,7 +496,7 @@ function ApplicantsTab() {
             <div className="flex items-center justify-between flex-wrap gap-3">
               <CardTitle className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-primary" />
-                Applicants ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â ranked by skill match
+                Applicants ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ranked by skill match
               </CardTitle>
               {applicants.length > 0 && (
                 <div className="flex gap-2">
@@ -565,12 +565,12 @@ function ApplicantsTab() {
                             className="font-medium text-primary hover:underline text-left">
                             {app.student?.user?.first_name
                               ? `${app.student.user.first_name} ${app.student.user.last_name}`.trim()
-                              : app.student?.user?.username ?? "ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â"}
+                              : app.student?.user?.username ?? "ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â"}
                           </button>
                         </TableCell>
                         <TableCell>
                           <span className={`text-sm font-semibold ${Number(app.student?.cgpa) >= 8 ? "text-green-600" : Number(app.student?.cgpa) >= 6 ? "text-amber-600" : "text-red-500"}`}>
-                            {app.student?.cgpa ?? "ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â"}
+                            {app.student?.cgpa ?? "ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â"}
                           </span>
                         </TableCell>
                         <TableCell>
@@ -585,7 +585,7 @@ function ApplicantsTab() {
                         <TableCell>
                           {app.student?.resume_url
                             ? <a href={app.student.resume_url} target="_blank" rel="noreferrer" className="text-primary underline text-sm flex items-center gap-1"><FileText className="h-3.5 w-3.5" />View</a>
-                            : <span className="text-muted-foreground text-sm">ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â</span>}
+                            : <span className="text-muted-foreground text-sm">ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â</span>}
                         </TableCell>
                         <TableCell><StatusBadge status={app.status} /></TableCell>
                         <TableCell>
@@ -698,8 +698,8 @@ function RecruiterHomeTab({ onTabChange }) {
       {/* Active vs expired */}
       <div className="grid grid-cols-2 gap-3">
         {[
-          { label: "Active Jobs",  value: activeJobs,  color: "text-green-600", bg: "from-green-50 to-emerald-50", border: "border-green-100", delay: 0.45 },
-          { label: "Expired Jobs", value: expiredJobs, color: "text-red-500",   bg: "from-red-50 to-rose-50",     border: "border-red-100",   delay: 0.5  },
+          { label: "Active Jobs",  value: activeJobs.length,  color: "text-green-600", bg: "from-green-50 to-emerald-50", border: "border-green-100", delay: 0.45 },
+          { label: "Expired Jobs", value: expiredJobs.length, color: "text-red-500",   bg: "from-red-50 to-rose-50",     border: "border-red-100",   delay: 0.5  },
         ].map((s) => (
           <motion.div key={s.label}
             initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }}
