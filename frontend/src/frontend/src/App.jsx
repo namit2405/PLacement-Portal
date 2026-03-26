@@ -1,5 +1,6 @@
 import { Toaster } from "@/components/ui/sonner";
 import { GraduationCap, Loader2 } from "lucide-react";
+import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { MobileMenuButton, Sidebar } from "./components/Sidebar";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
@@ -79,13 +80,19 @@ function AppInner() {
         </div>
 
         {appRole === "student" && (
-          <StudentDashboard activeTab={activeTab} onTabChange={setActiveTab} />
+          <motion.div key="student" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="flex-1 flex flex-col min-w-0">
+            <StudentDashboard activeTab={activeTab} onTabChange={setActiveTab} />
+          </motion.div>
         )}
         {appRole === "recruiter" && (
-          <RecruiterDashboard activeTab={activeTab} onTabChange={setActiveTab} />
+          <motion.div key="recruiter" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="flex-1 flex flex-col min-w-0">
+            <RecruiterDashboard activeTab={activeTab} onTabChange={setActiveTab} />
+          </motion.div>
         )}
         {appRole === "admin" && (
-          <AdminDashboard activeTab={activeTab} onTabChange={setActiveTab} />
+          <motion.div key="admin" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="flex-1 flex flex-col min-w-0">
+            <AdminDashboard activeTab={activeTab} onTabChange={setActiveTab} />
+          </motion.div>
         )}
       </div>
 
