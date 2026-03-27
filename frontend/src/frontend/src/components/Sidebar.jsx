@@ -121,9 +121,6 @@ function SidebarContent({ role, activeTab, onTabChange, onClose }) {
           <LogOut className="h-3.5 w-3.5 shrink-0" />
           Sign Out
         </button>
-          <LogOut className="h-3.5 w-3.5 shrink-0" />
-          Sign Out
-        </button>
       </div>
     </div>
   );

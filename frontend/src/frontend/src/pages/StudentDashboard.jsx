@@ -471,7 +471,7 @@ function ApplicationsTab() {
           })}
         </div>
       )}
-    </motion.div>
+    </PageTransition>
   );
 }
 function StudentHomeTab({ onTabChange }) {

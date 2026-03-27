@@ -218,7 +218,7 @@ function CompanyProfileTab() {
           )}
         </CardContent>
       </Card>
-    </motion.div>
+    </PageTransition>
   );
 }
 
@@ -623,7 +623,7 @@ function ApplicantsTab() {
           </CardContent>
         </Card>
       )}
-    </motion.div>
+    </PageTransition>
   );
 }
 
