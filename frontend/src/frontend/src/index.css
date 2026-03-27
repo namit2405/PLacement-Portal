@@ -229,7 +229,14 @@
   transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Input focus */
+/* Sign out button */
+.sidebar-signout {
+  color: rgba(255,255,255,0.45) !important;
+}
+.sidebar-signout:hover {
+  color: #f87171 !important;
+  background: rgba(248,113,113,0.08) !important;
+}
 input:focus-visible, textarea:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px rgba(99,102,241,0.2) !important;

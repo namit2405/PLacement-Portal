@@ -117,10 +117,10 @@ function SidebarContent({ role, activeTab, onTabChange, onClose }) {
           </div>
         )}
         <button type="button" onClick={logout} data-ocid="nav.logout.button"
-          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium transition-all"
-          style={{ color: "rgba(255,255,255,0.45)" }}
-          onMouseEnter={e => e.currentTarget.style.color = "#f87171"}
-          onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.45)"}>
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium transition-colors sidebar-signout">
+          <LogOut className="h-3.5 w-3.5 shrink-0" />
+          Sign Out
+        </button>
           <LogOut className="h-3.5 w-3.5 shrink-0" />
           Sign Out
         </button>

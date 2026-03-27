@@ -81,7 +81,7 @@ function DashboardTab() {
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {[
-            { label: "Students",     value: stats?.totalStudents ?? "'€”",     accent: "text-foreground" },
+            { label: "Students",     value: stats?.totalStudents ?? "'",     accent: "text-foreground" },
             { label: "Jobs",         value: stats?.totalJobs ?? "",         accent: "text-indigo-600" },
             { label: "Applications", value: stats?.totalApplications ?? "", accent: "text-foreground" },
             { label: "Placements",   value: stats?.placements ?? "",        accent: "text-emerald-600" },
@@ -234,17 +234,17 @@ function StudentsTab() {
                   <div className="grid grid-cols-3 gap-2 text-xs">
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Enrollment</p>
-                      <p className="font-medium truncate">{s.enrollment_no || "eƒÆ’e†'€™eƒ'€še‚'¢eƒÆ’e‚'¢eƒ'¢e¢'€š'¬e…'¡eƒ'€še‚'¬eƒÆ’e‚'¢eƒ'¢e¢'‚¬Å¡e‚'¬eƒ'€še‚'"}</p>
+                      <p className="font-medium truncate">{s.enrollment_no || "ee'e'e'ee'e'e''e'e'e'ee'e'e'e'e'e'"}</p>
                     </div>
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">CGPA</p>
                       <p className={`font-semibold ${s.gpa >= 8 ? "text-green-600" : s.gpa >= 6 ? "text-amber-600" : "text-red-600"}`}>
-                        {s.gpa ? Number(s.gpa).toFixed(2) : "eƒÆ’e†'€™eƒ'€še‚'¢eƒÆ’e‚'¢eƒ'¢e¢'€š'¬e…'¡eƒ'€še‚'¬eƒÆ’e‚'¢eƒ'¢e¢'‚¬Å¡e‚'¬eƒ'€še‚'"}
+                        {s.gpa ? Number(s.gpa).toFixed(2) : "ee'e'e'ee'e'e''e'e'e'ee'e'e'e'e'e'"}
                       </p>
                     </div>
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Grad Year</p>
-                      <p className="font-medium">{s.graduationYear || "eƒÆ’e†'€™eƒ'€še‚'¢eƒÆ’e‚'¢eƒ'¢e¢'€š'¬e…'¡eƒ'€še‚'¬eƒÆ’e‚'¢eƒ'¢e¢'‚¬Å¡e‚'¬eƒ'€še‚'"}</p>
+                      <p className="font-medium">{s.graduationYear || "ee'e'e'ee'e'e''e'e'e'ee'e'e'e'e'e'"}</p>
                     </div>
                   </div>
                   {skillList.length > 0 && (
@@ -264,7 +264,7 @@ function StudentsTab() {
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>Edit Student eƒÆ’e†'€™eƒ'€še‚'¢eƒÆ’e‚'¢eƒ'¢e¢'€š'¬e…'¡eƒ'€še‚'¬eƒÆ’e‚'¢eƒ'¢e¢'‚¬Å¡e‚'¬eƒ'€še‚' {editing?.user?.username}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Edit Student ee'e'e'ee'e'e''e'e'e'ee'e'e'e'e'e' {editing?.user?.username}</DialogTitle></DialogHeader>
           {form && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -378,9 +378,9 @@ function RecruitersTab() {
                     </div>
                   </div>
                   <div className="space-y-1 text-xs text-muted-foreground">
-                    {r.user?.email && <p className="flex items-center gap-1.5">eƒÆ’e†'€™eƒ'€še‚'°eƒÆ’e¢'‚¬'¦eƒ'€še‚'¸eƒÆ’e‚'¢eƒ'¢e¢'‚¬Å¡e‚'¬eƒ'€¦e¢'‚¬Å“eƒÆ’e¢'‚¬Å¡eƒ'€še‚'§ {r.user.email}</p>}
-                    {r.website && <a href={r.website} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-primary hover:underline">eƒÆ’e†'€™eƒ'€še‚'°eƒÆ’e¢'‚¬'¦eƒ'€še‚'¸eƒÆ’e¢'‚¬'¦eƒ'¢e¢'€š'¬e¢'€ž'¢eƒÆ’e¢'‚¬Å¡eƒ'€še‚' {r.website}</a>}
-                    {r.address && <p className="flex items-center gap-1.5">eƒÆ’e†'€™eƒ'€še‚'°eƒÆ’e¢'‚¬'¦eƒ'€še‚'¸eƒÆ’e‚'¢eƒ'¢e¢'‚¬Å¡e‚'¬eƒ'€¦e¢'‚¬Å“eƒÆ’e¢'‚¬Å¡eƒ'€še‚' {r.address}</p>}
+                    {r.user?.email && <p className="flex items-center gap-1.5">ee'e'e'ee''e'e'ee'e'e'e'e'e'ee'e'e' {r.user.email}</p>}
+                    {r.website && <a href={r.website} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-primary hover:underline">ee'e'e'ee''e'e'ee''e'e''e''ee'e'e' {r.website}</a>}
+                    {r.address && <p className="flex items-center gap-1.5">ee'e'e'ee''e'e'ee'e'e'e'e'e'ee'e'e' {r.address}</p>}
                     {r.description && <p className="line-clamp-2 mt-1 text-muted-foreground/80">{r.description}</p>}
                   </div>
                 </CardContent>
@@ -392,7 +392,7 @@ function RecruitersTab() {
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>Edit Recruiter eƒÆ’e†'€™eƒ'€še‚'¢eƒÆ’e‚'¢eƒ'¢e¢'€š'¬e…'¡eƒ'€še‚'¬eƒÆ’e‚'¢eƒ'¢e¢'‚¬Å¡e‚'¬eƒ'€še‚' {editing?.name}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Edit Recruiter ee'e'e'ee'e'e''e'e'e'ee'e'e'e'e'e' {editing?.name}</DialogTitle></DialogHeader>
           {form && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -523,12 +523,12 @@ function JobsTab() {
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Location</p>
-                      <p className="font-medium truncate">{job.location || "eƒÆ’e†'€™eƒ'€še‚'¢eƒÆ’e‚'¢eƒ'¢e¢'€š'¬e…'¡eƒ'€še‚'¬eƒÆ’e‚'¢eƒ'¢e¢'‚¬Å¡e‚'¬eƒ'€še‚'"}</p>
+                      <p className="font-medium truncate">{job.location || "ee'e'e'ee'e'e''e'e'e'ee'e'e'e'e'e'"}</p>
                     </div>
                     <div className="bg-muted rounded-md px-2 py-1.5">
                       <p className="text-muted-foreground">Deadline</p>
                       <p className={`font-medium ${expired ? "text-red-500" : ""}`}>
-                        {job.last_date_to_apply ? new Date(job.last_date_to_apply).toLocaleDateString() : "eƒÆ’e†'€™eƒ'€še‚'¢eƒÆ’e‚'¢eƒ'¢e¢'€š'¬e…'¡eƒ'€še‚'¬eƒÆ’e‚'¢eƒ'¢e¢'‚¬Å¡e‚'¬eƒ'€še‚'"}
+                        {job.last_date_to_apply ? new Date(job.last_date_to_apply).toLocaleDateString() : "ee'e'e'ee'e'e''e'e'e'ee'e'e'e'e'e'"}
                       </p>
                     </div>
                   </div>
@@ -549,7 +549,7 @@ function JobsTab() {
 
       <Dialog open={!!editingJob} onOpenChange={(o) => !o && setEditingJob(null)}>
         <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>Edit Job eƒÆ’e†'€™eƒ'€še‚'¢eƒÆ’e‚'¢eƒ'¢e¢'€š'¬e…'¡eƒ'€še‚'¬eƒÆ’e‚'¢eƒ'¢e¢'‚¬Å¡e‚'¬eƒ'€še‚' {editingJob?.title}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Edit Job ee'e'e'ee'e'e''e'e'e'ee'e'e'e'e'e' {editingJob?.title}</DialogTitle></DialogHeader>
           {form && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -624,7 +624,7 @@ function ApplicationsTab() {
           {applications.map((app, i) => {
             const studentName = app.student?.user?.first_name
               ? `${app.student.user.first_name} ${app.student.user.last_name}`.trim()
-              : app.student?.user?.username ?? "eƒÆ’e†'€™eƒ'€še‚'¢eƒÆ’e‚'¢eƒ'¢e¢'€š'¬e…'¡eƒ'€še‚'¬eƒÆ’e‚'¢eƒ'¢e¢'‚¬Å¡e‚'¬eƒ'€še‚'";
+              : app.student?.user?.username ?? "ee'e'e'ee'e'e''e'e'e'ee'e'e'e'e'e'";
             return (
               <Card key={app.id || i} className="shadow-card">
                 <CardContent className="p-4 space-y-3">
@@ -652,7 +652,7 @@ function ApplicationsTab() {
                       {studentName[0]?.toUpperCase()}
                     </div>
                     <span className="font-medium text-foreground">{studentName}</span>
-                    <span>eƒÆ’e†'€™eƒ'¢e¢'€š'¬e…'¡eƒÆ’e¢'‚¬Å¡eƒ'€še‚'·</span>
+                    <span>ee'e'e''e'ee'e'e'</span>
                     <span>{new Date(app.applied_at).toLocaleDateString()}</span>
                   </div>
                   <Input
