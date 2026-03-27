@@ -22,8 +22,8 @@ import { calcSkillMatch, useAllJobs, useApplicationsForJob, useDeleteJob, usePos
 import { useCompanyProfile, useSaveCompanyProfile } from "../hooks/useQueries";
 import { useAllApplications } from "../hooks/useQueries";
 import { ChatPage, InlineChatPanel } from "../components/ChatPanel";
-import { SectionHeader } from "../components/AnimatedUI";
-import { SectionHeader } from "../components/AnimatedUI";
+import { PageTransition, SectionHeader } from "../components/AnimatedUI";
+import { PageTransition, SectionHeader } from "../components/AnimatedUI";
 
 const emptyJob = () => ({
   title: "", company: "", description: "", requirements: [],

@@ -14,7 +14,7 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { JobTypeBadge } from "../components/JobTypeBadge";
-import { SectionHeader } from "../components/AnimatedUI";
+import { PageTransition, SectionHeader } from "../components/AnimatedUI";
 import { StatusBadge } from "../components/StatusBadge";
 import { useAllApplications, useAllJobs, useAllRecruiters, useAllStudents, useAssignRole, useDeleteJob, useDeleteRecruiter, useDeleteStudent, useStats, useUpdateApplicationStatus, useUpdateJob, useUpdateRecruiter, useUpdateStudent } from "../hooks/useQueries";
 
