@@ -110,14 +110,17 @@ function SidebarContent({ role, activeTab, onTabChange, onClose }) {
               {(user.first_name || user.username || "?")[0].toUpperCase()}
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-medium text-sidebar-foreground/70 truncate">
+              <p className="text-xs font-medium truncate" style={{ color: "rgba(255,255,255,0.6)" }}>
                 {user.first_name ? `${user.first_name} ${user.last_name || ""}`.trim() : user.username}
               </p>
             </div>
           </div>
         )}
         <button type="button" onClick={logout} data-ocid="nav.logout.button"
-          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium text-sidebar-foreground/50 hover:text-red-400 hover:bg-red-500/10 transition-all">
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium transition-all"
+          style={{ color: "rgba(255,255,255,0.45)" }}
+          onMouseEnter={e => e.currentTarget.style.color = "#f87171"}
+          onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.45)"}>
           <LogOut className="h-3.5 w-3.5 shrink-0" />
           Sign Out
         </button>
