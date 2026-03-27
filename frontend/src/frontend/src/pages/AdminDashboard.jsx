@@ -652,7 +652,7 @@ function ApplicationsTab() {
                       {studentName[0]?.toUpperCase()}
                     </div>
                     <span className="font-medium text-foreground">{studentName}</span>
-                    <span>ee'e'e''e'ee'e'e'</span>
+                    <span className="text-muted-foreground"></span>
                     <span>{new Date(app.applied_at).toLocaleDateString()}</span>
                   </div>
                   <Input
