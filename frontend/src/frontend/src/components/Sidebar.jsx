@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
   Briefcase, Building2, ClipboardList, FileText,
-  GraduationCap, LayoutDashboard, LogOut, Menu, MessageCircle, Settings, Sparkles, User, Users, X,
+  GraduationCap, LayoutDashboard, LogOut, Menu, MessageCircle, Settings, Sparkles, User, Users, X, BarChart2,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useAuth } from "../hooks/useAuth";
@@ -28,6 +28,7 @@ const recruiterLinks = [
 
 const adminLinks = [
   { id: "dashboard",    label: "Dashboard",        icon: LayoutDashboard },
+  { id: "analytics",    label: "Analytics",        icon: BarChart2 },
   { id: "students",     label: "Students",         icon: GraduationCap },
   { id: "recruiters",   label: "Recruiters",       icon: Building2 },
   { id: "jobs",         label: "All Jobs",         icon: Briefcase },
