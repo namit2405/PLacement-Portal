@@ -458,3 +458,79 @@ class UnreadCountView(APIView):
     def get(self, request):
         count = Message.objects.filter(recipient=request.user, is_read=False).count()
         return Response({"unread": count})
+
+
+# ── Admin User Management ─────────────────────────────────────────────────────
+
+class AdminUsersListView(APIView):
+    """Admin: list all users with search + role filter."""
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def get(self, request):
+        qs = User.objects.all().order_by("-date_joined")
+        role = request.query_params.get("role")
+        search = request.query_params.get("search")
+        if role:
+            qs = qs.filter(role=role.upper())
+        if search:
+            from django.db.models import Q
+            qs = qs.filter(
+                Q(username__icontains=search) |
+                Q(email__icontains=search) |
+                Q(first_name__icontains=search) |
+                Q(last_name__icontains=search)
+            )
+        data = [{
+            "id": u.id,
+            "username": u.username,
+            "email": u.email,
+            "first_name": u.first_name,
+            "last_name": u.last_name,
+            "role": u.role,
+            "is_active": u.is_active,
+            "date_joined": u.date_joined,
+            "last_login": u.last_login,
+        } for u in qs]
+        return Response(data)
+
+
+class AdminUserDetailView(APIView):
+    """Admin: toggle active, reset password, change role, delete user."""
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def patch(self, request, pk):
+        try:
+            user = User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return Response({"detail": "Not found."}, status=404)
+
+        if user == request.user:
+            return Response({"detail": "Cannot modify your own account."}, status=400)
+
+        if "is_active" in request.data:
+            user.is_active = request.data["is_active"]
+
+        if "role" in request.data:
+            role = request.data["role"].upper()
+            if role in [User.Roles.STUDENT, User.Roles.COMPANY, User.Roles.ADMIN]:
+                user.role = role
+
+        if "password" in request.data:
+            from django.contrib.auth.hashers import make_password
+            user.password = make_password(request.data["password"])
+
+        user.save()
+        return Response({
+            "id": user.id, "username": user.username, "role": user.role,
+            "is_active": user.is_active,
+        })
+
+    def delete(self, request, pk):
+        try:
+            user = User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return Response({"detail": "Not found."}, status=404)
+        if user == request.user:
+            return Response({"detail": "Cannot delete your own account."}, status=400)
+        user.delete()
+        return Response(status=204)

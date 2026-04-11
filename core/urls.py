@@ -9,6 +9,7 @@ from .views import (
     AdminDashboardView, AdminAssignRoleView,
     AdminStudentDetailView, AdminRecruitersView, AdminRecruiterDetailView,
     ConversationsView, MessagesView, UnreadCountView,
+    AdminUsersListView, AdminUserDetailView,
 )
 
 router = DefaultRouter()
@@ -39,6 +40,9 @@ urlpatterns = [
     path("messages/", ConversationsView.as_view(), name="conversations"),
     path("messages/<int:partner_id>/", MessagesView.as_view(), name="messages"),
     path("messages/unread/", UnreadCountView.as_view(), name="unread-count"),
+    # User management
+    path("admin/users/", AdminUsersListView.as_view(), name="admin-users"),
+    path("admin/users/<int:pk>/", AdminUserDetailView.as_view(), name="admin-user-detail"),
     # Resources
     path("", include(router.urls)),
 ]

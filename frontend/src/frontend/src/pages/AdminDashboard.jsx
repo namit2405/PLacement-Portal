@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { BarChart2, Briefcase, Download, Edit, FileText, Loader2, RefreshCw, ShieldCheck, Trash2, TrendingUp, UserX, Users } from "lucide-react";
+import { BarChart2, Briefcase, Download, Edit, FileText, KeyRound, Loader2, RefreshCw, Search, ShieldCheck, Trash2, TrendingUp, UserCheck, UserX, Users } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line } from "recharts";
 import * as XLSX from "xlsx";
 import { motion } from "motion/react";
@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import { JobTypeBadge } from "../components/JobTypeBadge";
 import { PageTransition, SectionHeader } from "../components/AnimatedUI";
 import { StatusBadge } from "../components/StatusBadge";
-import { useAllApplications, useAllJobs, useAllRecruiters, useAllStudents, useAssignRole, useDeleteJob, useDeleteRecruiter, useDeleteStudent, useStats, useUpdateApplicationStatus, useUpdateJob, useUpdateRecruiter, useUpdateStudent } from "../hooks/useQueries";
+import { useAllApplications, useAllJobs, useAllRecruiters, useAllStudents, useAllUsers, useAssignRole, useDeleteJob, useDeleteRecruiter, useDeleteStudent, useDeleteUser, useStats, useUpdateApplicationStatus, useUpdateJob, useUpdateRecruiter, useUpdateStudent, useUpdateUser } from "../hooks/useQueries";
 
 export function AdminDashboard({ activeTab, onTabChange }) {
   return (
@@ -950,59 +950,165 @@ function ApplicationsTab() {
 }
 
 function RolesTab() {
+  const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState("ALL");
+  const [resetTarget, setResetTarget] = useState(null);
+  const [newPassword, setNewPassword] = useState("");
+  const { data: users = [], isLoading } = useAllUsers({ role: roleFilter === "ALL" ? "" : roleFilter, search });
+  const updateUser = useUpdateUser();
+  const deleteUser = useDeleteUser();
   const assignRole = useAssignRole();
-  const [usernameInput, setUsernameInput] = useState("");
-  const [selectedRole, setSelectedRole] = useState("STUDENT");
 
-  const handleAssign = (e) => {
-    e.preventDefault();
-    assignRole.mutate(
-      { username: usernameInput.trim(), role: selectedRole },
-      {
-        onSuccess: () => {
-          toast.success(`Role '${selectedRole}' assigned to ${usernameInput}.`);
-          setUsernameInput("");
-        },
-        onError: (err) => toast.error(err.response?.data?.detail || err.message || "Failed to assign role."),
-      }
-    );
+  const filtered = users;
+
+  const roleBadge = (role) => {
+    const map = { STUDENT: "bg-blue-50 text-blue-700", COMPANY: "bg-purple-50 text-purple-700", ADMIN: "bg-emerald-50 text-emerald-700" };
+    return <span className={`text-xs font-semibold px-2 py-0.5 rounded-md ${map[role] || "bg-muted text-muted-foreground"}`}>{role}</span>;
   };
 
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-      <Card className="max-w-lg shadow-card">
-        <CardHeader><CardTitle>Assign User Role</CardTitle></CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            Change a user's role directly. Use with caution.
-          </p>
-          <form onSubmit={handleAssign} className="space-y-4">
+    <PageTransition className="space-y-4">
+      {/* Header */}
+      <div>
+        <h2 className="text-base font-semibold text-foreground">User Management</h2>
+        <p className="text-xs text-muted-foreground mt-0.5">Manage all user accounts — roles, access, and passwords</p>
+      </div>
+
+      {/* Filters */}
+      <div className="flex gap-2 flex-wrap">
+        <div className="relative flex-1 min-w-48">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <Input placeholder="Search by name, username or email..." value={search}
+            onChange={e => setSearch(e.target.value)} className="pl-8 h-9 text-sm" />
+        </div>
+        <Select value={roleFilter} onValueChange={setRoleFilter}>
+          <SelectTrigger className="w-36 h-9 text-sm"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">All Roles</SelectItem>
+            <SelectItem value="STUDENT">Students</SelectItem>
+            <SelectItem value="COMPANY">Recruiters</SelectItem>
+            <SelectItem value="ADMIN">Admins</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Stats row */}
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          { label: "Students",  role: "STUDENT", color: "text-blue-600" },
+          { label: "Recruiters",role: "COMPANY", color: "text-purple-600" },
+          { label: "Admins",    role: "ADMIN",   color: "text-emerald-600" },
+        ].map(s => (
+          <div key={s.role} className="rounded-xl border border-border bg-card p-3 text-center cursor-pointer hover:border-indigo-200 transition-colors"
+            onClick={() => setRoleFilter(roleFilter === s.role ? "ALL" : s.role)}>
+            <p className={`text-xl font-bold ${s.color}`}>{users.filter(u => u.role === s.role).length}</p>
+            <p className="text-xs text-muted-foreground">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* User list */}
+      {isLoading ? (
+        <div className="space-y-2">{[1,2,3,4].map(i => <Skeleton key={i} className="h-16 rounded-xl" />)}</div>
+      ) : filtered.length === 0 ? (
+        <div className="rounded-xl border border-border bg-card py-12 text-center">
+          <p className="text-muted-foreground text-sm">No users found.</p>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {filtered.map((u, i) => (
+            <motion.div key={u.id}
+              initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }}
+              transition={{ delay: i * 0.03 }}
+              className={`rounded-xl border bg-card p-4 flex items-center gap-4 flex-wrap ${!u.is_active ? "opacity-50" : ""}`}>
+              {/* Avatar */}
+              <div className={`h-9 w-9 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0 ${u.is_active ? "bg-indigo-600" : "bg-muted-foreground"}`}>
+                {(u.first_name || u.username || "?")[0].toUpperCase()}
+              </div>
+              {/* Info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <p className="text-sm font-medium text-foreground">
+                    {u.first_name ? `${u.first_name} ${u.last_name}`.trim() : u.username}
+                  </p>
+                  {roleBadge(u.role)}
+                  {!u.is_active && <span className="text-xs bg-red-50 text-red-600 px-2 py-0.5 rounded-md font-semibold">Suspended</span>}
+                </div>
+                <p className="text-xs text-muted-foreground">@{u.username} · {u.email}</p>
+                <p className="text-xs text-muted-foreground">Joined: {new Date(u.date_joined).toLocaleDateString()}{u.last_login ? ` · Last login: ${new Date(u.last_login).toLocaleDateString()}` : ""}</p>
+              </div>
+              {/* Actions */}
+              <div className="flex items-center gap-1.5 shrink-0 flex-wrap">
+                {/* Change role */}
+                <Select value={u.role} onValueChange={role =>
+                  updateUser.mutate({ id: u.id, role }, {
+                    onSuccess: () => toast.success(`Role updated to ${role}`),
+                    onError: () => toast.error("Failed to update role"),
+                  })}>
+                  <SelectTrigger className="h-7 w-28 text-xs"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="STUDENT">Student</SelectItem>
+                    <SelectItem value="COMPANY">Recruiter</SelectItem>
+                    <SelectItem value="ADMIN">Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+                {/* Suspend / Activate */}
+                <motion.button type="button" whileHover={{ scale:1.05 }} whileTap={{ scale:0.95 }}
+                  onClick={() => updateUser.mutate({ id: u.id, is_active: !u.is_active }, {
+                    onSuccess: () => toast.success(u.is_active ? "User suspended" : "User activated"),
+                    onError: () => toast.error("Failed"),
+                  })}
+                  className={`h-7 px-2.5 rounded-lg text-xs font-medium border transition-colors ${u.is_active ? "border-amber-200 text-amber-700 hover:bg-amber-50" : "border-emerald-200 text-emerald-700 hover:bg-emerald-50"}`}>
+                  {u.is_active ? <><UserX className="h-3 w-3 inline mr-1" />Suspend</> : <><UserCheck className="h-3 w-3 inline mr-1" />Activate</>}
+                </motion.button>
+                {/* Reset password */}
+                <motion.button type="button" whileHover={{ scale:1.05 }} whileTap={{ scale:0.95 }}
+                  onClick={() => { setResetTarget(u); setNewPassword(""); }}
+                  className="h-7 px-2.5 rounded-lg text-xs font-medium border border-border text-muted-foreground hover:text-foreground hover:border-indigo-200 transition-colors">
+                  <KeyRound className="h-3 w-3 inline mr-1" />Reset PW
+                </motion.button>
+                {/* Delete */}
+                <motion.button type="button" whileHover={{ scale:1.05 }} whileTap={{ scale:0.95 }}
+                  onClick={() => {
+                    if (confirm(`Delete user "${u.username}"? This cannot be undone.`))
+                      deleteUser.mutate(u.id, {
+                        onSuccess: () => toast.success("User deleted"),
+                        onError: (e) => toast.error(e.response?.data?.detail || "Failed"),
+                      });
+                  }}
+                  className="h-7 px-2 rounded-lg text-xs border border-red-200 text-red-500 hover:bg-red-50 transition-colors">
+                  <Trash2 className="h-3 w-3" />
+                </motion.button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
+
+      {/* Reset password dialog */}
+      <Dialog open={!!resetTarget} onOpenChange={o => !o && setResetTarget(null)}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader><DialogTitle>Reset Password  @{resetTarget?.username}</DialogTitle></DialogHeader>
+          <div className="space-y-3 pt-1">
             <div className="space-y-1.5">
-              <Label htmlFor="username-input">Username</Label>
-              <Input id="username-input" value={usernameInput}
-                onChange={(e) => setUsernameInput(e.target.value)}
-                placeholder="student_username" required />
+              <Label className="text-xs font-medium">New Password</Label>
+              <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)}
+                placeholder="Min 6 characters" className="h-10" />
             </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="role-select">Role</Label>
-              <Select value={selectedRole} onValueChange={setSelectedRole}>
-                <SelectTrigger id="role-select"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="STUDENT">Student</SelectItem>
-                  <SelectItem value="COMPANY">Recruiter</SelectItem>
-                  <SelectItem value="ADMIN">Admin</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" size="sm" onClick={() => setResetTarget(null)}>Cancel</Button>
+              <Button size="sm" disabled={newPassword.length < 6 || updateUser.isPending}
+                onClick={() => updateUser.mutate({ id: resetTarget.id, password: newPassword }, {
+                  onSuccess: () => { toast.success("Password reset successfully"); setResetTarget(null); },
+                  onError: () => toast.error("Failed to reset password"),
+                })}>
+                {updateUser.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Reset Password"}
+              </Button>
             </div>
-            <Button type="submit" disabled={assignRole.isPending}>
-              {assignRole.isPending
-                ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Assigning...</>
-                : "Assign Role"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </motion.div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </PageTransition>
   );
 }
 

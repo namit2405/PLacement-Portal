@@ -436,3 +436,39 @@ export function useUnreadCount() {
     refetchInterval: 5000,
   });
 }
+
+// ── Admin User Management ─────────────────────────────────────────────────────
+
+export function useAllUsers(filters = {}) {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: ["allUsers", filters],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (filters.role) params.append("role", filters.role);
+      if (filters.search) params.append("search", filters.search);
+      const { data } = await api.get(`/admin/users/?${params}`);
+      return data;
+    },
+    enabled: !!user && user.role === "ADMIN",
+  });
+}
+
+export function useUpdateUser() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...fields }) => {
+      const { data } = await api.patch(`/admin/users/${id}/`, fields);
+      return data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["allUsers"] }),
+  });
+}
+
+export function useDeleteUser() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id) => { await api.delete(`/admin/users/${id}/`); },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["allUsers"] }),
+  });
+}
