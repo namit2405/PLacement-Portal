@@ -24,7 +24,7 @@ export function AdminDashboard({ activeTab, onTabChange }) {
   return (
     <main className="flex-1 p-3 sm:p-6 overflow-auto">
       <Tabs value={activeTab} onValueChange={onTabChange}>
-        <TabsContent value="dashboard"><DashboardTab /></TabsContent>
+        <TabsContent value="dashboard"><DashboardTab onTabChange={onTabChange} /></TabsContent>
         <TabsContent value="analytics"><AnalyticsTab /></TabsContent>
         <TabsContent value="students"><StudentsTab /></TabsContent>
         <TabsContent value="recruiters"><RecruitersTab /></TabsContent>
@@ -54,7 +54,7 @@ function StatCard({ icon: Icon, label, value, color }) {
   );
 }
 
-function DashboardTab() {
+function DashboardTab({ onTabChange }) {
   const { data: stats, isLoading, refetch } = useStats();
   const { data: applications = [] } = useAllApplications();
   const { data: jobs = [] } = useAllJobs();
@@ -125,9 +125,9 @@ function DashboardTab() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           {[
             { icon: ShieldCheck, title: "Manage User Roles",   desc: "Assign or change roles for any user.",                                       onClick: () => document.querySelector('[data-ocid="admin.roles.tab"]')?.click() },
-            { icon: Users,       title: "View All Students",   desc: "Browse student profiles, CGPA, and skills.",                                onClick: () => document.querySelector('[data-ocid="admin.students.tab"]')?.click() },
+            { icon: Users,       title: "View All Students",   desc: "Browse student profiles, CGPA, and skills.",                                onClick: () => onTabChange("students") },
             { icon: UserX,       title: "Review Applications", desc: `${pendingApps} application${pendingApps !== 1 ? "s" : ""} awaiting review.`, onClick: () => document.querySelector('[data-ocid="admin.applications.tab"]')?.click() },
-            { icon: Briefcase,   title: "Manage Jobs",         desc: "View, edit, or remove job postings.",                                        onClick: () => document.querySelector('[data-ocid="admin.jobs.tab"]')?.click() },
+            { icon: Briefcase,   title: "Manage Jobs",         desc: "View, edit, or remove job postings.",                                        onClick: () => onTabChange("jobs") },
           ].map((a, i) => {
             const Icon = a.icon;
             return (
