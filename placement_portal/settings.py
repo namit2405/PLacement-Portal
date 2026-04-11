@@ -1,6 +1,13 @@
 from pathlib import Path
 from datetime import timedelta
 import os
+
+# Load .env file if present (local development)
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+except ImportError:
+    pass
 import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
