@@ -253,7 +253,14 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             user=self.request.user,
             defaults={"enrollment_no": self.request.user.username},
         )
-        serializer.save(student=student_profile)
+        application = serializer.save(student=student_profile)
+        from .emails import notify_new_application
+        notify_new_application(application)
+
+    def perform_update(self, serializer):
+        application = serializer.save()
+        from .emails import notify_status_update
+        notify_status_update(application)
 
 
 # ── Admin Dashboard ───────────────────────────────────────────────────────────
