@@ -226,6 +226,8 @@ function AnalyticsTab() {
   const timeData = Object.entries(timeMap).map(([date, count]) => ({ date, Applications: count }));
 
   const COLORS = ["#6366f1","#f59e0b","#10b981","#ef4444","#8b5cf6","#06b6d4","#f97316","#ec4899"];
+  const STATUS_COLORS = ["#6366f1", "#f59e0b", "#10b981", "#ef4444"]; // Applied, Shortlisted, Selected, Rejected
+  const JOB_COLORS = ["#6366f1", "#f97316"]; // Full-time, Internship
 
   const exportToExcel = (type) => {
     const wb = XLSX.utils.book_new();
@@ -319,14 +321,14 @@ function AnalyticsTab() {
           <Card className="shadow-card">
             <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Application Status</CardTitle></CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={220}>
-                <PieChart>
-                  <Pie data={statusData} cx="50%" cy="50%" innerRadius={55} outerRadius={85}
-                    paddingAngle={3} dataKey="value" label={({ name, value }) => `${name}: ${value}`} labelLine={false}>
-                    {statusData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+              <ResponsiveContainer width="100%" height={280}>
+                <PieChart margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
+                  <Pie data={statusData} cx="50%" cy="45%" innerRadius={60} outerRadius={90}
+                    paddingAngle={4} dataKey="value">
+                    {statusData.map((_, i) => <Cell key={i} fill={STATUS_COLORS[i]} />)}
                   </Pie>
-                  <Tooltip />
-                  <Legend />
+                  <Tooltip formatter={(value, name) => [value, name]} />
+                  <Legend iconType="circle" iconSize={10} wrapperStyle={{ paddingTop: 12, fontSize: 12 }} />
                 </PieChart>
               </ResponsiveContainer>
             </CardContent>
@@ -337,14 +339,14 @@ function AnalyticsTab() {
           <Card className="shadow-card">
             <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Jobs by Type</CardTitle></CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={220}>
-                <PieChart>
-                  <Pie data={jobTypeData} cx="50%" cy="50%" innerRadius={55} outerRadius={85}
-                    paddingAngle={3} dataKey="value" label={({ name, value }) => `${name}: ${value}`} labelLine={false}>
-                    {jobTypeData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+              <ResponsiveContainer width="100%" height={280}>
+                <PieChart margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
+                  <Pie data={jobTypeData} cx="50%" cy="45%" innerRadius={60} outerRadius={90}
+                    paddingAngle={4} dataKey="value">
+                    {jobTypeData.map((_, i) => <Cell key={i} fill={JOB_COLORS[i]} />)}
                   </Pie>
-                  <Tooltip />
-                  <Legend />
+                  <Tooltip formatter={(value, name) => [value, name]} />
+                  <Legend iconType="circle" iconSize={10} wrapperStyle={{ paddingTop: 12, fontSize: 12 }} />
                 </PieChart>
               </ResponsiveContainer>
             </CardContent>
@@ -357,7 +359,7 @@ function AnalyticsTab() {
         <Card className="shadow-card">
           <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Applications per Company (Top 8)</CardTitle></CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={240}>
+            <ResponsiveContainer width="100%" height={260}>
               <BarChart data={companyData} margin={{ top:4, right:16, left:0, bottom:4 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                 <XAxis dataKey="name" tick={{ fontSize:11 }} />
@@ -376,7 +378,7 @@ function AnalyticsTab() {
           <Card className="shadow-card">
             <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Student CGPA Distribution</CardTitle></CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={220}>
+              <ResponsiveContainer width="100%" height={260}>
                 <BarChart data={cgpaData} margin={{ top:4, right:16, left:0, bottom:4 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                   <XAxis dataKey="range" tick={{ fontSize:11 }} />
@@ -393,7 +395,7 @@ function AnalyticsTab() {
           <Card className="shadow-card">
             <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Applications (Last 30 Days)</CardTitle></CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={220}>
+              <ResponsiveContainer width="100%" height={260}>
                 <LineChart data={timeData} margin={{ top:4, right:16, left:0, bottom:4 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                   <XAxis dataKey="date" tick={{ fontSize:9 }} interval={6} />
