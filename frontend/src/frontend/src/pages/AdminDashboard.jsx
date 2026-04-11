@@ -124,9 +124,9 @@ function DashboardTab({ onTabChange }) {
         <SectionHeader title="Admin Actions" delay={0.55} />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           {[
-            { icon: ShieldCheck, title: "Manage User Roles",   desc: "Assign or change roles for any user.",                                       onClick: () => document.querySelector('[data-ocid="admin.roles.tab"]')?.click() },
+            { icon: ShieldCheck, title: "Manage User Roles",   desc: "Assign or change roles for any user.",                                       onClick: () => onTabChange("roles") },
             { icon: Users,       title: "View All Students",   desc: "Browse student profiles, CGPA, and skills.",                                onClick: () => onTabChange("students") },
-            { icon: UserX,       title: "Review Applications", desc: `${pendingApps} application${pendingApps !== 1 ? "s" : ""} awaiting review.`, onClick: () => document.querySelector('[data-ocid="admin.applications.tab"]')?.click() },
+            { icon: UserX,       title: "Review Applications", desc: `${pendingApps} application${pendingApps !== 1 ? "s" : ""} awaiting review.`, onClick: () => onTabChange("applications") },
             { icon: Briefcase,   title: "Manage Jobs",         desc: "View, edit, or remove job postings.",                                        onClick: () => onTabChange("jobs") },
           ].map((a, i) => {
             const Icon = a.icon;
