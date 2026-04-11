@@ -23,7 +23,6 @@ import { useCompanyProfile, useSaveCompanyProfile } from "../hooks/useQueries";
 import { useAllApplications } from "../hooks/useQueries";
 import { ChatPage, InlineChatPanel } from "../components/ChatPanel";
 import { PageTransition, SectionHeader } from "../components/AnimatedUI";
-import { PageTransition, SectionHeader } from "../components/AnimatedUI";
 
 const emptyJob = () => ({
   title: "", company: "", description: "", requirements: [],
