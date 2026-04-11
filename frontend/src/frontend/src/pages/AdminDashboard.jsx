@@ -9,7 +9,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { BarChart2, Briefcase, Edit, FileText, Loader2, RefreshCw, ShieldCheck, Trash2, TrendingUp, UserX, Users } from "lucide-react";
+import { BarChart2, Briefcase, Download, Edit, FileText, Loader2, RefreshCw, ShieldCheck, Trash2, TrendingUp, UserX, Users } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line } from "recharts";
+import * as XLSX from "xlsx";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -167,6 +169,270 @@ function ActionCard({ icon: Icon, title, description, onClick, variant = "outlin
   );
 }
 
+function AnalyticsTab() {
+  const { data: applications = [], isLoading: appsLoading } = useAllApplications();
+  const { data: jobs = [], isLoading: jobsLoading } = useAllJobs();
+  const { data: students = [], isLoading: studentsLoading } = useAllStudents();
+  const { data: recruiters = [] } = useAllRecruiters();
+  const isLoading = appsLoading || jobsLoading || studentsLoading;
+
+  // Application status breakdown
+  const statusData = ["APPLIED","SHORTLISTED","SELECTED","REJECTED"].map(s => ({
+    name: s.charAt(0) + s.slice(1).toLowerCase(),
+    value: applications.filter(a => a.status === s).length,
+  }));
+
+  // Jobs by type
+  const jobTypeData = [
+    { name: "Full-time", value: jobs.filter(j => !j.is_internship).length },
+    { name: "Internship", value: jobs.filter(j => j.is_internship).length },
+  ];
+
+  // Applications per company (top 8)
+  const companyMap = {};
+  applications.forEach(a => {
+    const name = a.job?.company?.name || "Unknown";
+    companyMap[name] = (companyMap[name] || 0) + 1;
+  });
+  const companyData = Object.entries(companyMap)
+    .sort((a, b) => b[1] - a[1]).slice(0, 8)
+    .map(([name, count]) => ({ name: name.length > 12 ? name.slice(0,12)+"..." : name, Applications: count }));
+
+  // CGPA distribution
+  const cgpaBuckets = { "< 6": 0, "6-7": 0, "7-8": 0, "8-9": 0, "9-10": 0 };
+  students.forEach(s => {
+    const g = Number(s.cgpa || s.gpa || 0);
+    if (g < 6) cgpaBuckets["< 6"]++;
+    else if (g < 7) cgpaBuckets["6-7"]++;
+    else if (g < 8) cgpaBuckets["7-8"]++;
+    else if (g < 9) cgpaBuckets["8-9"]++;
+    else cgpaBuckets["9-10"]++;
+  });
+  const cgpaData = Object.entries(cgpaBuckets).map(([range, count]) => ({ range, Students: count }));
+
+  // Applications over time (last 30 days)
+  const timeMap = {};
+  const today = new Date();
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(today); d.setDate(d.getDate() - i);
+    timeMap[d.toLocaleDateString("en-IN", { day:"2-digit", month:"short" })] = 0;
+  }
+  applications.forEach(a => {
+    if (!a.applied_at) return;
+    const d = new Date(a.applied_at);
+    const key = d.toLocaleDateString("en-IN", { day:"2-digit", month:"short" });
+    if (key in timeMap) timeMap[key]++;
+  });
+  const timeData = Object.entries(timeMap).map(([date, count]) => ({ date, Applications: count }));
+
+  const COLORS = ["#6366f1","#f59e0b","#10b981","#ef4444","#8b5cf6","#06b6d4","#f97316","#ec4899"];
+
+  const exportToExcel = (type) => {
+    const wb = XLSX.utils.book_new();
+
+    if (type === "all" || type === "students") {
+      const studentRows = students.map(s => ({
+        Name: s.name || s.user?.username || "",
+        Email: s.email || s.user?.email || "",
+        Enrollment: s.enrollment_no || "",
+        CGPA: s.cgpa || s.gpa || "",
+        "Grad Year": s.graduationYear || s.year || "",
+        Skills: s.skills || "",
+      }));
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(studentRows), "Students");
+    }
+
+    if (type === "all" || type === "jobs") {
+      const jobRows = jobs.map(j => ({
+        Title: j.title || "",
+        Company: j.company?.name || j.company_name || "",
+        Location: j.location || "",
+        Type: j.is_internship ? "Internship" : "Full-time",
+        Salary: j.stipend_or_ctc || j.stipendOrSalary || "",
+        Deadline: j.last_date_to_apply || "",
+        Skills: j.skills_required || "",
+      }));
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(jobRows), "Jobs");
+    }
+
+    if (type === "all" || type === "applications") {
+      const appRows = applications.map(a => ({
+        Student: a.student?.user?.first_name ? `${a.student.user.first_name} ${a.student.user.last_name}`.trim() : a.student?.user?.username || "",
+        Job: a.job?.title || "",
+        Company: a.job?.company?.name || "",
+        Status: a.status || "",
+        "Applied On": a.applied_at ? new Date(a.applied_at).toLocaleDateString() : "",
+        Notes: a.notes || "",
+      }));
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(appRows), "Applications");
+    }
+
+    if (type === "all" || type === "recruiters") {
+      const recRows = recruiters.map(r => ({
+        Company: r.name || "",
+        Contact: r.user?.first_name ? `${r.user.first_name} ${r.user.last_name}`.trim() : r.user?.username || "",
+        Email: r.user?.email || "",
+        Website: r.website || "",
+        Address: r.address || "",
+      }));
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(recRows), "Recruiters");
+    }
+
+    XLSX.writeFile(wb, `placement_analytics_${type}_${new Date().toISOString().split("T")[0]}.xlsx`);
+    toast.success("Excel file downloaded!");
+  };
+
+  if (isLoading) return (
+    <div className="space-y-4">
+      {[1,2,3].map(i => <Skeleton key={i} className="h-64 rounded-xl" />)}
+    </div>
+  );
+
+  return (
+    <PageTransition className="space-y-5">
+      {/* Header + Export buttons */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h2 className="text-base font-semibold text-foreground">Analytics & Reports</h2>
+          <p className="text-xs text-muted-foreground mt-0.5">Visual insights and data exports</p>
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          {[
+            { label: "All Data",      type: "all" },
+            { label: "Students",      type: "students" },
+            { label: "Jobs",          type: "jobs" },
+            { label: "Applications",  type: "applications" },
+          ].map(btn => (
+            <motion.button key={btn.type} type="button" onClick={() => exportToExcel(btn.type)}
+              whileHover={{ scale:1.02 }} whileTap={{ scale:0.98 }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-xs font-medium text-foreground hover:border-indigo-300 hover:bg-indigo-50/50 transition-all">
+              <Download className="h-3.5 w-3.5 text-indigo-600" />
+              {btn.label}
+            </motion.button>
+          ))}
+        </div>
+      </div>
+
+      {/* Row 1: Status pie + Job type pie */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <motion.div initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.1 }}>
+          <Card className="shadow-card">
+            <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Application Status</CardTitle></CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={220}>
+                <PieChart>
+                  <Pie data={statusData} cx="50%" cy="50%" innerRadius={55} outerRadius={85}
+                    paddingAngle={3} dataKey="value" label={({ name, value }) => `${name}: ${value}`} labelLine={false}>
+                    {statusData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        <motion.div initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.15 }}>
+          <Card className="shadow-card">
+            <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Jobs by Type</CardTitle></CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={220}>
+                <PieChart>
+                  <Pie data={jobTypeData} cx="50%" cy="50%" innerRadius={55} outerRadius={85}
+                    paddingAngle={3} dataKey="value" label={({ name, value }) => `${name}: ${value}`} labelLine={false}>
+                    {jobTypeData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+
+      {/* Row 2: Applications per company bar chart */}
+      <motion.div initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.2 }}>
+        <Card className="shadow-card">
+          <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Applications per Company (Top 8)</CardTitle></CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={companyData} margin={{ top:4, right:16, left:0, bottom:4 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis dataKey="name" tick={{ fontSize:11 }} />
+                <YAxis tick={{ fontSize:11 }} allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="Applications" fill="#6366f1" radius={[4,4,0,0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Row 3: CGPA distribution + Applications over time */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <motion.div initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.25 }}>
+          <Card className="shadow-card">
+            <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Student CGPA Distribution</CardTitle></CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={cgpaData} margin={{ top:4, right:16, left:0, bottom:4 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <XAxis dataKey="range" tick={{ fontSize:11 }} />
+                  <YAxis tick={{ fontSize:11 }} allowDecimals={false} />
+                  <Tooltip />
+                  <Bar dataKey="Students" fill="#10b981" radius={[4,4,0,0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        <motion.div initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.3 }}>
+          <Card className="shadow-card">
+            <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Applications (Last 30 Days)</CardTitle></CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={220}>
+                <LineChart data={timeData} margin={{ top:4, right:16, left:0, bottom:4 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <XAxis dataKey="date" tick={{ fontSize:9 }} interval={6} />
+                  <YAxis tick={{ fontSize:11 }} allowDecimals={false} />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="Applications" stroke="#6366f1" strokeWidth={2} dot={false} />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+
+      {/* Summary table */}
+      <motion.div initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.35 }}>
+        <Card className="shadow-card">
+          <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Quick Summary</CardTitle></CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                { label: "Total Students",    value: students.length,      color: "text-indigo-600" },
+                { label: "Total Recruiters",  value: recruiters.length,    color: "text-purple-600" },
+                { label: "Active Jobs",       value: jobs.filter(j => !j.last_date_to_apply || new Date(j.last_date_to_apply) >= new Date()).length, color: "text-emerald-600" },
+                { label: "Placement Rate",    value: applications.length ? Math.round((applications.filter(a=>a.status==="SELECTED").length/applications.length)*100)+"%" : "0%", color: "text-amber-600" },
+              ].map((s,i) => (
+                <motion.div key={s.label} initial={{ opacity:0, scale:0.9 }} animate={{ opacity:1, scale:1 }}
+                  transition={{ delay: 0.4 + i*0.06 }}
+                  className="rounded-xl border border-border bg-muted/30 p-4 text-center">
+                  <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{s.label}</p>
+                </motion.div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </PageTransition>
+  );
+}
 function StudentsTab() {
   const { data: students = [], isLoading } = useAllStudents();
   const updateStudent = useUpdateStudent();
@@ -738,255 +1004,3 @@ function RolesTab() {
   );
 }
 
-function AnalyticsTab() {
-  const { data: applications = [], isLoading: appsLoading } = useAllApplications();
-  const { data: students = [], isLoading: studentsLoading } = useAllStudents();
-  const { data: jobs = [] } = useAllJobs();
-
-  const [yearFilter, setYearFilter] = useState("ALL");
-  const [statusFilter, setStatusFilter] = useState("SELECTED");
-  const [companyFilter, setCompanyFilter] = useState("ALL");
-
-  const isLoading = appsLoading || studentsLoading;
-
-  // Build student lookup: id -> student
-  const studentMap = {};
-  students.forEach(s => { studentMap[s.id] = s; });
-
-  // Graduation years available
-  const years = [...new Set(students.map(s => s.graduationYear).filter(Boolean))].sort((a,b) => b - a);
-
-  // Filter applications
-  const filtered = applications.filter(app => {
-    const matchStatus = statusFilter === "ALL" || app.status === statusFilter;
-    const student = app.student || studentMap[app.student_id];
-    const gradYear = student?.year ?? student?.graduationYear;
-    const matchYear = yearFilter === "ALL" || String(gradYear) === yearFilter;
-    const companyName = app.job?.company?.name ?? "";
-    const matchCompany = companyFilter === "ALL" || companyName === companyFilter;
-    return matchStatus && matchYear && matchCompany;
-  });
-
-  // Company placements count
-  const companyStats = {};
-  filtered.forEach(app => {
-    const name = app.job?.company?.name ?? "Unknown";
-    if (!companyStats[name]) companyStats[name] = { count: 0, students: [] };
-    companyStats[name].count++;
-    const student = app.student || studentMap[app.student_id];
-    const sName = student?.user?.first_name
-      ? `${student.user.first_name} ${student.user.last_name || ""}`.trim()
-      : student?.user?.username ?? "Unknown";
-    companyStats[name].students.push(sName);
-  });
-  const companySorted = Object.entries(companyStats).sort((a,b) => b[1].count - a[1].count);
-
-  // Year-wise stats
-  const yearStats = {};
-  filtered.forEach(app => {
-    const student = app.student || studentMap[app.student_id];
-    const yr = String(student?.year ?? student?.graduationYear ?? "Unknown");
-    yearStats[yr] = (yearStats[yr] || 0) + 1;
-  });
-  const yearSorted = Object.entries(yearStats).sort((a,b) => b[1] - a[1]);
-
-  // All companies for filter dropdown
-  const allCompanies = [...new Set(applications.map(a => a.job?.company?.name).filter(Boolean))].sort();
-
-  const maxCompanyCount = companySorted[0]?.[1]?.count || 1;
-  const maxYearCount = yearSorted[0]?.[1] || 1;
-
-  if (isLoading) return (
-    <div className="space-y-3">
-      {[1,2,3].map(i => <Skeleton key={i} className="h-24 rounded-xl" />)}
-    </div>
-  );
-
-  return (
-    <PageTransition className="space-y-5">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-base font-semibold text-foreground">Placement Analytics</h2>
-          <p className="text-xs text-muted-foreground mt-0.5">Filter and analyze placement data across companies and batches</p>
-        </div>
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 border border-indigo-100">
-          <BarChart2 className="h-3.5 w-3.5 text-indigo-600" />
-          <span className="text-xs font-semibold text-indigo-700">{filtered.length} records</span>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <motion.div initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.3 }}
-        className="rounded-xl border border-border bg-card p-4 flex flex-wrap gap-3 items-end">
-        <div className="space-y-1.5 min-w-36">
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</label>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ALL">All Statuses</SelectItem>
-              <SelectItem value="SELECTED">Selected (Placed)</SelectItem>
-              <SelectItem value="SHORTLISTED">Shortlisted</SelectItem>
-              <SelectItem value="APPLIED">Applied</SelectItem>
-              <SelectItem value="REJECTED">Rejected</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-1.5 min-w-36">
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Batch / Year</label>
-          <Select value={yearFilter} onValueChange={setYearFilter}>
-            <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ALL">All Batches</SelectItem>
-              {years.map(y => <SelectItem key={y} value={String(y)}>{y}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-1.5 min-w-44">
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Company</label>
-          <Select value={companyFilter} onValueChange={setCompanyFilter}>
-            <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ALL">All Companies</SelectItem>
-              {allCompanies.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        </div>
-        {(statusFilter !== "SELECTED" || yearFilter !== "ALL" || companyFilter !== "ALL") && (
-          <button type="button"
-            onClick={() => { setStatusFilter("SELECTED"); setYearFilter("ALL"); setCompanyFilter("ALL"); }}
-            className="text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors self-end pb-2">
-            Reset filters
-          </button>
-        )}
-      </motion.div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        {/* Company leaderboard */}
-        <motion.div initial={{ opacity:0, x:-12 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.1 }}
-          className="rounded-xl border border-border bg-card p-5 space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-foreground">Top Companies</h3>
-            <span className="text-xs text-muted-foreground">{companySorted.length} companies</span>
-          </div>
-          {companySorted.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-8">No data for selected filters.</p>
-          ) : (
-            <div className="space-y-3">
-              {companySorted.map(([name, data], i) => (
-                <motion.div key={name}
-                  initial={{ opacity:0, x:-8 }} animate={{ opacity:1, x:0 }}
-                  transition={{ delay: 0.15 + i * 0.05 }}
-                  className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className={`text-xs font-bold w-5 shrink-0 ${i === 0 ? "text-amber-500" : i === 1 ? "text-slate-400" : i === 2 ? "text-orange-400" : "text-muted-foreground"}`}>
-                        #{i+1}
-                      </span>
-                      <span className="text-sm font-medium text-foreground truncate">{name}</span>
-                    </div>
-                    <span className="text-sm font-bold text-indigo-600 shrink-0 ml-2">{data.count}</span>
-                  </div>
-                  <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                    <motion.div
-                      initial={{ width:0 }} animate={{ width: `${(data.count / maxCompanyCount) * 100}%` }}
-                      transition={{ delay: 0.2 + i * 0.05, duration:0.6, ease:"easeOut" }}
-                      className={`h-full rounded-full ${i === 0 ? "bg-indigo-600" : "bg-indigo-300"}`} />
-                  </div>
-                  <p className="text-xs text-muted-foreground truncate">
-                    {data.students.slice(0,3).join(", ")}{data.students.length > 3 ? ` +${data.students.length - 3} more` : ""}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </motion.div>
-
-        {/* Batch-wise breakdown */}
-        <motion.div initial={{ opacity:0, x:12 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.15 }}
-          className="rounded-xl border border-border bg-card p-5 space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-foreground">By Graduation Batch</h3>
-            <span className="text-xs text-muted-foreground">{yearSorted.length} batches</span>
-          </div>
-          {yearSorted.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-8">No data for selected filters.</p>
-          ) : (
-            <div className="space-y-3">
-              {yearSorted.map(([yr, count], i) => (
-                <motion.div key={yr}
-                  initial={{ opacity:0, x:8 }} animate={{ opacity:1, x:0 }}
-                  transition={{ delay: 0.2 + i * 0.05 }}
-                  className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-foreground">Batch {yr}</span>
-                    <span className="text-sm font-bold text-indigo-600">{count}</span>
-                  </div>
-                  <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                    <motion.div
-                      initial={{ width:0 }} animate={{ width: `${(count / maxYearCount) * 100}%` }}
-                      transition={{ delay: 0.25 + i * 0.05, duration:0.6, ease:"easeOut" }}
-                      className="h-full rounded-full bg-emerald-500" />
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </motion.div>
-      </div>
-
-      {/* Detailed table */}
-      {filtered.length > 0 && (
-        <motion.div initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.25 }}
-          className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="px-5 py-3.5 border-b border-border">
-            <h3 className="text-sm font-semibold text-foreground">Detailed Records ({filtered.length})</h3>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border bg-muted/40">
-                  <th className="text-left px-4 py-2.5 text-xs font-semibold text-muted-foreground">Student</th>
-                  <th className="text-left px-4 py-2.5 text-xs font-semibold text-muted-foreground">Batch</th>
-                  <th className="text-left px-4 py-2.5 text-xs font-semibold text-muted-foreground">Company</th>
-                  <th className="text-left px-4 py-2.5 text-xs font-semibold text-muted-foreground">Role</th>
-                  <th className="text-left px-4 py-2.5 text-xs font-semibold text-muted-foreground">Status</th>
-                  <th className="text-left px-4 py-2.5 text-xs font-semibold text-muted-foreground">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.slice(0, 50).map((app, i) => {
-                  const student = app.student || studentMap[app.student_id];
-                  const sName = student?.user?.first_name
-                    ? `${student.user.first_name} ${student.user.last_name || ""}`.trim()
-                    : student?.user?.username ?? "-";
-                  const gradYear = student?.year ?? student?.graduationYear ?? "-";
-                  const statusColor = { SELECTED:"bg-emerald-50 text-emerald-700", SHORTLISTED:"bg-indigo-50 text-indigo-700", APPLIED:"bg-blue-50 text-blue-700", REJECTED:"bg-muted text-muted-foreground" };
-                  return (
-                    <motion.tr key={app.id || i}
-                      initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay: 0.3 + i * 0.02 }}
-                      className="border-b border-border/50 hover:bg-muted/30 transition-colors">
-                      <td className="px-4 py-2.5 font-medium text-foreground">{sName}</td>
-                      <td className="px-4 py-2.5 text-muted-foreground">{gradYear}</td>
-                      <td className="px-4 py-2.5 text-muted-foreground">{app.job?.company?.name ?? "-"}</td>
-                      <td className="px-4 py-2.5 text-muted-foreground">{app.job?.title ?? "-"}</td>
-                      <td className="px-4 py-2.5">
-                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-md ${statusColor[app.status] || "bg-muted text-muted-foreground"}`}>
-                          {app.status}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2.5 text-muted-foreground text-xs">{new Date(app.applied_at).toLocaleDateString()}</td>
-                    </motion.tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            {filtered.length > 50 && (
-              <p className="text-xs text-muted-foreground text-center py-3">Showing 50 of {filtered.length} records</p>
-            )}
-          </div>
-        </motion.div>
-      )}
-    </PageTransition>
-  );
-}
