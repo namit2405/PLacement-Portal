@@ -129,7 +129,10 @@ export function RecruiterDashboard({ activeTab, onTabChange }) {
 function CompanyProfileTab() {
   const { data: profile, isLoading } = useCompanyProfile();
   const saveProfile = useSaveCompanyProfile();
-  const [form, setForm] = useState({ name: "", website: "", address: "", description: "" });
+  const [form, setForm] = useState({
+    name: "", website: "", address: "", description: "",
+    industry: "", company_size: "", founded_year: "", linkedin: "",
+  });
   const [initialized, setInitialized] = useState(false);
 
   if (profile && !initialized) {
@@ -139,85 +142,124 @@ function CompanyProfileTab() {
       website: profile.website || "",
       address: profile.address || "",
       description: profile.description || "",
+      industry: profile.industry || "",
+      company_size: profile.company_size || "",
+      founded_year: profile.founded_year ? String(profile.founded_year) : "",
+      linkedin: profile.linkedin || "",
     });
   }
 
+  const set = (key) => (e) => setForm((p) => ({ ...p, [key]: e.target.value }));
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    saveProfile.mutate(form, {
+    saveProfile.mutate({
+      ...form,
+      founded_year: form.founded_year ? parseInt(form.founded_year) : null,
+    }, {
       onSuccess: () => toast.success("Company profile saved!"),
       onError: () => toast.error("Failed to save profile."),
     });
   };
 
   if (isLoading) return (
-    <Card className="max-w-2xl shadow-card"><CardContent className="p-6 space-y-4">
-      <Skeleton className="h-10" /><Skeleton className="h-10" /><Skeleton className="h-10" /><Skeleton className="h-24" />
-    </CardContent></Card>
+    <div className="max-w-2xl space-y-3">
+      {[1,2,3].map(i => <Skeleton key={i} className="h-10 rounded-xl" />)}
+    </div>
   );
 
   const u = profile?.user ?? {};
-  const completeness = [profile?.name, profile?.website, profile?.address, profile?.description].filter(Boolean).length;
-  const pct = Math.round((completeness / 4) * 100);
+  const completeness = [form.name, form.website, form.address, form.description, form.industry, form.company_size, form.linkedin].filter(Boolean).length;
+  const pct = Math.round((completeness / 7) * 100);
 
   return (
     <PageTransition className="space-y-4 max-w-2xl">
       {/* Read-only user info */}
-      <Card className="shadow-card">
-        <CardContent className="p-4 flex items-center gap-4">
-          <div className="h-12 w-12 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-lg shrink-0">
-            {(form.name || u.username || "?")[0].toUpperCase()}
-          </div>
-          <div>
-            <p className="font-semibold">{u.first_name ? `${u.first_name} ${u.last_name}`.trim() : u.username}</p>
-            <p className="text-sm text-muted-foreground flex items-center gap-1"><Mail className="h-3.5 w-3.5" />{u.email}</p>
-          </div>
-        </CardContent>
-      </Card>
+      <motion.div initial={{ opacity:0, y:-8 }} animate={{ opacity:1, y:0 }}
+        className="rounded-xl border border-border bg-card p-4 flex items-center gap-4">
+        <div className="h-11 w-11 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-lg shrink-0">
+          {(form.name || u.username || "?")[0].toUpperCase()}
+        </div>
+        <div>
+          <p className="font-semibold text-sm">{u.first_name ? `${u.first_name} ${u.last_name || ""}`.trim() : u.username}</p>
+          <p className="text-xs text-muted-foreground flex items-center gap-1"><Mail className="h-3 w-3" />{u.email}</p>
+        </div>
+      </motion.div>
 
-      <Card className="shadow-card">
-        <CardHeader><CardTitle>Company Profile</CardTitle></CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Company basics */}
+        <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+          <p className="text-sm font-semibold text-foreground">Company Information</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label htmlFor="cp-name">Company Name</Label>
-              <Input id="cp-name" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} placeholder="TechCorp Inc." required />
+              <Label className="text-xs font-medium">Company Name</Label>
+              <Input value={form.name} onChange={set("name")} placeholder="TechCorp Inc." required className="h-10" />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="cp-website" className="flex items-center gap-1"><Globe className="h-3.5 w-3.5" />Website</Label>
-              <Input id="cp-website" value={form.website} onChange={e => setForm(p => ({ ...p, website: e.target.value }))} placeholder="https://techcorp.com" />
+              <Label className="text-xs font-medium flex items-center gap-1.5"><Globe className="h-3 w-3" />Website</Label>
+              <Input value={form.website} onChange={set("website")} placeholder="https://techcorp.com" className="h-10" />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="cp-address" className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />Address / Location</Label>
-              <Input id="cp-address" value={form.address} onChange={e => setForm(p => ({ ...p, address: e.target.value }))} placeholder="Bangalore, India" />
+              <Label className="text-xs font-medium">Industry</Label>
+              <Input value={form.industry} onChange={set("industry")} placeholder="Software / IT Services" className="h-10" />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="cp-desc">About the Company</Label>
-              <Textarea id="cp-desc" value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
-                rows={4} placeholder="Tell candidates about your company, culture, and what you do..." />
+              <Label className="text-xs font-medium">Company Size</Label>
+              <Select value={form.company_size} onValueChange={v => setForm(p => ({ ...p, company_size: v }))}>
+                <SelectTrigger className="h-10"><SelectValue placeholder="Select size..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1-10">1-10 employees</SelectItem>
+                  <SelectItem value="11-50">11-50 employees</SelectItem>
+                  <SelectItem value="51-200">51-200 employees</SelectItem>
+                  <SelectItem value="201-500">201-500 employees</SelectItem>
+                  <SelectItem value="501-1000">501-1000 employees</SelectItem>
+                  <SelectItem value="1000+">1000+ employees</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <Button type="submit" disabled={saveProfile.isPending}>
-              {saveProfile.isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</> : "Save Profile"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-
-      <Card className="shadow-card">
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-medium">Profile Completeness</p>
-            <span className="text-sm font-semibold text-primary">{pct}%</span>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium">Founded Year</Label>
+              <Input type="number" value={form.founded_year} onChange={set("founded_year")} placeholder="2010" min="1800" max={new Date().getFullYear()} className="h-10" />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium flex items-center gap-1.5"><MapPin className="h-3 w-3" />Location / Address</Label>
+              <Input value={form.address} onChange={set("address")} placeholder="Bangalore, India" className="h-10" />
+            </div>
           </div>
-          <Progress value={pct} className="h-2" />
-          {pct < 100 && (
-            <p className="text-xs text-muted-foreground mt-2">
-              A complete profile helps candidates trust your postings.
-              {!form.website && " Add a website."}{!form.address && " Add a location."}{!form.description && " Add a company description."}
-            </p>
-          )}
-        </CardContent>
-      </Card>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-medium">About the Company</Label>
+            <Textarea value={form.description} onChange={set("description")} rows={3} placeholder="Tell candidates about your company, culture, and what you do..." />
+          </div>
+        </div>
+
+        {/* Online presence */}
+        <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+          <p className="text-sm font-semibold text-foreground">Online Presence</p>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-medium">LinkedIn Company Page</Label>
+            <Input value={form.linkedin} onChange={set("linkedin")} placeholder="https://linkedin.com/company/techcorp" className="h-10" />
+          </div>
+        </div>
+
+        <motion.div whileHover={{ scale:1.01 }} whileTap={{ scale:0.99 }}>
+          <Button type="submit" disabled={saveProfile.isPending} className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 border-0">
+            {saveProfile.isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</> : "Save Profile"}
+          </Button>
+        </motion.div>
+      </form>
+
+      {/* Completeness */}
+      <div className="rounded-xl border border-border bg-card p-4">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-sm font-medium">Profile Completeness</p>
+          <span className="text-sm font-semibold text-indigo-600">{pct}%</span>
+        </div>
+        <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+          <motion.div initial={{ width:0 }} animate={{ width: pct + "%" }} transition={{ duration:0.7, ease:"easeOut" }}
+            className="h-full rounded-full bg-indigo-600" />
+        </div>
+        {pct < 100 && <p className="text-xs text-muted-foreground mt-2">A complete profile helps candidates trust your postings.</p>}
+      </div>
     </PageTransition>
   );
 }

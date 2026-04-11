@@ -36,8 +36,14 @@ class StudentProfile(models.Model):
     name = models.CharField(max_length=100, blank=True)
     year = models.IntegerField(null=True, blank=True)
     cgpa = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
-    skills = models.TextField(blank=True)  # comma-separated or free text
+    skills = models.TextField(blank=True)
     resume = models.FileField(upload_to="resumes/", storage=resume_storage, null=True, blank=True)
+    # Extended profile fields
+    phone = models.CharField(max_length=20, blank=True)
+    branch = models.CharField(max_length=100, blank=True)
+    linkedin = models.URLField(blank=True)
+    github = models.URLField(blank=True)
+    address = models.TextField(blank=True)
 
     def __str__(self) -> str:
         return f"{self.user.get_full_name()} ({self.enrollment_no})"
@@ -54,6 +60,11 @@ class Company(models.Model):
     website = models.URLField(blank=True)
     address = models.TextField(blank=True)
     description = models.TextField(blank=True)
+    # Extended profile fields
+    industry = models.CharField(max_length=100, blank=True)
+    company_size = models.CharField(max_length=50, blank=True)
+    founded_year = models.IntegerField(null=True, blank=True)
+    linkedin = models.URLField(blank=True)
 
     def __str__(self) -> str:
         return self.name

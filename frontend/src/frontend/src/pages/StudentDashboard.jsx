@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+﻿import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -200,7 +200,10 @@ function JobCard({ job, isApplied, onApply, isPending, studentProfile, onCompany
 function ProfileTab() {
   const { data: profile, isLoading } = useCallerProfile();
   const saveProfile = useSaveProfile();
-  const [form, setForm] = useState({ name: "", email: "", gpa: "", graduationYear: "", skills: "" });
+  const [form, setForm] = useState({
+    name: "", email: "", gpa: "", graduationYear: "", skills: "",
+    enrollment_no: "", phone: "", branch: "", linkedin: "", github: "", address: "",
+  });
   const [resumeFile, setResumeFile] = useState(null);
   const [initialized, setInitialized] = useState(false);
 
@@ -212,92 +215,145 @@ function ProfileTab() {
       gpa: profile.gpa ? String(profile.gpa) : "",
       graduationYear: profile.graduationYear ? String(profile.graduationYear) : "",
       skills: Array.isArray(profile.skills) ? profile.skills.join(", ") : (profile.skills || ""),
+      enrollment_no: profile.enrollment_no || "",
+      phone: profile.phone || "",
+      branch: profile.branch || "",
+      linkedin: profile.linkedin || "",
+      github: profile.github || "",
+      address: profile.address || "",
     });
   }
+
+  const set = (key) => (e) => setForm((p) => ({ ...p, [key]: e.target.value }));
 
   const handleSubmit = (e) => {
     e.preventDefault();
     saveProfile.mutate({
-      name: form.name, gpa: parseFloat(form.gpa) || 0,
+      name: form.name,
+      gpa: parseFloat(form.gpa) || 0,
       graduationYear: parseInt(form.graduationYear) || new Date().getFullYear(),
-      skills: form.skills, resumeFile,
+      skills: form.skills,
+      resumeFile,
+      enrollment_no: form.enrollment_no,
+      phone: form.phone,
+      branch: form.branch,
+      linkedin: form.linkedin,
+      github: form.github,
+      address: form.address,
     }, {
-      onSuccess: () => toast.success("Profile saved successfully!"),
+      onSuccess: () => toast.success("Profile saved!"),
       onError: () => toast.error("Failed to save profile."),
     });
   };
 
   if (isLoading) return (
-    <Card className="max-w-2xl shadow-card"><CardContent className="p-6 space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Skeleton className="h-10" /><Skeleton className="h-10" /><Skeleton className="h-10" /><Skeleton className="h-10" />
-      </div>
-      <Skeleton className="h-20" /><Skeleton className="h-10" />
-    </CardContent></Card>
+    <div className="max-w-2xl space-y-3">
+      {[1,2,3,4].map(i => <Skeleton key={i} className="h-10 rounded-xl" />)}
+    </div>
   );
 
   const skills = form.skills ? form.skills.split(",").map(s => s.trim()).filter(Boolean) : [];
-  const completeness = [profile?.name, profile?.gpa, profile?.year, profile?.skills, profile?.resumeUrl].filter(Boolean).length;
-  const pct = Math.round((completeness / 5) * 100);
+  const completeness = [profile?.name, profile?.gpa, profile?.year, profile?.skills, profile?.resumeUrl, profile?.phone, profile?.branch].filter(Boolean).length;
+  const pct = Math.round((completeness / 7) * 100);
 
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-4 max-w-2xl">
-      <Card className="shadow-card">
-        <CardHeader><CardTitle>Student Profile</CardTitle></CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="name">Full Name</Label>
-                <Input id="name" value={form.name} onChange={(e) => setForm(p => ({ ...p, name: e.target.value }))} placeholder="Jane Smith" />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="email">Email Address</Label>
-                <Input id="email" type="email" value={form.email} disabled className="opacity-60" />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="gpa">CGPA</Label>
-                <Input id="gpa" type="number" step="0.01" min="0" max="10" value={form.gpa} onChange={(e) => setForm(p => ({ ...p, gpa: e.target.value }))} placeholder="8.5" />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="year">Graduation Year</Label>
-                <Input id="year" type="number" value={form.graduationYear} onChange={(e) => setForm(p => ({ ...p, graduationYear: e.target.value }))} placeholder="2025" />
-              </div>
+    <PageTransition className="space-y-4 max-w-2xl">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Basic info */}
+        <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+          <p className="text-sm font-semibold text-foreground">Basic Information</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium">Full Name</Label>
+              <Input value={form.name} onChange={set("name")} placeholder="Jane Smith" className="h-10" />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="skills">Skills <span className="text-muted-foreground text-xs">(comma-separated)</span></Label>
-              <Textarea id="skills" value={form.skills} onChange={(e) => setForm(p => ({ ...p, skills: e.target.value }))} placeholder="React, Python, Machine Learning" />
-              {skills.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {skills.map(s => <Badge key={s} variant="secondary" className="text-xs">{s}</Badge>)}
-                </div>
-              )}
+              <Label className="text-xs font-medium">Email Address</Label>
+              <Input value={form.email} disabled className="h-10 opacity-50" />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="resume">Resume (PDF)</Label>
-              <Input id="resume" type="file" accept=".pdf,.doc,.docx" onChange={(e) => setResumeFile(e.target.files?.[0] ?? null)} />
-              {profile?.resumeUrl && !resumeFile && (
-                <p className="text-xs text-muted-foreground">Current: <a href={profile.resumeUrl} target="_blank" rel="noreferrer" className="text-primary underline">View uploaded resume</a></p>
-              )}
-              {resumeFile && <p className="text-xs text-muted-foreground">Selected: {resumeFile.name}</p>}
+              <Label className="text-xs font-medium">Enrollment No.</Label>
+              <Input value={form.enrollment_no} onChange={set("enrollment_no")} placeholder="2021CS001" className="h-10" />
             </div>
-            <Button type="submit" disabled={saveProfile.isPending}>
-              {saveProfile.isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</> : "Save Profile"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-      <Card className="shadow-card">
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-medium">Profile Completeness</p>
-            <span className="text-sm font-semibold text-primary">{pct}%</span>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium flex items-center gap-1.5"><Phone className="h-3 w-3" />Phone</Label>
+              <Input value={form.phone} onChange={set("phone")} placeholder="+91 98765 43210" className="h-10" />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium">Branch / Department</Label>
+              <Input value={form.branch} onChange={set("branch")} placeholder="Computer Science" className="h-10" />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium">Graduation Year</Label>
+              <Input type="number" value={form.graduationYear} onChange={set("graduationYear")} placeholder="2025" className="h-10" />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium">CGPA</Label>
+              <Input type="number" step="0.01" min="0" max="10" value={form.gpa} onChange={set("gpa")} placeholder="8.5" className="h-10" />
+            </div>
           </div>
-          <Progress value={pct} className="h-2" />
-          {pct < 100 && <p className="text-xs text-muted-foreground mt-2">Complete your profile to improve job match scores.</p>}
-        </CardContent>
-      </Card>
-    </motion.div>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-medium">Address</Label>
+            <Textarea value={form.address} onChange={set("address")} placeholder="City, State, Country" rows={2} />
+          </div>
+        </div>
+
+        {/* Online presence */}
+        <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+          <p className="text-sm font-semibold text-foreground">Online Presence</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium flex items-center gap-1.5"><Linkedin className="h-3 w-3" />LinkedIn</Label>
+              <Input value={form.linkedin} onChange={set("linkedin")} placeholder="https://linkedin.com/in/username" className="h-10" />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium flex items-center gap-1.5"><Github className="h-3 w-3" />GitHub</Label>
+              <Input value={form.github} onChange={set("github")} placeholder="https://github.com/username" className="h-10" />
+            </div>
+          </div>
+        </div>
+
+        {/* Skills */}
+        <div className="rounded-xl border border-border bg-card p-5 space-y-3">
+          <p className="text-sm font-semibold text-foreground">Skills</p>
+          <Textarea value={form.skills} onChange={set("skills")} placeholder="React, Python, Machine Learning" rows={2} />
+          {skills.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {skills.map(s => <Badge key={s} variant="secondary" className="text-xs">{s}</Badge>)}
+            </div>
+          )}
+        </div>
+
+        {/* Resume */}
+        <div className="rounded-xl border border-border bg-card p-5 space-y-3">
+          <p className="text-sm font-semibold text-foreground">Resume</p>
+          <Input type="file" accept=".pdf,.doc,.docx" onChange={e => setResumeFile(e.target.files?.[0] || null)} className="h-10" />
+          {profile?.resumeUrl && !resumeFile && (
+            <p className="text-xs text-muted-foreground">Current: <a href={profile.resumeUrl} target="_blank" rel="noreferrer" className="text-indigo-600 underline">View uploaded resume</a></p>
+          )}
+          {resumeFile && <p className="text-xs text-muted-foreground">Selected: {resumeFile.name}</p>}
+        </div>
+
+        <motion.div whileHover={{ scale:1.01 }} whileTap={{ scale:0.99 }}>
+          <Button type="submit" disabled={saveProfile.isPending} className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 border-0">
+            {saveProfile.isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</> : "Save Profile"}
+          </Button>
+        </motion.div>
+      </form>
+
+      {/* Completeness */}
+      <div className="rounded-xl border border-border bg-card p-4">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-sm font-medium">Profile Completeness</p>
+          <span className="text-sm font-semibold text-indigo-600">{pct}%</span>
+        </div>
+        <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+          <motion.div initial={{ width:0 }} animate={{ width: pct + "%" }} transition={{ duration:0.7, ease:"easeOut" }}
+            className="h-full rounded-full bg-indigo-600" />
+        </div>
+        {pct < 100 && <p className="text-xs text-muted-foreground mt-2">Add phone, branch, LinkedIn and GitHub to reach 100%.</p>}
+      </div>
+    </PageTransition>
   );
 }
 

@@ -228,6 +228,11 @@ export function useSaveProfile() {
         formData.append("skills", Array.isArray(profile.skills) ? profile.skills.join(", ") : profile.skills);
       }
       if (profile.enrollment_no !== undefined) formData.append("enrollment_no", profile.enrollment_no);
+      if (profile.phone !== undefined) formData.append("phone", profile.phone || "");
+      if (profile.branch !== undefined) formData.append("branch", profile.branch || "");
+      if (profile.linkedin !== undefined) formData.append("linkedin", profile.linkedin || "");
+      if (profile.github !== undefined) formData.append("github", profile.github || "");
+      if (profile.address !== undefined) formData.append("address", profile.address || "");
       // Only append resume if it's an actual File object
       if (profile.resumeFile instanceof File) {
         formData.append("resume", profile.resumeFile);

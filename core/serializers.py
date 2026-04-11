@@ -159,7 +159,11 @@ class StudentProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StudentProfile
-        fields = ["id", "user", "enrollment_no", "name", "year", "cgpa", "skills", "resume", "resume_url"]
+        fields = [
+            "id", "user", "enrollment_no", "name", "year", "cgpa", "skills",
+            "resume", "resume_url",
+            "phone", "branch", "linkedin", "github", "address",
+        ]
         extra_kwargs = {"resume": {"write_only": True, "required": False}}
 
     def get_resume_url(self, obj):
@@ -176,7 +180,8 @@ class CompanySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Company
-        fields = ["id", "user", "name", "website", "address", "description"]
+        fields = ["id", "user", "name", "website", "address", "description",
+                  "industry", "company_size", "founded_year", "linkedin"]
 
 
 class JobSerializer(serializers.ModelSerializer):
@@ -223,7 +228,7 @@ class AdminStudentUpdateSerializer(serializers.ModelSerializer):
     """Admin can edit student profile fields."""
     class Meta:
         model = StudentProfile
-        fields = ["name", "enrollment_no", "year", "cgpa", "skills"]
+        fields = ["name", "enrollment_no", "year", "cgpa", "skills", "phone", "branch", "linkedin", "github", "address"]
 
 
 class AdminUserUpdateSerializer(serializers.ModelSerializer):
