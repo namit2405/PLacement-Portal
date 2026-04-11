@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { AlertCircle, Briefcase, Building2, Calendar, CheckCircle2, DollarSign, Globe, Loader2, Mail, MapPin, MessageCircle, Search, Sparkles, XCircle } from "lucide-react";
+import { AlertCircle, Briefcase, Building2, Calendar, CheckCircle2, DollarSign, Github, Globe, Linkedin, Loader2, Mail, MapPin, MessageCircle, Phone, Search, Sparkles, User, XCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -19,22 +19,13 @@ import { ChatPage } from "../components/ChatPanel";
 import { JobTypeBadge } from "../components/JobTypeBadge";
 import { StatusBadge } from "../components/StatusBadge";
 import { calcSkillMatch, useAllJobs, useApplyToJob, useCallerProfile, useMyApplications, useSaveProfile } from "../hooks/useQueries";
+import { PageTransition, SectionHeader } from "../components/AnimatedUI";
 
 export function StudentDashboard({ activeTab, onTabChange }) {
   return (
     <main className="flex-1 p-3 sm:p-6 overflow-auto">
       <Tabs value={activeTab} onValueChange={onTabChange}>
-        <TabsList className="mb-6 w-full sm:w-auto">
-          <TabsTrigger value="profile" className="flex-1 sm:flex-none">My Profile</TabsTrigger>
-          <TabsTrigger value="browse" className="flex-1 sm:flex-none">Browse Jobs</TabsTrigger>
-          <TabsTrigger value="recommended" className="flex-1 sm:flex-none">
-            <Sparkles className="h-3.5 w-3.5 mr-1" />For You
-          </TabsTrigger>
-          <TabsTrigger value="applications" className="flex-1 sm:flex-none">My Applications</TabsTrigger>
-          <TabsTrigger value="chat" className="flex-1 sm:flex-none">
-            <MessageCircle className="h-3.5 w-3.5 mr-1" />Messages
-          </TabsTrigger>
-        </TabsList>
+        <TabsContent value="dashboard"><StudentHomeTab onTabChange={onTabChange} /></TabsContent>
         <TabsContent value="profile"><ProfileTab /></TabsContent>
         <TabsContent value="browse"><BrowseJobsTab /></TabsContent>
         <TabsContent value="recommended"><RecommendedTab /></TabsContent>
@@ -524,5 +515,161 @@ function ApplicationsTab() {
         </div>
       )}
     </motion.div>
+  );
+}
+
+function StudentHomeTab({ onTabChange }) {
+  const { data: profile } = useCallerProfile();
+  const { data: jobs = [] } = useAllJobs();
+  const { data: myApps = [] } = useMyApplications();
+
+  const appliedCount = myApps.length;
+  const shortlistedCount = myApps.filter(a => a.status === "SHORTLISTED").length;
+  const selectedCount = myApps.filter(a => a.status === "SELECTED").length;
+  const rejectedCount = myApps.filter(a => a.status === "REJECTED").length;
+
+  const recommended = !profile?.skills ? [] : jobs
+    .filter(j => !j.last_date_to_apply || new Date(j.last_date_to_apply) >= new Date())
+    .map(j => ({ ...j, _score: calcSkillMatch(profile.skills, j.skills_required || "").score }))
+    .sort((a, b) => b._score - a._score)
+    .slice(0, 3);
+
+  const recentApps = myApps.slice(0, 3);
+  const completeness = [profile?.name, profile?.gpa, profile?.year, profile?.skills, profile?.resumeUrl, profile?.phone, profile?.branch].filter(Boolean).length;
+  const pct = Math.round((completeness / 7) * 100);
+
+  return (
+    <div className="space-y-5">
+      <motion.div initial={{ opacity:0, y:-12 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.4 }}
+        className="rounded-xl border border-border bg-card p-5 flex items-center gap-4">
+        <motion.div initial={{ scale:0.8, opacity:0 }} animate={{ scale:1, opacity:1 }} transition={{ delay:0.1, type:"spring", stiffness:200 }}
+          className="h-12 w-12 rounded-xl bg-indigo-600 flex items-center justify-center text-white text-lg font-bold shrink-0 shadow-md shadow-indigo-500/20">
+          {(profile?.name || profile?.email || "?")[0].toUpperCase()}
+        </motion.div>
+        <div>
+          <motion.h1 initial={{ opacity:0, x:-8 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.15 }}
+            className="text-lg font-semibold text-foreground">
+            Welcome back{profile?.name ? `, ${profile.name.split(" ")[0]}` : ""}
+          </motion.h1>
+          <motion.p initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:0.2 }}
+            className="text-sm text-muted-foreground">Here is your placement overview.</motion.p>
+        </div>
+      </motion.div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { label: "Applied",     value: appliedCount,     accent: "text-foreground",       delay: 0.1 },
+          { label: "Shortlisted", value: shortlistedCount, accent: "text-indigo-600",        delay: 0.2 },
+          { label: "Selected",    value: selectedCount,    accent: "text-emerald-600",       delay: 0.3 },
+          { label: "Rejected",    value: rejectedCount,    accent: "text-muted-foreground",  delay: 0.4 },
+        ].map(s => (
+          <motion.div key={s.label}
+            initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }}
+            transition={{ delay: s.delay, duration:0.35 }}
+            whileHover={{ y:-2, boxShadow:"0 4px 16px rgba(99,102,241,0.08)" }}
+            className="rounded-xl border border-border bg-card p-4 cursor-default transition-shadow">
+            <p className={`text-2xl font-bold ${s.accent}`}>{s.value}</p>
+            <p className="text-xs text-muted-foreground font-medium mt-0.5">{s.label}</p>
+          </motion.div>
+        ))}
+      </div>
+
+      {pct < 100 && (
+        <motion.div initial={{ opacity:0, x:-12 }} animate={{ opacity:1, x:0 }} transition={{ delay:0.35 }}
+          className="rounded-xl border border-border bg-card p-4">
+          <div className="flex items-center justify-between mb-2.5">
+            <p className="text-sm font-medium text-foreground">Profile completeness</p>
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-semibold text-indigo-600">{pct}%</span>
+              <button type="button" onClick={() => onTabChange("profile")}
+                className="text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors">Complete</button>
+            </div>
+          </div>
+          <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+            <motion.div initial={{ width:0 }} animate={{ width: pct + "%" }} transition={{ delay:0.5, duration:0.7, ease:"easeOut" }}
+              className="h-full rounded-full bg-indigo-600" />
+          </div>
+        </motion.div>
+      )}
+
+      {recommended.length > 0 && (
+        <div className="space-y-2">
+          <SectionHeader title="Top Matches For You" action={() => onTabChange("recommended")} actionLabel="See all" delay={0.4} />
+          <div className="space-y-1.5">
+            {recommended.map((job, i) => (
+              <motion.div key={job.id || i}
+                initial={{ opacity:0, x:-8 }} animate={{ opacity:1, x:0 }}
+                transition={{ delay: 0.45 + i * 0.07 }}
+                whileHover={{ x:3 }}
+                className="rounded-lg border border-border bg-card px-4 py-3 flex items-center justify-between gap-3 cursor-default transition-all">
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-foreground truncate">{job.title}</p>
+                  <p className="text-xs text-muted-foreground">{job.company?.name}{job.location ? ` · ${job.location}` : ""}</p>
+                </div>
+                <div className="flex items-center gap-2.5 shrink-0">
+                  <span className={`text-xs font-semibold px-2 py-0.5 rounded-md ${job._score >= 70 ? "bg-emerald-50 text-emerald-700" : job._score >= 40 ? "bg-amber-50 text-amber-700" : "bg-muted text-muted-foreground"}`}>
+                    {job._score}%
+                  </span>
+                  <button type="button" onClick={() => onTabChange("browse")}
+                    className="text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors">View</button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {recentApps.length > 0 && (
+        <div className="space-y-2">
+          <SectionHeader title="Recent Applications" action={() => onTabChange("applications")} actionLabel="See all" delay={0.5} />
+          <div className="space-y-1.5">
+            {recentApps.map((app, i) => {
+              const statusStyle = { APPLIED:"bg-blue-50 text-blue-700", SHORTLISTED:"bg-indigo-50 text-indigo-700", SELECTED:"bg-emerald-50 text-emerald-700", REJECTED:"bg-muted text-muted-foreground" };
+              return (
+                <motion.div key={app.id || i}
+                  initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }}
+                  transition={{ delay: 0.55 + i * 0.07 }}
+                  whileHover={{ x:3 }}
+                  className="rounded-lg border border-border bg-card px-4 py-3 flex items-center justify-between gap-3 cursor-default transition-all">
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-foreground truncate">{app.job ? app.job.title : `Job #${app.jobId}`}</p>
+                    <p className="text-xs text-muted-foreground">{app.job?.company?.name}</p>
+                  </div>
+                  <span className={`text-xs font-semibold px-2 py-0.5 rounded-md shrink-0 ${statusStyle[app.status] || "bg-muted text-muted-foreground"}`}>
+                    {app.status}
+                  </span>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <div>
+        <SectionHeader title="Quick Actions" delay={0.6} />
+        <div className="grid grid-cols-2 gap-2.5">
+          {[
+            { label: "Browse Jobs",  icon: Briefcase,     tab: "browse" },
+            { label: "For You",      icon: Sparkles,      tab: "recommended" },
+            { label: "My Profile",   icon: User,          tab: "profile" },
+            { label: "Messages",     icon: MessageCircle, tab: "chat" },
+          ].map((item, i) => {
+            const Icon = item.icon;
+            return (
+              <motion.button key={item.tab} type="button" onClick={() => onTabChange(item.tab)}
+                initial={{ opacity:0, scale:0.95 }} animate={{ opacity:1, scale:1 }}
+                transition={{ delay: 0.65 + i * 0.06 }}
+                whileHover={{ scale:1.02, y:-1 }} whileTap={{ scale:0.98 }}
+                className="rounded-xl border border-border bg-card px-4 py-3.5 flex items-center gap-3 text-left hover:border-indigo-200 hover:bg-indigo-50/50 transition-all">
+                <div className="h-8 w-8 rounded-lg bg-indigo-50 flex items-center justify-center shrink-0">
+                  <Icon className="h-4 w-4 text-indigo-600" />
+                </div>
+                <span className="text-sm font-medium text-foreground">{item.label}</span>
+              </motion.button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }
