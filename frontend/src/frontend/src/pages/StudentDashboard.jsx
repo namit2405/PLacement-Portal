@@ -462,12 +462,19 @@ function RecommendedTab() {
 
 function ApplicationsTab() {
   const { data: applications = [], isLoading } = useMyApplications();
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [search, setSearch] = useState("");
 
   if (isLoading) return (
     <div className="space-y-4">{[1,2].map(i => <Card key={i} className="shadow-card"><CardContent className="p-5 space-y-3"><Skeleton className="h-5 w-48" /><Skeleton className="h-4 w-32" /></CardContent></Card>)}</div>
   );
 
   const counts = applications.reduce((acc, a) => { acc[a.status] = (acc[a.status] || 0) + 1; return acc; }, {});
+  const filtered = applications.filter(a => {
+    const matchStatus = statusFilter === "ALL" || a.status === statusFilter;
+    const matchSearch = !search || (a.job?.title || "").toLowerCase().includes(search.toLowerCase()) || (a.job?.company?.name || "").toLowerCase().includes(search.toLowerCase());
+    return matchStatus && matchSearch;
+  });
 
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
@@ -486,7 +493,28 @@ function ApplicationsTab() {
           ))}
         </div>
       )}
-      {applications.length === 0 ? (
+      {/* Filters */}
+      {applications.length > 0 && (
+        <div className="flex gap-2 flex-wrap">
+          <div className="relative flex-1 min-w-40">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+            <Input placeholder="Search by job or company..." value={search} onChange={e => setSearch(e.target.value)} className="pl-8 h-9 text-sm" />
+          </div>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-36 h-9 text-sm"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">All Status</SelectItem>
+              <SelectItem value="APPLIED">Applied</SelectItem>
+              <SelectItem value="SHORTLISTED">Shortlisted</SelectItem>
+              <SelectItem value="SELECTED">Selected</SelectItem>
+              <SelectItem value="REJECTED">Rejected</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+      {filtered.length === 0 && applications.length > 0 ? (
+        <Card className="shadow-card"><CardContent className="py-8 text-center"><p className="text-muted-foreground text-sm">No applications match your filters.</p></CardContent></Card>
+      ) : applications.length === 0 ? (
         <Card className="shadow-card"><CardContent className="py-12 text-center">
           <Briefcase className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
           <p className="font-medium text-muted-foreground">No applications yet</p>
@@ -494,7 +522,7 @@ function ApplicationsTab() {
         </CardContent></Card>
       ) : (
         <div className="grid gap-4">
-          {applications.map((app, i) => (
+          {filtered.map((app, i) => (
             <Card key={app.id || i} className="shadow-card">
               <CardContent className="p-5">
                 <div className="flex items-start justify-between gap-3 flex-wrap">

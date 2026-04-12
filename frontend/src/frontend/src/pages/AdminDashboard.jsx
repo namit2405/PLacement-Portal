@@ -441,6 +441,9 @@ function StudentsTab() {
   const deleteStudent = useDeleteStudent();
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(null);
+  const [search, setSearch] = useState("");
+  const [minCgpa, setMinCgpa] = useState("");
+  const [yearFilter, setYearFilter] = useState("ALL");
 
   const openEdit = (s) => {
     setEditing(s);
@@ -458,16 +461,40 @@ function StudentsTab() {
 
   if (isLoading) return <Skeleton className="h-64" />;
 
+  const filteredStudents = students.filter(s => {
+    const name = s.user?.first_name ? `${s.user.first_name} ${s.user.last_name}`.trim() : s.name || s.user?.username || "";
+    const matchSearch = !search || name.toLowerCase().includes(search.toLowerCase()) || (s.email || "").toLowerCase().includes(search.toLowerCase()) || (s.enrollment_no || "").toLowerCase().includes(search.toLowerCase());
+    const matchCgpa = !minCgpa || Number(s.cgpa || s.gpa || 0) >= Number(minCgpa);
+    const matchYear = yearFilter === "ALL" || String(s.graduationYear || s.year) === yearFilter;
+    return matchSearch && matchCgpa && matchYear;
+  });
+  const years = [...new Set(students.map(s => s.graduationYear || s.year).filter(Boolean))].sort();
+
   return (
     <PageTransition className="space-y-3">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">All Students ({students.length})</h2>
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Students ({filteredStudents.length}/{students.length})</h2>
       </div>
-      {students.length === 0 ? (
-        <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No students registered yet.</p></CardContent></Card>
+      {/* Filters */}
+      <div className="flex gap-2 flex-wrap">
+        <div className="relative flex-1 min-w-40">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <Input placeholder="Search name, email, enrollment..." value={search} onChange={e => setSearch(e.target.value)} className="pl-8 h-9 text-sm" />
+        </div>
+        <Input placeholder="Min CGPA" type="number" step="0.1" min="0" max="10" value={minCgpa} onChange={e => setMinCgpa(e.target.value)} className="w-28 h-9 text-sm" />
+        <Select value={yearFilter} onValueChange={setYearFilter}>
+          <SelectTrigger className="w-32 h-9 text-sm"><SelectValue placeholder="Grad Year" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">All Years</SelectItem>
+            {years.map(y => <SelectItem key={y} value={String(y)}>{y}</SelectItem>)}
+          </SelectContent>
+        </Select>
+      </div>
+      {filteredStudents.length === 0 ? (
+        <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No students match your filters.</p></CardContent></Card>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2">
-          {students.map((s, i) => {
+          {filteredStudents.map((s, i) => {
             const name = s.user?.first_name ? `${s.user.first_name} ${s.user.last_name}`.trim() : s.name || s.user?.username;
             const skillList = String(s.skills || "").split(",").map(x => x.trim()).filter(Boolean);
             return (
@@ -591,6 +618,7 @@ function RecruitersTab() {
   const deleteRecruiter = useDeleteRecruiter();
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(null);
+  const [search, setSearch] = useState("");
 
   const openEdit = (r) => {
     setEditing(r);
@@ -607,14 +635,25 @@ function RecruitersTab() {
 
   if (isLoading) return <Skeleton className="h-64" />;
 
+  const filteredRecruiters = recruiters.filter(r => {
+    const contact = r.user?.first_name ? `${r.user.first_name} ${r.user.last_name}`.trim() : r.user?.username || "";
+    return !search || (r.name || "").toLowerCase().includes(search.toLowerCase()) || contact.toLowerCase().includes(search.toLowerCase()) || (r.user?.email || "").toLowerCase().includes(search.toLowerCase());
+  });
+
   return (
     <PageTransition className="space-y-3">
-      <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">All Recruiters ({recruiters.length})</h2>
-      {recruiters.length === 0 ? (
-        <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No recruiters registered yet.</p></CardContent></Card>
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Recruiters ({filteredRecruiters.length}/{recruiters.length})</h2>
+      </div>
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+        <Input placeholder="Search by company, contact or email..." value={search} onChange={e => setSearch(e.target.value)} className="pl-8 h-9 text-sm" />
+      </div>
+      {filteredRecruiters.length === 0 ? (
+        <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No recruiters match your search.</p></CardContent></Card>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2">
-          {recruiters.map((r, i) => {
+          {filteredRecruiters.map((r, i) => {
             const contact = r.user?.first_name ? `${r.user.first_name} ${r.user.last_name}`.trim() : r.user?.username;
             return (
               <Card key={r.id || i} className="shadow-card">
@@ -714,6 +753,9 @@ function JobsTab() {
   const updateJob = useUpdateJob();
   const [editingJob, setEditingJob] = useState(null);
   const [form, setForm] = useState(null);
+  const [jobSearch, setJobSearch] = useState("");
+  const [jobTypeFilter, setJobTypeFilter] = useState("ALL");
+  const [jobStatusFilter, setJobStatusFilter] = useState("ALL");
 
   const openEdit = (job) => {
     setEditingJob(job);
@@ -750,16 +792,47 @@ function JobsTab() {
     });
   };
 
+  const filteredJobs = jobs.filter(j => {
+    const expired = j.last_date_to_apply && new Date(j.last_date_to_apply) < new Date();
+    const matchSearch = !jobSearch || (j.title || "").toLowerCase().includes(jobSearch.toLowerCase()) || (j.company?.name || j.company_name || "").toLowerCase().includes(jobSearch.toLowerCase());
+    const matchType = jobTypeFilter === "ALL" || (jobTypeFilter === "internship" ? j.is_internship : !j.is_internship);
+    const matchStatus = jobStatusFilter === "ALL" || (jobStatusFilter === "active" ? !expired : expired);
+    return matchSearch && matchType && matchStatus;
+  });
   if (isLoading) return <Skeleton className="h-64" />;
 
   return (
     <PageTransition className="space-y-3">
-      <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">All Job Postings ({jobs.length})</h2>
-      {jobs.length === 0 ? (
-        <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No jobs posted yet.</p></CardContent></Card>
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Jobs ({filteredJobs.length}/{jobs.length})</h2>
+      </div>
+      <div className="flex gap-2 flex-wrap">
+        <div className="relative flex-1 min-w-40">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <Input placeholder="Search by title or company..." value={jobSearch} onChange={e => setJobSearch(e.target.value)} className="pl-8 h-9 text-sm" />
+        </div>
+        <Select value={jobTypeFilter} onValueChange={setJobTypeFilter}>
+          <SelectTrigger className="w-32 h-9 text-sm"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">All Types</SelectItem>
+            <SelectItem value="job">Full-time</SelectItem>
+            <SelectItem value="internship">Internship</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={jobStatusFilter} onValueChange={setJobStatusFilter}>
+          <SelectTrigger className="w-28 h-9 text-sm"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">All Status</SelectItem>
+            <SelectItem value="active">Active</SelectItem>
+            <SelectItem value="expired">Expired</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      {filteredJobs.length === 0 ? (
+        <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No jobs match your filters.</p></CardContent></Card>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2">
-          {jobs.map((job, i) => {
+          {filteredJobs.map((job, i) => {
             const expired = job.last_date_to_apply && new Date(job.last_date_to_apply) < new Date();
             return (
               <Card key={job.id || i} className="shadow-card">
@@ -880,17 +953,44 @@ function ApplicationsTab() {
   const { data: applications = [], isLoading } = useAllApplications();
   const updateStatus = useUpdateApplicationStatus();
   const [notes, setNotes] = useState({});
+  const [appSearch, setAppSearch] = useState("");
+  const [appStatusFilter, setAppStatusFilter] = useState("ALL");
+
+  const filteredApps = applications.filter(a => {
+    const student = a.student?.user?.first_name ? `${a.student.user.first_name} ${a.student.user.last_name}`.trim() : a.student?.user?.username || "";
+    const matchSearch = !appSearch || student.toLowerCase().includes(appSearch.toLowerCase()) || (a.job?.title || "").toLowerCase().includes(appSearch.toLowerCase()) || (a.job?.company?.name || "").toLowerCase().includes(appSearch.toLowerCase());
+    const matchStatus = appStatusFilter === "ALL" || a.status === appStatusFilter;
+    return matchSearch && matchStatus;
+  });
 
   if (isLoading) return <Skeleton className="h-64" />;
 
   return (
     <PageTransition className="space-y-3">
-      <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">All Applications ({applications.length})</h2>
-      {applications.length === 0 ? (
-        <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No applications yet.</p></CardContent></Card>
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Applications ({filteredApps.length}/{applications.length})</h2>
+      </div>
+      <div className="flex gap-2 flex-wrap">
+        <div className="relative flex-1 min-w-40">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <Input placeholder="Search by student, job or company..." value={appSearch} onChange={e => setAppSearch(e.target.value)} className="pl-8 h-9 text-sm" />
+        </div>
+        <Select value={appStatusFilter} onValueChange={setAppStatusFilter}>
+          <SelectTrigger className="w-36 h-9 text-sm"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">All Status</SelectItem>
+            <SelectItem value="APPLIED">Applied</SelectItem>
+            <SelectItem value="SHORTLISTED">Shortlisted</SelectItem>
+            <SelectItem value="SELECTED">Selected</SelectItem>
+            <SelectItem value="REJECTED">Rejected</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      {filteredApps.length === 0 ? (
+        <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No applications match your filters.</p></CardContent></Card>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2">
-          {applications.map((app, i) => {
+          {filteredApps.map((app, i) => {
             const studentName = app.student?.user?.first_name
               ? `${app.student.user.first_name} ${app.student.user.last_name}`.trim()
               : app.student?.user?.username ?? "e";
