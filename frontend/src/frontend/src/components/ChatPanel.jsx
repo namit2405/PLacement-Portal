@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MessageCircle, Send } from "lucide-react";
+import { ArrowLeft, MessageCircle, Send } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
@@ -61,7 +61,7 @@ function MessageThread({ partnerId, partnerName, jobId, onBack }) {
     <div className="flex flex-col h-full">
       <div className="flex items-center gap-3 px-4 py-3 border-b border-border shrink-0">
         {onBack && (
-          <button type="button" onClick={onBack} className="text-muted-foreground hover:text-foreground text-sm mr-1">â†</button>
+          <button type="button" onClick={onBack} className="text-muted-foreground hover:text-foreground transition-colors mr-1"><ArrowLeft className="h-4 w-4" /></button>
         )}
         <Avatar name={partnerName} />
         <div>
@@ -187,7 +187,7 @@ export function ChatPage() {
   );
 }
 
-// Inline chat panel â€” used inside recruiter's applicant view
+// Inline chat panel - used inside recruiter applicant view
 export function InlineChatPanel({ partnerId, partnerName, jobId }) {
   return (
     <div className="h-96 border border-border rounded-xl overflow-hidden shadow-card bg-card flex flex-col">
