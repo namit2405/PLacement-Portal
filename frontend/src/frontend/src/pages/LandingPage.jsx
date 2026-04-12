@@ -223,13 +223,61 @@ export function LandingPage({ onRoleSelected }) {
       </div>
 
       {/* ── Right: auth panel ── */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 auth-panel overflow-y-auto">
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 auth-panel overflow-y-auto relative">
+        {/* Mobile-only animated background */}
+        <div className="lg:hidden absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Animated gradient orbs */}
+          <motion.div
+            animate={{ scale: [1, 1.2, 1], opacity: [0.06, 0.12, 0.06] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-indigo-500"
+            style={{ filter: "blur(60px)" }}
+          />
+          <motion.div
+            animate={{ scale: [1, 1.15, 1], opacity: [0.05, 0.1, 0.05] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-violet-500"
+            style={{ filter: "blur(70px)" }}
+          />
+          <motion.div
+            animate={{ scale: [1, 1.3, 1], opacity: [0.04, 0.08, 0.04] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-blue-400"
+            style={{ filter: "blur(50px)" }}
+          />
+          {/* Floating dots */}
+          {[
+            { top: "15%", left: "8%",  size: 3, dur: 7,  del: 0 },
+            { top: "25%", left: "88%", size: 2, dur: 9,  del: 1 },
+            { top: "60%", left: "5%",  size: 4, dur: 8,  del: 2 },
+            { top: "75%", left: "90%", size: 2, dur: 6,  del: 3 },
+            { top: "45%", left: "92%", size: 3, dur: 10, del: 1.5 },
+            { top: "85%", left: "15%", size: 2, dur: 7,  del: 0.5 },
+          ].map((p, i) => (
+            <motion.div key={i}
+              animate={{ y: [-8, 8, -8], opacity: [0.15, 0.4, 0.15] }}
+              transition={{ duration: p.dur, repeat: Infinity, ease: "easeInOut", delay: p.del }}
+              className="absolute rounded-full bg-indigo-400"
+              style={{ top: p.top, left: p.left, width: p.size, height: p.size }}
+            />
+          ))}
+          {/* Subtle grid dots */}
+          <div className="absolute inset-0 opacity-[0.03]"
+            style={{ backgroundImage: "radial-gradient(circle, #6366f1 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
+        </div>
         <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="w-full max-w-sm">
 
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-2 mb-8">
+            {/* Animated top accent bar */}
+            <motion.div
+              initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-600 via-violet-500 to-indigo-600 origin-left"
+              style={{ backgroundSize: "200% 100%", animation: "gradientShift 3s ease infinite" }}
+            />
             <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center">
               <GraduationCap className="h-4 w-4 text-white" />
             </div>
