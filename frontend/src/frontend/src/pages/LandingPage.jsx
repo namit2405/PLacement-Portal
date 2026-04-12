@@ -223,51 +223,54 @@ export function LandingPage({ onRoleSelected }) {
       </div>
 
       {/* ── Right: auth panel ── */}
-      <div className="flex-1 flex items-center justify-center overflow-y-auto relative auth-panel">
+      <div className="flex-1 flex flex-col lg:items-center lg:justify-center overflow-y-auto auth-panel">
 
-        {/* Mobile-only dark hero background */}
-        <div className="lg:hidden absolute inset-0 hero-bg">
+        {/* Mobile dark header */}
+        <div className="lg:hidden hero-bg relative overflow-hidden px-5 pt-6 pb-8">
           <div className="dot-grid absolute inset-0" />
           <Particles />
-          {/* Orbs */}
-          <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full opacity-20"
-            style={{ background: "radial-gradient(circle, #6366f1, transparent)", filter: "blur(40px)" }} />
-          <div className="absolute -bottom-16 -left-16 w-64 h-64 rounded-full opacity-15"
-            style={{ background: "radial-gradient(circle, #8b5cf6, transparent)", filter: "blur(50px)" }} />
-          <motion.div
-            animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.2, 0.1] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/3 right-1/4 w-32 h-32 rounded-full"
-            style={{ background: "radial-gradient(circle, #818cf8, transparent)", filter: "blur(30px)" }} />
-        </div>
+          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-30"
+            style={{ background: "radial-gradient(circle, #6366f1, transparent)", filter: "blur(30px)" }} />
+          <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full opacity-20"
+            style={{ background: "radial-gradient(circle, #8b5cf6, transparent)", filter: "blur(40px)" }} />
 
-        {/* Mobile mini hero header */}
-        <div className="lg:hidden absolute top-0 left-0 right-0 px-5 pt-5 pb-4 z-10">
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-            className="flex items-center gap-2.5 mb-4">
-            <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+            className="relative z-10 flex items-center gap-2.5 mb-5">
+            <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center shadow-lg">
               <GraduationCap className="h-4 w-4 text-white" />
             </div>
             <span className="font-bold text-sm text-white">Smart Placement Portal</span>
           </motion.div>
-          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-            className="grid grid-cols-4 gap-2">
+
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+            className="relative z-10 mb-5">
+            <h1 className="text-2xl font-extrabold text-white tracking-tight">Your Career<br />
+              <span className="text-indigo-300">Journey Starts Here</span>
+            </h1>
+            <p className="text-sm text-white/55 mt-1.5">Connect with top recruiters through smart matching.</p>
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+            className="relative z-10 grid grid-cols-4 gap-2">
             {stats.map((s, i) => (
-              <motion.div key={s.label} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2 + i * 0.07, type: "spring", stiffness: 200 }}
-                className="text-center glass rounded-lg py-2">
+              <motion.div key={s.label}
+                initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3 + i * 0.07, type: "spring", stiffness: 200 }}
+                className="text-center glass rounded-xl py-2.5">
                 <p className="text-sm font-bold text-white">{s.value}</p>
-                <p className="text-[10px] text-white/50">{s.label}</p>
+                <p className="text-[10px] text-white/50 mt-0.5">{s.label}</p>
               </motion.div>
             ))}
           </motion.div>
         </div>
 
+        {/* Auth form area */}
+        <div className="flex-1 lg:flex lg:items-center lg:justify-center w-full">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full max-w-sm relative z-10 px-5 pb-6 pt-36 lg:pt-0 lg:px-10">
+          className="w-full max-w-sm mx-auto px-5 py-6 lg:px-10">
 
-          {/* Desktop heading (hidden on mobile — shown above) */}
+          {/* Desktop heading */}
           <div className="hidden lg:block mb-7">
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 }}
               className="h-12 w-12 rounded-xl bg-indigo-600 flex items-center justify-center mb-4 shadow-lg shadow-indigo-500/20">
@@ -277,14 +280,6 @@ export function LandingPage({ onRoleSelected }) {
               className="text-2xl font-bold text-foreground tracking-tight">Welcome back</motion.h1>
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
               className="text-sm text-muted-foreground mt-1">Sign in or create your account</motion.p>
-          </div>
-
-          {/* Mobile heading */}
-          <div className="lg:hidden mb-5">
-            <motion.h1 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-              className="text-2xl font-bold text-white tracking-tight">Welcome back</motion.h1>
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}
-              className="text-sm text-white/60 mt-1">Sign in or create your account</motion.p>
           </div>
 
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
@@ -441,6 +436,7 @@ export function LandingPage({ onRoleSelected }) {
             </motion.div>
           )}
         </motion.div>
+        </div>
       </div>
     </div>
   );
