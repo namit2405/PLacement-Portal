@@ -117,7 +117,7 @@ function JobCard({ job, isApplied, onApply, isPending, studentProfile, onCompany
     : null;
 
   return (
-    <Card className="shadow-card">
+    <Card className="shadow-card hover-lift">
       <CardContent className="p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
@@ -254,36 +254,36 @@ function ProfileTab() {
         <div className="rounded-xl border border-border bg-card p-5 space-y-4">
           <p className="text-sm font-semibold text-foreground">Basic Information</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 stagger-list">
               <Label className="text-xs font-medium">Full Name</Label>
               <Input value={form.name} onChange={set("name")} placeholder="Jane Smith" className="h-10" />
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 stagger-list">
               <Label className="text-xs font-medium">Email Address</Label>
               <Input value={form.email} disabled className="h-10 opacity-50" />
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 stagger-list">
               <Label className="text-xs font-medium">Enrollment No.</Label>
               <Input value={form.enrollment_no} onChange={set("enrollment_no")} placeholder="2021CS001" className="h-10" />
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 stagger-list">
               <Label className="text-xs font-medium flex items-center gap-1.5"><Phone className="h-3 w-3" />Phone</Label>
               <Input value={form.phone} onChange={set("phone")} placeholder="+91 98765 43210" className="h-10" />
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 stagger-list">
               <Label className="text-xs font-medium">Branch / Department</Label>
               <Input value={form.branch} onChange={set("branch")} placeholder="Computer Science" className="h-10" />
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 stagger-list">
               <Label className="text-xs font-medium">Graduation Year</Label>
               <Input type="number" value={form.graduationYear} onChange={set("graduationYear")} placeholder="2025" className="h-10" />
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 stagger-list">
               <Label className="text-xs font-medium">CGPA</Label>
               <Input type="number" step="0.01" min="0" max="10" value={form.gpa} onChange={set("gpa")} placeholder="8.5" className="h-10" />
             </div>
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-1.5 stagger-list">
             <Label className="text-xs font-medium">Address</Label>
             <Textarea value={form.address} onChange={set("address")} placeholder="City, State, Country" rows={2} />
           </div>
@@ -293,11 +293,11 @@ function ProfileTab() {
         <div className="rounded-xl border border-border bg-card p-5 space-y-4">
           <p className="text-sm font-semibold text-foreground">Online Presence</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 stagger-list">
               <Label className="text-xs font-medium flex items-center gap-1.5"><Linkedin className="h-3 w-3" />LinkedIn</Label>
               <Input value={form.linkedin} onChange={set("linkedin")} placeholder="https://linkedin.com/in/username" className="h-10" />
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 stagger-list">
               <Label className="text-xs font-medium flex items-center gap-1.5"><Github className="h-3 w-3" />GitHub</Label>
               <Input value={form.github} onChange={set("github")} placeholder="https://github.com/username" className="h-10" />
             </div>
@@ -367,7 +367,7 @@ function BrowseJobsTab() {
   });
 
   if (isLoading) return (
-    <div className="space-y-4">{[1,2,3].map(i => <Card key={i} className="shadow-card"><CardContent className="p-5 space-y-3"><Skeleton className="h-5 w-48" /><Skeleton className="h-4 w-32" /><Skeleton className="h-12" /></CardContent></Card>)}</div>
+    <div className="space-y-4">{[1,2,3].map(i => <Card key={i} className="shadow-card hover-lift"><CardContent className="p-5 space-y-3"><Skeleton className="h-5 w-48" /><Skeleton className="h-4 w-32" /><Skeleton className="h-12" /></CardContent></Card>)}</div>
   );
 
   return (
@@ -388,9 +388,9 @@ function BrowseJobsTab() {
         </Select>
       </div>
       {filtered.length === 0 ? (
-        <Card className="shadow-card"><CardContent className="py-12 text-center"><Briefcase className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" /><p className="text-muted-foreground">No jobs found.</p></CardContent></Card>
+        <Card className="shadow-card hover-lift"><CardContent className="py-12 text-center"><Briefcase className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" /><p className="text-muted-foreground">No jobs found.</p></CardContent></Card>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid gap-4 stagger-list">
           {filtered.map((job, i) => (
             <JobCard key={job.id || i} job={job} isApplied={appliedJobIds.has(String(job.id))}
               isPending={applyToJob.isPending} studentProfile={profile}
@@ -426,11 +426,11 @@ function RecommendedTab() {
     .slice(0, 8);
 
   if (isLoading) return (
-    <div className="space-y-4">{[1,2,3].map(i => <Card key={i} className="shadow-card"><CardContent className="p-5 space-y-3"><Skeleton className="h-5 w-48" /><Skeleton className="h-4 w-32" /><Skeleton className="h-12" /></CardContent></Card>)}</div>
+    <div className="space-y-4">{[1,2,3].map(i => <Card key={i} className="shadow-card hover-lift"><CardContent className="p-5 space-y-3"><Skeleton className="h-5 w-48" /><Skeleton className="h-4 w-32" /><Skeleton className="h-12" /></CardContent></Card>)}</div>
   );
 
   if (!profile?.skills) return (
-    <Card className="shadow-card"><CardContent className="py-12 text-center">
+    <Card className="shadow-card hover-lift"><CardContent className="py-12 text-center">
       <Sparkles className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
       <p className="font-medium text-muted-foreground">Add skills to your profile</p>
       <p className="text-sm text-muted-foreground/60 mt-1">We'll recommend the best-matching jobs for you.</p>
@@ -442,9 +442,9 @@ function RecommendedTab() {
       <RecruiterProfileModal company={viewCompany} open={!!viewCompany} onClose={() => setViewCompany(null)} />
       <p className="text-sm text-muted-foreground">Top matches based on your skills and eligibility.</p>
       {recommended.length === 0 ? (
-        <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No matching jobs found right now.</p></CardContent></Card>
+        <Card className="shadow-card hover-lift"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No matching jobs found right now.</p></CardContent></Card>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid gap-4 stagger-list">
           {recommended.map((job, i) => (
             <JobCard key={job.id || i} job={job} isApplied={appliedJobIds.has(String(job.id))}
               isPending={applyToJob.isPending} studentProfile={profile}
@@ -466,7 +466,7 @@ function ApplicationsTab() {
   const [search, setSearch] = useState("");
 
   if (isLoading) return (
-    <div className="space-y-4">{[1,2].map(i => <Card key={i} className="shadow-card"><CardContent className="p-5 space-y-3"><Skeleton className="h-5 w-48" /><Skeleton className="h-4 w-32" /></CardContent></Card>)}</div>
+    <div className="space-y-4">{[1,2].map(i => <Card key={i} className="shadow-card hover-lift"><CardContent className="p-5 space-y-3"><Skeleton className="h-5 w-48" /><Skeleton className="h-4 w-32" /></CardContent></Card>)}</div>
   );
 
   const counts = applications.reduce((acc, a) => { acc[a.status] = (acc[a.status] || 0) + 1; return acc; }, {});
@@ -487,7 +487,7 @@ function ApplicationsTab() {
             { label: "Rejected", key: "REJECTED", color: "bg-red-50 text-red-700" },
           ].map(({ label, key, color }) => (
             <div key={key} className={`rounded-lg px-4 py-3 ${color}`}>
-              <p className="text-2xl font-bold">{counts[key] || 0}</p>
+              <p className="text-2xl font-bold stat-pop">{counts[key] || 0}</p>
               <p className="text-xs font-medium">{label}</p>
             </div>
           ))}
@@ -495,7 +495,7 @@ function ApplicationsTab() {
       )}
       {/* Filters */}
       {applications.length > 0 && (
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap filter-bar">
           <div className="relative flex-1 min-w-40">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
             <Input placeholder="Search by job or company..." value={search} onChange={e => setSearch(e.target.value)} className="pl-8 h-9 text-sm" />
@@ -513,17 +513,17 @@ function ApplicationsTab() {
         </div>
       )}
       {filtered.length === 0 && applications.length > 0 ? (
-        <Card className="shadow-card"><CardContent className="py-8 text-center"><p className="text-muted-foreground text-sm">No applications match your filters.</p></CardContent></Card>
+        <Card className="shadow-card hover-lift"><CardContent className="py-8 text-center"><p className="text-muted-foreground text-sm">No applications match your filters.</p></CardContent></Card>
       ) : applications.length === 0 ? (
-        <Card className="shadow-card"><CardContent className="py-12 text-center">
+        <Card className="shadow-card hover-lift"><CardContent className="py-12 text-center">
           <Briefcase className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
           <p className="font-medium text-muted-foreground">No applications yet</p>
           <p className="text-sm text-muted-foreground/60 mt-1">Browse jobs and apply to get started</p>
         </CardContent></Card>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid gap-4 stagger-list">
           {filtered.map((app, i) => (
-            <Card key={app.id || i} className="shadow-card">
+            <Card key={app.id || i} className="shadow-card hover-lift">
               <CardContent className="p-5">
                 <div className="flex items-start justify-between gap-3 flex-wrap">
                   <div>
@@ -621,9 +621,9 @@ function StudentHomeTab({ onTabChange }) {
       )}
 
       {recommended.length > 0 && (
-        <div className="space-y-2">
+        <div className="space-y-2 stagger-list">
           <SectionHeader title="Top Matches For You" action={() => onTabChange("recommended")} actionLabel="See all" delay={0.4} />
-          <div className="space-y-1.5">
+          <div className="space-y-1.5 stagger-list">
             {recommended.map((job, i) => (
               <motion.div key={job.id || i}
                 initial={{ opacity:0, x:-8 }} animate={{ opacity:1, x:0 }}
@@ -648,9 +648,9 @@ function StudentHomeTab({ onTabChange }) {
       )}
 
       {recentApps.length > 0 && (
-        <div className="space-y-2">
+        <div className="space-y-2 stagger-list">
           <SectionHeader title="Recent Applications" action={() => onTabChange("applications")} actionLabel="See all" delay={0.5} />
-          <div className="space-y-1.5">
+          <div className="space-y-1.5 stagger-list">
             {recentApps.map((app, i) => {
               const statusStyle = { APPLIED:"bg-blue-50 text-blue-700", SHORTLISTED:"bg-indigo-50 text-indigo-700", SELECTED:"bg-emerald-50 text-emerald-700", REJECTED:"bg-muted text-muted-foreground" };
               return (

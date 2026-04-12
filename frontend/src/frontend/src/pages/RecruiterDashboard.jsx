@@ -190,19 +190,19 @@ function CompanyProfileTab() {
  <div className="rounded-xl border border-border bg-card p-5 space-y-4">
  <p className="text-sm font-semibold text-foreground">Company Information</p>
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label className="text-xs font-medium">Company Name</Label>
  <Input value={form.name} onChange={set("name")} placeholder="TechCorp Inc." required className="h-10" />
  </div>
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label className="text-xs font-medium flex items-center gap-1.5"><Globe className="h-3 w-3" />Website</Label>
  <Input value={form.website} onChange={set("website")} placeholder="https://techcorp.com" className="h-10" />
  </div>
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label className="text-xs font-medium">Industry</Label>
  <Input value={form.industry} onChange={set("industry")} placeholder="Software / IT Services" className="h-10" />
  </div>
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label className="text-xs font-medium">Company Size</Label>
  <Select value={form.company_size} onValueChange={v => setForm(p => ({ ...p, company_size: v }))}>
  <SelectTrigger className="h-10"><SelectValue placeholder="Select size..." /></SelectTrigger>
@@ -216,16 +216,16 @@ function CompanyProfileTab() {
  </SelectContent>
  </Select>
  </div>
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label className="text-xs font-medium">Founded Year</Label>
  <Input type="number" value={form.founded_year} onChange={set("founded_year")} placeholder="2010" min="1800" max={new Date().getFullYear()} className="h-10" />
  </div>
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label className="text-xs font-medium flex items-center gap-1.5"><MapPin className="h-3 w-3" />Location / Address</Label>
  <Input value={form.address} onChange={set("address")} placeholder="Bangalore, India" className="h-10" />
  </div>
  </div>
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label className="text-xs font-medium">About the Company</Label>
  <Textarea value={form.description} onChange={set("description")} rows={3} placeholder="Tell candidates about your company, culture, and what you do..." />
  </div>
@@ -234,7 +234,7 @@ function CompanyProfileTab() {
  {/* Online presence */}
  <div className="rounded-xl border border-border bg-card p-5 space-y-4">
  <p className="text-sm font-semibold text-foreground">Online Presence</p>
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label className="text-xs font-medium">LinkedIn Company Page</Label>
  <Input value={form.linkedin} onChange={set("linkedin")} placeholder="https://linkedin.com/company/techcorp" className="h-10" />
  </div>
@@ -282,23 +282,23 @@ function JobForm({ initial, onSubmit, isPending, submitLabel }) {
  return (
  <form onSubmit={handleSubmit} className="space-y-4">
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label htmlFor="job-title">Job Title</Label>
  <Input id="job-title" value={form.title} onChange={(e) => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Software Engineer" required />
  </div>
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label htmlFor="job-company">Company Name</Label>
  <Input id="job-company" value={form.company} onChange={(e) => setForm(p => ({ ...p, company: e.target.value }))} placeholder="TechCorp Inc." required />
  </div>
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label htmlFor="job-location">Location</Label>
  <Input id="job-location" value={form.location} onChange={(e) => setForm(p => ({ ...p, location: e.target.value }))} placeholder="Bangalore, India" required />
  </div>
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label htmlFor="job-salary">Stipend / Salary</Label>
  <Input id="job-salary" value={form.stipendOrSalary} onChange={(e) => setForm(p => ({ ...p, stipendOrSalary: e.target.value }))} placeholder="8,00,000 per annum" required />
  </div>
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label htmlFor="job-type">Type</Label>
  <Select value={form.jobType} onValueChange={(v) => setForm(p => ({ ...p, jobType: v }))}>
  <SelectTrigger id="job-type"><SelectValue /></SelectTrigger>
@@ -308,23 +308,23 @@ function JobForm({ initial, onSubmit, isPending, submitLabel }) {
  </SelectContent>
  </Select>
  </div>
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label htmlFor="job-deadline">Application Deadline</Label>
  <Input id="job-deadline" type="date"
  value={new Date(form.deadline).toISOString().split("T")[0]}
  onChange={(e) => setForm(p => ({ ...p, deadline: new Date(e.target.value).getTime() }))} />
  </div>
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label htmlFor="job-cgpa">Min CGPA <span className="text-muted-foreground text-xs">(optional)</span></Label>
  <Input id="job-cgpa" type="number" step="0.1" min="0" max="10" value={form.eligibility_cgpa}
  onChange={(e) => setForm(p => ({ ...p, eligibility_cgpa: e.target.value }))} placeholder="e.g. 7.0" />
  </div>
  </div>
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label htmlFor="job-description">Description</Label>
  <Textarea id="job-description" value={form.description} onChange={(e) => setForm(p => ({ ...p, description: e.target.value }))} rows={4} required />
  </div>
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  <Label htmlFor="job-requirements">Required Skills <span className="text-muted-foreground text-xs">(comma-separated - used for smart matching)</span></Label>
  <Input id="job-requirements" value={form.requirementsText} onChange={(e) => setForm(p => ({ ...p, requirementsText: e.target.value }))} placeholder="React, TypeScript, Node.js" />
  </div>
@@ -366,7 +366,7 @@ function MyJobsTab({ onViewApplicants }) {
  return (
  <PageTransition className="space-y-4">
  {myJobs.length === 0 ? (
- <Card className="shadow-card"><CardContent className="py-12 text-center">
+ <Card className="shadow-card hover-lift"><CardContent className="py-12 text-center">
  <p className="text-muted-foreground">No jobs posted yet. Post your first position!</p>
  </CardContent></Card>
  ) : myJobs.map((job, i) => {
@@ -375,7 +375,7 @@ function MyJobsTab({ onViewApplicants }) {
  ? Math.ceil((new Date(job.last_date_to_apply) - new Date()) / 86400000)
  : null;
  return (
- <Card key={job.id || i} className="shadow-card">
+ <Card key={job.id || i} className="shadow-card hover-lift">
  <CardContent className="p-5">
  <div className="flex items-start justify-between gap-4 flex-wrap">
  <div className="flex-1 min-w-0">
@@ -491,7 +491,7 @@ function ApplicantsTab() {
  />
 
  {chatPartner && (
- <div className="space-y-2">
+ <div className="space-y-2 stagger-list">
  <div className="flex items-center justify-between">
  <p className="text-sm font-semibold">Chat with {chatPartner.name}</p>
  <button type="button" onClick={() => setChatPartner(null)} className="text-xs text-muted-foreground hover:text-foreground">Close chat</button>
@@ -500,7 +500,7 @@ function ApplicantsTab() {
  </div>
  )}
 
- <Card className="shadow-card">
+ <Card className="shadow-card hover-lift">
  <CardHeader><CardTitle>Select a Job</CardTitle></CardHeader>
  <CardContent>
  <Select value={selectedJobId ? String(selectedJobId) : ""} onValueChange={(v) => { setSelectedJobId(Number(v)); setSearch(""); setStatusFilter("ALL"); }}>
@@ -524,7 +524,7 @@ function ApplicantsTab() {
  ].map(({ label, key, color }) => (
  <div key={key} className={`rounded-lg px-4 py-3 ${color} cursor-pointer`}
  onClick={() => setStatusFilter(statusFilter === key ? "ALL" : key)}>
- <p className="text-2xl font-bold">{counts[key] || 0}</p>
+ <p className="text-2xl font-bold stat-pop">{counts[key] || 0}</p>
  <p className="text-xs font-medium">{label}</p>
  </div>
  ))}
@@ -532,7 +532,7 @@ function ApplicantsTab() {
  )}
 
  {selectedJobId && (
- <Card className="shadow-card">
+ <Card className="shadow-card hover-lift">
  <CardHeader>
  <div className="flex items-center justify-between flex-wrap gap-3">
  <CardTitle className="flex items-center gap-2">
@@ -554,7 +554,7 @@ function ApplicantsTab() {
  </div>
  </CardHeader>
  <CardContent className="space-y-3">
- <div className="flex gap-2 flex-wrap">
+ <div className="flex gap-2 flex-wrap filter-bar">
  <div className="relative flex-1 min-w-40">
  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
  <Input placeholder="Search by name..." value={search} onChange={e => setSearch(e.target.value)} className="pl-8 h-8 text-sm" />
@@ -575,7 +575,7 @@ function ApplicantsTab() {
  </div>
 
  {isLoading ? (
- <div className="space-y-2"><Skeleton className="h-16" /><Skeleton className="h-16" /></div>
+ <div className="space-y-2 stagger-list"><Skeleton className="h-16" /><Skeleton className="h-16" /></div>
  ) : filtered.length === 0 ? (
  <p className="text-muted-foreground text-center py-8">No applicants match your filters.</p>
  ) : (
@@ -762,9 +762,9 @@ function RecruiterHomeTab({ onTabChange }) {
  )}
 
  {recentJobs.length > 0 && (
- <div className="space-y-2">
+ <div className="space-y-2 stagger-list">
  <SectionHeader title="Recent Listings" action={() => onTabChange("jobs")} actionLabel="See all" delay={0.45} />
- <div className="space-y-1.5">
+ <div className="space-y-1.5 stagger-list">
  {recentJobs.map((job, i) => {
  const expired = job.last_date_to_apply && new Date(job.last_date_to_apply) < new Date();
  return (

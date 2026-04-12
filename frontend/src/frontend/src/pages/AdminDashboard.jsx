@@ -38,14 +38,14 @@ export function AdminDashboard({ activeTab, onTabChange }) {
 
 function StatCard({ icon: Icon, label, value, color }) {
   return (
-    <Card className="shadow-card">
+    <Card className="shadow-card hover-lift">
       <CardContent className="p-6">
         <div className="flex items-center gap-4">
           <div className={`h-12 w-12 rounded-xl ${color} flex items-center justify-center shrink-0`}>
             <Icon className="h-6 w-6" />
           </div>
           <div>
-            <p className="text-2xl font-bold">{value}</p>
+            <p className="text-2xl font-bold stat-pop">{value}</p>
             <p className="text-sm text-muted-foreground">{label}</p>
           </div>
         </div>
@@ -298,7 +298,7 @@ function AnalyticsTab() {
           <h2 className="text-base font-semibold text-foreground">Analytics & Reports</h2>
           <p className="text-xs text-muted-foreground mt-0.5">Visual insights and data exports</p>
         </div>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap filter-bar">
           {[
             { label: "All Data",      type: "all" },
             { label: "Students",      type: "students" },
@@ -318,7 +318,7 @@ function AnalyticsTab() {
       {/* Row 1: Status pie + Job type pie */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <motion.div initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.1 }}>
-          <Card className="shadow-card">
+          <Card className="shadow-card hover-lift">
             <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Application Status</CardTitle></CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={280}>
@@ -336,7 +336,7 @@ function AnalyticsTab() {
         </motion.div>
 
         <motion.div initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.15 }}>
-          <Card className="shadow-card">
+          <Card className="shadow-card hover-lift">
             <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Jobs by Type</CardTitle></CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={280}>
@@ -356,7 +356,7 @@ function AnalyticsTab() {
 
       {/* Row 2: Applications per company bar chart */}
       <motion.div initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.2 }}>
-        <Card className="shadow-card">
+        <Card className="shadow-card hover-lift">
           <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Applications per Company (Top 8)</CardTitle></CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={260}>
@@ -375,7 +375,7 @@ function AnalyticsTab() {
       {/* Row 3: CGPA distribution + Applications over time */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <motion.div initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.25 }}>
-          <Card className="shadow-card">
+          <Card className="shadow-card hover-lift">
             <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Student CGPA Distribution</CardTitle></CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={260}>
@@ -392,7 +392,7 @@ function AnalyticsTab() {
         </motion.div>
 
         <motion.div initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.3 }}>
-          <Card className="shadow-card">
+          <Card className="shadow-card hover-lift">
             <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Applications (Last 30 Days)</CardTitle></CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={260}>
@@ -411,7 +411,7 @@ function AnalyticsTab() {
 
       {/* Summary table */}
       <motion.div initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.35 }}>
-        <Card className="shadow-card">
+        <Card className="shadow-card hover-lift">
           <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold">Quick Summary</CardTitle></CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -476,7 +476,7 @@ function StudentsTab() {
         <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Students ({filteredStudents.length}/{students.length})</h2>
       </div>
       {/* Filters */}
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-2 flex-wrap filter-bar">
         <div className="relative flex-1 min-w-40">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
           <Input placeholder="Search name, email, enrollment..." value={search} onChange={e => setSearch(e.target.value)} className="pl-8 h-9 text-sm" />
@@ -491,14 +491,14 @@ function StudentsTab() {
         </Select>
       </div>
       {filteredStudents.length === 0 ? (
-        <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No students match your filters.</p></CardContent></Card>
+        <Card className="shadow-card hover-lift"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No students match your filters.</p></CardContent></Card>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2 stagger-list">
           {filteredStudents.map((s, i) => {
             const name = s.user?.first_name ? `${s.user.first_name} ${s.user.last_name}`.trim() : s.name || s.user?.username;
             const skillList = String(s.skills || "").split(",").map(x => x.trim()).filter(Boolean);
             return (
-              <Card key={s.id || i} className="shadow-card">
+              <Card key={s.id || i} className="shadow-card hover-lift">
                 <CardContent className="p-4 space-y-3">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-3">
@@ -564,33 +564,33 @@ function StudentsTab() {
           {form && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>First Name</Label>
                   <Input value={form.first_name} onChange={e => setForm(p => ({ ...p, first_name: e.target.value }))} />
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>Last Name</Label>
                   <Input value={form.last_name} onChange={e => setForm(p => ({ ...p, last_name: e.target.value }))} />
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>Email</Label>
                   <Input type="email" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} />
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>Enrollment No.</Label>
                   <Input value={form.enrollment_no} onChange={e => setForm(p => ({ ...p, enrollment_no: e.target.value }))} />
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>CGPA</Label>
                   <Input type="number" step="0.01" min="0" max="10" value={form.cgpa}
                     onChange={e => setForm(p => ({ ...p, cgpa: e.target.value }))} />
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>Graduation Year</Label>
                   <Input type="number" value={form.year} onChange={e => setForm(p => ({ ...p, year: e.target.value }))} />
                 </div>
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 stagger-list">
                 <Label>Skills <span className="text-muted-foreground text-xs">(comma-separated)</span></Label>
                 <Input value={form.skills} onChange={e => setForm(p => ({ ...p, skills: e.target.value }))} />
               </div>
@@ -650,13 +650,13 @@ function RecruitersTab() {
         <Input placeholder="Search by company, contact or email..." value={search} onChange={e => setSearch(e.target.value)} className="pl-8 h-9 text-sm" />
       </div>
       {filteredRecruiters.length === 0 ? (
-        <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No recruiters match your search.</p></CardContent></Card>
+        <Card className="shadow-card hover-lift"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No recruiters match your search.</p></CardContent></Card>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2 stagger-list">
           {filteredRecruiters.map((r, i) => {
             const contact = r.user?.first_name ? `${r.user.first_name} ${r.user.last_name}`.trim() : r.user?.username;
             return (
-              <Card key={r.id || i} className="shadow-card">
+              <Card key={r.id || i} className="shadow-card hover-lift">
                 <CardContent className="p-4 space-y-3">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-3">
@@ -704,19 +704,19 @@ function RecruitersTab() {
           {form && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>First Name</Label>
                   <Input value={form.first_name} onChange={e => setForm(p => ({ ...p, first_name: e.target.value }))} />
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>Last Name</Label>
                   <Input value={form.last_name} onChange={e => setForm(p => ({ ...p, last_name: e.target.value }))} />
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>Email</Label>
                   <Input type="email" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} />
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>Company Name</Label>
                   <Input value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} />
                 </div>
@@ -725,7 +725,7 @@ function RecruitersTab() {
                   <Input value={form.website} onChange={e => setForm(p => ({ ...p, website: e.target.value }))} placeholder="https://..." />
                 </div>
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 stagger-list">
                 <Label>Description</Label>
                 <Textarea rows={2} value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
               </div>
@@ -806,7 +806,7 @@ function JobsTab() {
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Jobs ({filteredJobs.length}/{jobs.length})</h2>
       </div>
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-2 flex-wrap filter-bar">
         <div className="relative flex-1 min-w-40">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
           <Input placeholder="Search by title or company..." value={jobSearch} onChange={e => setJobSearch(e.target.value)} className="pl-8 h-9 text-sm" />
@@ -829,13 +829,13 @@ function JobsTab() {
         </Select>
       </div>
       {filteredJobs.length === 0 ? (
-        <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No jobs match your filters.</p></CardContent></Card>
+        <Card className="shadow-card hover-lift"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No jobs match your filters.</p></CardContent></Card>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2 stagger-list">
           {filteredJobs.map((job, i) => {
             const expired = job.last_date_to_apply && new Date(job.last_date_to_apply) < new Date();
             return (
-              <Card key={job.id || i} className="shadow-card">
+              <Card key={job.id || i} className="shadow-card hover-lift">
                 <CardContent className="p-4 space-y-3">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
@@ -895,19 +895,19 @@ function JobsTab() {
           {form && (
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>Title</Label>
                   <Input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} />
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>Location</Label>
                   <Input value={form.location} onChange={e => setForm(p => ({ ...p, location: e.target.value }))} />
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>Stipend / Salary</Label>
                   <Input value={form.stipendOrSalary} onChange={e => setForm(p => ({ ...p, stipendOrSalary: e.target.value }))} />
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>Type</Label>
                   <Select value={form.jobType} onValueChange={v => setForm(p => ({ ...p, jobType: v }))}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
@@ -917,21 +917,21 @@ function JobsTab() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>Deadline</Label>
                   <Input type="date" value={form.deadline} onChange={e => setForm(p => ({ ...p, deadline: e.target.value }))} />
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 stagger-list">
                   <Label>Min CGPA</Label>
                   <Input type="number" step="0.1" min="0" max="10" value={form.eligibility_cgpa}
                     onChange={e => setForm(p => ({ ...p, eligibility_cgpa: e.target.value }))} placeholder="Optional" />
                 </div>
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 stagger-list">
                 <Label>Description</Label>
                 <Textarea rows={3} value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 stagger-list">
                 <Label>Skills Required <span className="text-muted-foreground text-xs">(comma-separated)</span></Label>
                 <Input value={form.requirementsText} onChange={e => setForm(p => ({ ...p, requirementsText: e.target.value }))} />
               </div>
@@ -970,7 +970,7 @@ function ApplicationsTab() {
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Applications ({filteredApps.length}/{applications.length})</h2>
       </div>
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-2 flex-wrap filter-bar">
         <div className="relative flex-1 min-w-40">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
           <Input placeholder="Search by student, job or company..." value={appSearch} onChange={e => setAppSearch(e.target.value)} className="pl-8 h-9 text-sm" />
@@ -987,15 +987,15 @@ function ApplicationsTab() {
         </Select>
       </div>
       {filteredApps.length === 0 ? (
-        <Card className="shadow-card"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No applications match your filters.</p></CardContent></Card>
+        <Card className="shadow-card hover-lift"><CardContent className="py-12 text-center"><p className="text-muted-foreground">No applications match your filters.</p></CardContent></Card>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2 stagger-list">
           {filteredApps.map((app, i) => {
             const studentName = app.student?.user?.first_name
               ? `${app.student.user.first_name} ${app.student.user.last_name}`.trim()
               : app.student?.user?.username ?? "e";
             return (
-              <Card key={app.id || i} className="shadow-card">
+              <Card key={app.id || i} className="shadow-card hover-lift">
                 <CardContent className="p-4 space-y-3">
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -1075,7 +1075,7 @@ function RolesTab() {
       </div>
 
       {/* Filters */}
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-2 flex-wrap filter-bar">
         <div className="relative flex-1 min-w-48">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
           <Input placeholder="Search by name, username or email..." value={search}
@@ -1109,13 +1109,13 @@ function RolesTab() {
 
       {/* User list */}
       {isLoading ? (
-        <div className="space-y-2">{[1,2,3,4].map(i => <Skeleton key={i} className="h-16 rounded-xl" />)}</div>
+        <div className="space-y-2 stagger-list">{[1,2,3,4].map(i => <Skeleton key={i} className="h-16 rounded-xl" />)}</div>
       ) : filtered.length === 0 ? (
         <div className="rounded-xl border border-border bg-card py-12 text-center">
           <p className="text-muted-foreground text-sm">No users found.</p>
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-2 stagger-list">
           {filtered.map((u, i) => (
             <motion.div key={u.id}
               initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }}
@@ -1190,7 +1190,7 @@ function RolesTab() {
         <DialogContent className="max-w-sm">
           <DialogHeader><DialogTitle>Reset Password  @{resetTarget?.username}</DialogTitle></DialogHeader>
           <div className="space-y-3 pt-1">
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 stagger-list">
               <Label className="text-xs font-medium">New Password</Label>
               <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)}
                 placeholder="Min 6 characters" className="h-10" />

@@ -242,3 +242,140 @@ input:focus-visible, textarea:focus-visible {
   box-shadow: 0 0 0 2px rgba(99,102,241,0.2) !important;
   border-color: rgba(99,102,241,0.4) !important;
 }
+
+
+/*  Extra animations  */
+
+/* Staggered card list */
+.stagger-list > * {
+  animation: fadeUp 0.35s ease both;
+  opacity: 0;
+}
+.stagger-list > *:nth-child(1)  { animation-delay: 0.04s; }
+.stagger-list > *:nth-child(2)  { animation-delay: 0.09s; }
+.stagger-list > *:nth-child(3)  { animation-delay: 0.14s; }
+.stagger-list > *:nth-child(4)  { animation-delay: 0.19s; }
+.stagger-list > *:nth-child(5)  { animation-delay: 0.24s; }
+.stagger-list > *:nth-child(6)  { animation-delay: 0.29s; }
+.stagger-list > *:nth-child(n+7){ animation-delay: 0.34s; }
+
+/* Hover lift */
+.hover-lift {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99,102,241,0.1), 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Stat pop */
+@keyframes statPop {
+  from { opacity: 0; transform: scale(0.75) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.stat-pop { animation: statPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.stat-pop:nth-child(1) { animation-delay: 0.05s; }
+.stat-pop:nth-child(2) { animation-delay: 0.12s; }
+.stat-pop:nth-child(3) { animation-delay: 0.19s; }
+.stat-pop:nth-child(4) { animation-delay: 0.26s; }
+
+/* Filter bar slide */
+.filter-bar { animation: slideDown 0.22s ease both; }
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Badge pop */
+@keyframes badgePop {
+  from { transform: scale(0); }
+  to   { transform: scale(1); }
+}
+.badge-pop { animation: badgePop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+/* Underline hover */
+.hover-underline { position: relative; }
+.hover-underline::after {
+  content: ""; position: absolute;
+  bottom: -1px; left: 0; right: 0; height: 1px;
+  background: #6366f1;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.2s ease;
+}
+.hover-underline:hover::after { transform: scaleX(1); }
+
+/* Pulse ring for active indicators */
+@keyframes pulseRing {
+  0%   { box-shadow: 0 0 0 0 rgba(99,102,241,0.35); }
+  70%  { box-shadow: 0 0 0 8px rgba(99,102,241,0); }
+  100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+}
+.pulse-ring { animation: pulseRing 2s ease-out infinite; }
+
+/* Smooth width transition for progress bars */
+.progress-fill { transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* Row hover highlight */
+.row-hover { transition: background 0.15s ease; }
+.row-hover:hover { background: rgba(99,102,241,0.03); }
+/*  Extra animations  */
+
+/* Staggered card list */
+.stagger-list > * { animation: fadeUp 0.35s ease both; }
+.stagger-list > *:nth-child(1)  { animation-delay: 0.04s; }
+.stagger-list > *:nth-child(2)  { animation-delay: 0.08s; }
+.stagger-list > *:nth-child(3)  { animation-delay: 0.12s; }
+.stagger-list > *:nth-child(4)  { animation-delay: 0.16s; }
+.stagger-list > *:nth-child(5)  { animation-delay: 0.20s; }
+.stagger-list > *:nth-child(6)  { animation-delay: 0.24s; }
+.stagger-list > *:nth-child(7)  { animation-delay: 0.28s; }
+.stagger-list > *:nth-child(8)  { animation-delay: 0.32s; }
+.stagger-list > *:nth-child(n+9){ animation-delay: 0.36s; }
+
+/* Hover lift */
+.hover-lift {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99,102,241,0.1), 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Stat pop */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.75); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.stat-pop { animation: scaleIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+/* Badge pop */
+@keyframes badgePop {
+  from { transform: scale(0); }
+  to   { transform: scale(1); }
+}
+.badge-pulse { animation: badgePop 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+/* Filter bar slide */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.filter-bar { animation: slideDown 0.25s ease both; }
+
+/* Hover underline */
+.hover-underline { position: relative; }
+.hover-underline::after {
+  content: ""; position: absolute;
+  bottom: -1px; left: 0; right: 0; height: 1px;
+  background: #6366f1;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.2s ease;
+}
+.hover-underline:hover::after { transform: scaleX(1); }
+
+/* Pulse ring on active indicator */
+.fab-pulse { animation: fabPulse 2.5s ease-in-out infinite; }
+@keyframes fabPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.25); }
+  50%      { box-shadow: 0 0 0 6px rgba(99,102,241,0); }
+}

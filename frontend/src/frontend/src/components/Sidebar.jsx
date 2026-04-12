@@ -89,7 +89,7 @@ function SidebarContent({ role, activeTab, onTabChange, onClose }) {
               transition={{ delay: i * 0.04, duration: 0.25 }}
               onClick={() => { onTabChange(link.id); onClose?.(); }}
               data-ocid={`nav.${link.id}.link`}
-              className={cn("sidebar-nav-item w-full text-left", isActive && "active")}>
+              className={cn("sidebar-nav-item w-full text-left", isActive && "active")} whileHover={{ x: 2 }} whileTap={{ scale: 0.98 }}>
               <Icon className="h-4 w-4 shrink-0" />
               <span className="flex-1 text-sm">{link.label}</span>
               {showBadge && (
